@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package grpcAvito;
+option go_package = "./proto";
+import "google/api/annotations.proto";
+
+service Server {
+  rpc Create(CreateReq) returns (CreateReply) {
+    option (google.api.http) = {
+      post: "/create"
+      body: "*"
+    };
+  };
+}
+
+message CreateReq {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+  string repeat_password = 4;
+  string first_name = 5;
+}
+
+message CreateReply {
+  string id = 1;
+  float balance = 2;
+}
