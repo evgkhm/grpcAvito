@@ -1,0 +1,10 @@
+# JetBrains IDE
+.idea/
+
+# Log files
+*.log
+
+# config files
+*.env
+config.yaml
+configs/config.yml

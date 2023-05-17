@@ -1,0 +1,17 @@
+---
+server:
+  port: 8888
+  host_port: localhost:8888
+  domain: https://decide-career.com
+  log_path: logrus.log
+
+postgres:
+  host: localhost
+  port: 5432
+  user: postgres
+  pass: admin
+  name: decide-database
+  db_migrations: server/db/migrations
+  ssl_mode: disable
+
+...
