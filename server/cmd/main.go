@@ -7,13 +7,13 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/sync/errgroup"
-	"grpcAvito/proto"
 	"grpcAvito/server/internal/config"
 	postgresRepo "grpcAvito/server/internal/repository/postgres"
 	"grpcAvito/server/internal/server"
 	"grpcAvito/server/internal/service"
 	"grpcAvito/server/internal/usecase"
 	"grpcAvito/server/pkg/logging"
+	"net"
 	"net/http"
 )
 
@@ -23,10 +23,6 @@ func init() {
 		config.HttpConfig{},
 		config.GRPCConfig{},
 	})
-}
-
-func (s *Server) Create(ctx context.Context, in *proto.CreateReq) (*proto.CreateReply, error) {
-	return &proto.CreateReply{Id: "Hello again "}, nil //тут вывод айди и баланса
 }
 
 func main() {
@@ -44,7 +40,12 @@ func main() {
 
 	service := service.NewService(useCases, log)
 
-	grpcServer, listen := server.NewGRPCServer(service, log)
+	grpcServer := server.NewGRPCServer(service, log)
+
+	listen, err := net.Listen("tcp", config.GRPC.HostPort)
+	if err != nil {
+		log.Panic(err)
+	}
 
 	mux := server.NewHTTPServer(config.GRPC.Port, log)
 

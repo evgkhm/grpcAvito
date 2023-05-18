@@ -8,14 +8,13 @@ import (
 	"google.golang.org/grpc"
 	"grpcAvito/proto"
 	"grpcAvito/server/internal/service"
-	"net"
 )
 
 /*var (
 	port = flag.Int("port", 50051, "The server port")
 )*/
 
-func NewGRPCServer(service *service.Service, logger *logrus.Logger) (*grpc.Server, net.Listener) {
+func NewGRPCServer(service *service.Service, logger *logrus.Logger) *grpc.Server {
 	//flag.Parse()
 	/*lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.GRPC.Port))
 	if err != nil {

@@ -16,5 +16,6 @@ postgres:
 
 grpc:
   port: 50051
+  host_port: localhost:50051
 
 ...
