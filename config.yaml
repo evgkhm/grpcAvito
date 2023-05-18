@@ -2,7 +2,6 @@
 server:
   port: 8888
   host_port: localhost:8888
-  domain: https://decide-career.com
   log_path: logrus.log
 
 postgres:
@@ -11,7 +10,6 @@ postgres:
   user: admin
   pass: admin
   name: postgres
-  db_migrations: server/db/migrations
   ssl_mode: disable
 
 grpc:

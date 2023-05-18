@@ -3,7 +3,8 @@ package postgres
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"grpcAvito/server/internal/config"
+	_ "github.com/lib/pq"
+	"grpcAvito/internal/config"
 )
 
 func NewPostgresDB() (*sqlx.DB, error) {

@@ -6,5 +6,5 @@
 
 # config files
 #*.env
-server/config.yaml
-configs/config.yml
+#config.yaml
+#configs/config.yml

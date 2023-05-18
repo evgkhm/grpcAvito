@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"github.com/sirupsen/logrus"
+	"grpcAvito/internal/usecase"
 	"grpcAvito/proto"
-	"grpcAvito/server/internal/usecase"
 )
 
 type ServerServer interface {

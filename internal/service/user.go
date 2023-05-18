@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/sirupsen/logrus"
-	"grpcAvito/server/internal/repository/postgres"
+	"grpcAvito/internal/repository/postgres"
 )
 
 type UsersServiceImpl struct {

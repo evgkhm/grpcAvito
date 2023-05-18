@@ -3,7 +3,7 @@ package postgres
 import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	"grpcAvito/server/internal/entity"
+	"grpcAvito/internal/entity"
 )
 
 type RevenueRepositoryImpl struct {

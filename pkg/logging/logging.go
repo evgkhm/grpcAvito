@@ -2,7 +2,6 @@ package logging
 
 import (
 	"github.com/sirupsen/logrus"
-	"grpcAvito/server/internal/config"
 	"io"
 	"os"
 )
@@ -34,7 +33,11 @@ func GetLogger() *logrus.Logger {
 	})
 	l.SetReportCaller(true)
 
-	logFile, err := os.OpenFile(config.HTTP.LogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	/*err := os.MkdirAll("./logs", 0644)
+	if err != nil {
+		panic(err)
+	}*/
+	logFile, err := os.OpenFile("all.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		l.Printf("Couldn't open logfile. %s", err.Error())
 	}

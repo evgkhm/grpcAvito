@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"github.com/sirupsen/logrus"
-	"grpcAvito/server/internal/repository/postgres"
+	"grpcAvito/internal/repository/postgres"
 )
 
 type ServerUseCase interface {

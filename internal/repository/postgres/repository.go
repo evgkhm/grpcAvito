@@ -3,19 +3,19 @@ package postgres
 import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	"grpcAvito/server/internal/entity"
+	entity2 "grpcAvito/internal/entity"
 )
 
 type UsersRepository interface {
-	CreateUser(user entity.User, tx *sqlx.Tx) (int64, error)
+	CreateUser(user entity2.User, tx *sqlx.Tx) (int64, error)
 }
 
 type ReservationRepository interface {
-	Reservation(reservation entity.UserReservation, tx *sqlx.Tx) error
+	Reservation(reservation entity2.UserReservation, tx *sqlx.Tx) error
 }
 
 type RevenueRepository interface {
-	Revenue(revenue entity.UserRevenue, tx *sqlx.Tx) error
+	Revenue(revenue entity2.UserRevenue, tx *sqlx.Tx) error
 }
 
 type RepositoriesPostgres struct {

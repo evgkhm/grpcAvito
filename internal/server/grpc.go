@@ -6,8 +6,8 @@ import (
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"grpcAvito/internal/service"
 	"grpcAvito/proto"
-	"grpcAvito/server/internal/service"
 )
 
 /*var (
