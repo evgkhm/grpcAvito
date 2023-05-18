@@ -19,7 +19,8 @@ type Service struct {
 
 func (s Service) Create(ctx context.Context, req *proto.CreateReq) (*proto.CreateReply, error) {
 	//TODO implement me
-	s.log.Printf("Received: %v", req.GetUsername())
+	s.log.Printf("Received: %v", req.Id)
+	s.useCase.Create(ctx, req.Id, req.Balance)
 	return &proto.CreateReply{Id: "1 "}, nil
 	//panic("implement me")
 }

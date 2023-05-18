@@ -14,11 +14,8 @@ service Server {
 }
 
 message CreateReq {
-  string username = 1;
-  string email = 2;
-  string password = 3;
-  string repeat_password = 4;
-  string first_name = 5;
+  string id = 1;
+  string balance = 2;
 }
 
 message CreateReply {

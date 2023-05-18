@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+
 	"golang.org/x/sync/errgroup"
+
 	config2 "grpcAvito/internal/config"
 	"grpcAvito/internal/repository/postgres"
 	"grpcAvito/internal/server"

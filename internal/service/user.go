@@ -3,15 +3,16 @@ package service
 import (
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/repository/postgres"
+	"grpcAvito/internal/usecase"
 )
 
 type UsersServiceImpl struct {
 	repo      postgres.UsersRepository
-	txService *TransactionServiceImpl
+	txService *usecase.TransactionServiceImpl
 	log       *logrus.Logger
 }
 
-func NewUserService(repo postgres.UsersRepository, txService *TransactionServiceImpl, log *logrus.Logger) *UsersServiceImpl {
+func NewUserService(repo postgres.UsersRepository, txService *usecase.TransactionServiceImpl, log *logrus.Logger) *UsersServiceImpl {
 	return &UsersServiceImpl{
 		repo:      repo,
 		txService: txService,

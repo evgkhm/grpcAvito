@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/repository/postgres"
 )
@@ -12,14 +13,23 @@ type ServerUseCase interface {
 	GetTrack(ctx context.Context, playlistId, trackId string) (domain.Track, error)
 	GetAllTracks(ctx context.Context, playlistId string) ([]domain.Track, error)*/
 	//TODO: методы реализовать
+	Create(ctx context.Context, Id, Balance string) error
 }
 
 type UseCase struct {
-	ServerUseCase
+	repo *postgres.RepositoriesPostgres
+	log  *logrus.Logger
+}
+
+func (u UseCase) Create(ctx context.Context, Id, Balance string) error {
+	//TODO: транзакция
+
+	return nil
 }
 
 func NewUseCase(repo *postgres.RepositoriesPostgres, log *logrus.Logger) *UseCase {
 	return &UseCase{
-		ServerUseCase: NewServerUseCase(repo, log),
+		repo: repo,
+		log:  log,
 	}
 }

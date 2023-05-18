@@ -7,7 +7,7 @@ import (
 )
 
 type UsersRepository interface {
-	CreateUser(user entity2.User, tx *sqlx.Tx) (int64, error)
+	Create(user entity2.User, tx *sqlx.Tx) (int64, error)
 }
 
 type ReservationRepository interface {

@@ -18,6 +18,6 @@ func NewUsersPostgres(db *sqlx.DB, log *logrus.Logger) *UsersRepositoryImpl {
 	}
 }
 
-func (r UsersRepositoryImpl) CreateUser(user entity.User, tx *sqlx.Tx) (int64, error) {
+func (r UsersRepositoryImpl) Create(user entity.User, tx *sqlx.Tx) (int64, error) {
 	return 0, nil
 }
