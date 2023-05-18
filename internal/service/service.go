@@ -19,7 +19,9 @@ type Service struct {
 
 func (s Service) Create(ctx context.Context, req *proto.CreateReq) (*proto.CreateReply, error) {
 	//TODO implement me
-	panic("implement me")
+	s.log.Printf("Received: %v", req.GetUsername())
+	return &proto.CreateReply{Id: "1 "}, nil
+	//panic("implement me")
 }
 
 func NewService(useCase *usecase.UseCase, log *logrus.Logger) *Service {
