@@ -2,32 +2,27 @@ package main
 
 import (
 	"context"
-	"flag"
-	"fmt"
+	"github.com/golang-migrate/migrate"
+	"github.com/golang-migrate/migrate/database/postgres"
+	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
+	"golang.org/x/sync/errgroup"
 	"grpcAvito/proto"
 	"grpcAvito/server/internal/config"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
+	postgresRepo "grpcAvito/server/internal/repository/postgres"
+	"grpcAvito/server/internal/server"
+	"grpcAvito/server/internal/service"
+	"grpcAvito/server/internal/usecase"
+	"grpcAvito/server/pkg/logging"
+	"net/http"
 )
 
 func init() {
 	config.InitAll([]config.Config{
 		config.PostgresConfig{},
 		config.HttpConfig{},
+		config.GRPCConfig{},
 	})
-}
-
-var (
-	port = flag.Int("port", 50051, "The server port")
-)
-
-type Server struct {
-	proto.UnimplementedServerServer
 }
 
 func (s *Server) Create(ctx context.Context, in *proto.CreateReq) (*proto.CreateReply, error) {
@@ -43,37 +38,27 @@ func main() {
 
 	migrateDB(postgresDB, log)
 
-	//flag.Parse()
-
 	postgresRepository := postgresRepo.NewRepositoryPostgres(postgresDB, log)
-	services := service.NewService(postgresRepository, postgresDB, log)
-	handlers := handler.NewHandler(services, demoGateway, log)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	useCases := usecase.NewUseCase(postgresRepository, log)
+
+	service := service.NewService(useCases, log)
+
+	grpcServer, listen := server.NewGRPCServer(service, log)
+
+	mux := server.NewHTTPServer(config.GRPC.Port, log)
+
+	g, _ := errgroup.WithContext(context.Background())
+	g.Go(func() (err error) {
+		return grpcServer.Serve(listen)
+	})
+	g.Go(func() (err error) {
+		return http.ListenAndServe(config.HTTP.HostPort, mux)
+	})
+
+	err = g.Wait()
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	proto.RegisterServerServer(s, &Server{})
-	log.Printf("server listening at %v", lis.Addr())
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-
-	sigChan := make(chan os.Signal, 2)
-	signal.Notify(sigChan, os.Interrupt)
-	signal.Notify(sigChan, syscall.SIGTERM)
-
-	sig := <-sigChan
-
-	log.Printf("Recieved terminate, %v\n", sig)
-
-	ctx := context.Background()
-	ctx, cancelCtx := context.WithTimeout(ctx, 30*time.Second)
-	defer cancelCtx()
-
-	if err := srv.Shutdown(ctx, log); err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 }
 
@@ -83,7 +68,7 @@ func migrateDB(db *sqlx.DB, log *logrus.Logger) {
 		log.Fatalf("Couldn't get database instance for running migrations. %s", err.Error())
 	}
 
-	m, err := migrate.NewWithDatabaseInstance("file://db/migrations", "decide-database", driver)
+	m, err := migrate.NewWithDatabaseInstance("file://db/migrations", "grpcAvito", driver)
 	if err != nil {
 		log.Fatalf("Couldn't create migrate instance. %s", err.Error())
 	}

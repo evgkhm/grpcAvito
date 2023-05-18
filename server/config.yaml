@@ -14,4 +14,7 @@ postgres:
   db_migrations: server/db/migrations
   ssl_mode: disable
 
+grpc:
+  port: 50051
+
 ...
