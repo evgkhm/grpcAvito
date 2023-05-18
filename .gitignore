@@ -5,6 +5,6 @@
 *.log
 
 # config files
-*.env
-config.yaml
+#*.env
+server/config.yaml
 configs/config.yml

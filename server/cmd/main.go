@@ -69,7 +69,7 @@ func migrateDB(db *sqlx.DB, log *logrus.Logger) {
 		log.Fatalf("Couldn't get database instance for running migrations. %s", err.Error())
 	}
 
-	m, err := migrate.NewWithDatabaseInstance("file://db/migrations", "grpcAvito", driver)
+	m, err := migrate.NewWithDatabaseInstance("./db/migrations", "grpcAvito", driver)
 	if err != nil {
 		log.Fatalf("Couldn't create migrate instance. %s", err.Error())
 	}
