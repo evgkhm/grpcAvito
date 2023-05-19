@@ -22,14 +22,14 @@ func NewUsersPostgres(db *sqlx.DB, log *logrus.Logger) *UsersRepositoryImpl {
 	}
 }
 
-func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, Id uint32, Balance float32) error {
+func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, user entity.User) error {
 	var id int64
 
 	query := fmt.Sprintf(
 		"INSERT INTO %s (id, balance) "+
 			"VALUES ($1, $2) RETURNING id", usersTable)
 
-	row := tx.QueryRow(query, Id, Balance)
+	row := tx.QueryRow(query, user.Id, user.Balance)
 	if err, ok := row.Scan(&id).(*pq.Error); ok {
 		if err.Code == "23505" {
 			ErrUserAlreadyExist := errors.New("such user already exists")

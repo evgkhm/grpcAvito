@@ -8,7 +8,7 @@ import (
 )
 
 type UsersRepository interface {
-	Create(ctx context.Context, tx *sqlx.Tx, Id uint32, Balance float32) error
+	Create(ctx context.Context, tx *sqlx.Tx, userDTO entity.User) error
 	Sum(ctx context.Context, tx *sqlx.Tx, userDTO entity.User) error
 }
 

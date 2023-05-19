@@ -10,7 +10,7 @@ import (
 )
 
 type ServerUseCase interface {
-	Create(ctx context.Context, Id, Balance string) error
+	Create(ctx context.Context, userDTO entity.User) error
 	Sum(ctx context.Context, userDTO entity.User) error
 }
 
@@ -43,7 +43,7 @@ func (u UseCase) Sum(ctx context.Context, userDTO entity.User) error {
 	return nil
 }
 
-func (u UseCase) Create(ctx context.Context, Id uint32, Balance float32) error {
+func (u UseCase) Create(ctx context.Context, userDTO entity.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		u.txService.Rollback(tx)
@@ -53,7 +53,7 @@ func (u UseCase) Create(ctx context.Context, Id uint32, Balance float32) error {
 
 	//TODO: проверка что есть такой юзер
 
-	err = u.repo.Create(ctx, tx, Id, Balance)
+	err = u.repo.Create(ctx, tx, userDTO)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err
