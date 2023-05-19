@@ -32,7 +32,7 @@ func main() {
 
 	postgresRepository := postgres.NewRepositoryPostgres(postgresDB, log)
 
-	useCases := usecase.NewUseCase(postgresRepository, log)
+	useCases := usecase.NewUseCase(postgresRepository, log, postgresDB)
 
 	service := service.NewService(useCases, log)
 

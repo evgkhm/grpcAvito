@@ -7,6 +7,12 @@ import (
 	"grpcAvito/internal/config"
 )
 
+const (
+	usersTable       = "usr"
+	reservationTable = "reservation"
+	revenueTable     = "revenue"
+)
+
 func NewPostgresDB() (*sqlx.DB, error) {
 	dbURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
 		config.Postgres.Host, config.Postgres.Port, config.Postgres.User, config.Postgres.Name, config.Postgres.Pass, config.Postgres.SSLMode)

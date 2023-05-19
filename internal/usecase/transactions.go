@@ -17,21 +17,21 @@ func NewTransactionService(db *sqlx.DB, log *logrus.Logger) *TransactionServiceI
 	}
 }
 
-func (s *TransactionServiceImpl) NewTransaction() (*sqlx.Tx, error) {
-	return s.db.Beginx()
+func (u *TransactionServiceImpl) NewTransaction() (*sqlx.Tx, error) {
+	return u.db.Beginx()
 }
 
-func (s *TransactionServiceImpl) Rollback(tx *sqlx.Tx) error {
+func (u *TransactionServiceImpl) Rollback(tx *sqlx.Tx) error {
 	if err := tx.Rollback(); err != nil {
-		s.log.Printf("service: unable to rollback transaction. %s", err.Error())
+		u.log.Printf("service: unable to rollback transaction. %s", err.Error())
 		return err
 	}
 	return nil
 }
 
-func (s TransactionServiceImpl) Commit(tx *sqlx.Tx) error {
+func (u TransactionServiceImpl) Commit(tx *sqlx.Tx) error {
 	if err := tx.Commit(); err != nil {
-		s.log.Printf("service: unable to commit transaction. %s", err.Error())
+		u.log.Printf("service: unable to commit transaction. %s", err.Error())
 		return err
 	}
 	return nil

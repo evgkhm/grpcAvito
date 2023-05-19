@@ -1,9 +1,12 @@
 package postgres
 
 import (
+	"context"
+	"errors"
+	"fmt"
 	"github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"grpcAvito/internal/entity"
 )
 
 type UsersRepositoryImpl struct {
@@ -18,6 +21,20 @@ func NewUsersPostgres(db *sqlx.DB, log *logrus.Logger) *UsersRepositoryImpl {
 	}
 }
 
-func (r UsersRepositoryImpl) Create(user entity.User, tx *sqlx.Tx) (int64, error) {
-	return 0, nil
+func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, Id uint32, Balance float32) error {
+	var id int64
+
+	query := fmt.Sprintf(
+		"INSERT INTO %s (id, balance) "+
+			"VALUES ($1, $2) RETURNING id", usersTable)
+
+	row := tx.QueryRow(query, Id, Balance)
+	if err, ok := row.Scan(&id).(*pq.Error); ok {
+		if err.Code == "23505" {
+			ErrUserAlreadyExist := errors.New("такой пользователь уже существует")
+			return ErrUserAlreadyExist
+		}
+		return err
+	}
+	return nil
 }

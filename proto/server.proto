@@ -14,8 +14,8 @@ service Server {
 }
 
 message CreateReq {
-  string id = 1;
-  string balance = 2;
+  uint32 id = 1;
+  float balance = 2;
 }
 
 message CreateReply {

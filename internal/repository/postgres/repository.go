@@ -1,13 +1,14 @@
 package postgres
 
 import (
+	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	entity2 "grpcAvito/internal/entity"
 )
 
 type UsersRepository interface {
-	Create(user entity2.User, tx *sqlx.Tx) (int64, error)
+	Create(ctx context.Context, tx *sqlx.Tx, Id uint32, Balance float32) error
 }
 
 type ReservationRepository interface {
