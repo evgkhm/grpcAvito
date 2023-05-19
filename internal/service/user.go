@@ -34,9 +34,9 @@ func (s Service) Create(ctx context.Context, req *proto.CreateReq) (*proto.Creat
 	err := s.useCase.Create(ctx, userDTO)
 	if err != nil {
 		s.log.Errorf("creating user %v", err)
-		return &proto.CreateReply{Result: "not ok "}, err
+		return &proto.CreateReply{Success: false}, err
 	}
-	return &proto.CreateReply{Result: "ok "}, nil
+	return &proto.CreateReply{Success: true}, nil
 }
 
 func (s Service) Sum(ctx context.Context, req *proto.SumReq) (*proto.SumReply, error) {
@@ -45,7 +45,7 @@ func (s Service) Sum(ctx context.Context, req *proto.SumReq) (*proto.SumReply, e
 	err := s.useCase.Sum(ctx, userDTO)
 	if err != nil {
 		s.log.Errorf("summing user %v", err)
-		return &proto.SumReply{Result: "not ok "}, err
+		return &proto.SumReply{Success: false}, err
 	}
-	return &proto.SumReply{Result: "ok "}, nil
+	return &proto.SumReply{Success: true}, nil
 }

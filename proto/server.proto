@@ -26,7 +26,7 @@ message CreateReq {
 }
 
 message CreateReply {
-  string result = 1;
+  bool success = 1;
 }
 
 message SumReq {
@@ -35,5 +35,5 @@ message SumReq {
 }
 
 message SumReply {
-  string result = 1;
+  bool success = 1;
 }
