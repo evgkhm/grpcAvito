@@ -4,19 +4,20 @@ import (
 	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	entity2 "grpcAvito/internal/entity"
+	entity "grpcAvito/internal/entity"
 )
 
 type UsersRepository interface {
 	Create(ctx context.Context, tx *sqlx.Tx, Id uint32, Balance float32) error
+	Sum(ctx context.Context, tx *sqlx.Tx, userDTO entity.User) error
 }
 
 type ReservationRepository interface {
-	Reservation(reservation entity2.UserReservation, tx *sqlx.Tx) error
+	Reservation(reservation entity.UserReservation, tx *sqlx.Tx) error
 }
 
 type RevenueRepository interface {
-	Revenue(revenue entity2.UserRevenue, tx *sqlx.Tx) error
+	Revenue(revenue entity.UserRevenue, tx *sqlx.Tx) error
 }
 
 type RepositoriesPostgres struct {

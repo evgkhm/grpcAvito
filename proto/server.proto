@@ -11,6 +11,13 @@ service Server {
       body: "*"
     };
   };
+
+  rpc Sum(SumReq) returns (SumReply) {
+    option (google.api.http) = {
+      post: "/sum"
+      body: "*"
+    };
+  };
 }
 
 message CreateReq {
@@ -19,6 +26,14 @@ message CreateReq {
 }
 
 message CreateReply {
-  string id = 1;
+  string result = 1;
+}
+
+message SumReq {
+  uint32 id = 1;
   float balance = 2;
+}
+
+message SumReply {
+  string result = 1;
 }
