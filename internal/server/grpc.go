@@ -10,24 +10,7 @@ import (
 	"grpcAvito/proto"
 )
 
-/*var (
-	port = flag.Int("port", 50051, "The server port")
-)*/
-
 func NewGRPCServer(service *service.Service, logger *logrus.Logger) *grpc.Server {
-	//flag.Parse()
-	/*lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.GRPC.Port))
-	if err != nil {
-		logger.Errorf("failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	proto.RegisterServerServer(s, &Server{})
-	log.Printf("server listening at %v", lis.Addr())
-	if err := s.Serve(lis); err != nil {
-		logger.Fatalf("failed to serve: %v", err)
-	}
-
-	return s, lis*/
 	logger.Info("new grpc server")
 	log := logrus.NewEntry(logger)
 	var opts = []grpc.ServerOption{
