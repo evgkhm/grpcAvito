@@ -10,6 +10,7 @@ import (
 type UsersRepository interface {
 	Create(ctx context.Context, tx *sqlx.Tx, userDTO entity.User) error
 	Sum(ctx context.Context, tx *sqlx.Tx, userDTO entity.User) error
+	GetBalance(ctx context.Context, tx *sqlx.Tx, userDTO entity.User) (float32, error)
 }
 
 type ReservationRepository interface {

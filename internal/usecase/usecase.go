@@ -34,6 +34,15 @@ func (u UseCase) Sum(ctx context.Context, userDTO entity.User) error {
 		return errUserNegativeBalance
 	}
 
+	currBalance, err := u.repo.GetBalance(ctx, tx, userDTO)
+	if err != nil {
+		u.txService.Rollback(tx)
+		return err
+	}
+
+	newBalance := userDTO.Balance + currBalance
+	userDTO.Balance = newBalance
+	
 	err = u.repo.Sum(ctx, tx, userDTO)
 	if err != nil {
 		u.txService.Rollback(tx)
