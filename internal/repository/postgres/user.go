@@ -49,7 +49,6 @@ func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, user entit
 
 func (r UsersRepositoryImpl) Sum(ctx context.Context, tx *sqlx.Tx, user entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
-	//Выполнение sql запроса
 	_, err := tx.Exec(query, user.Balance, user.Id)
 	if err != nil {
 		return err

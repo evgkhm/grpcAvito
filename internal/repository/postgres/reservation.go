@@ -38,3 +38,12 @@ func (r ReservationRepositoryImpl) Reservation(reservation entity.UserReservatio
 
 	return nil
 }
+
+func (r ReservationRepositoryImpl) MinusBalance(tx *sqlx.Tx, user entity.User) error {
+	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
+	_, err := tx.Exec(query, user.Balance, user.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -15,6 +15,7 @@ type UsersRepository interface {
 
 type ReservationRepository interface {
 	Reservation(reservation entity.UserReservation, tx *sqlx.Tx) error
+	MinusBalance(tx *sqlx.Tx, userDTO entity.User) error
 }
 
 type RevenueRepository interface {
