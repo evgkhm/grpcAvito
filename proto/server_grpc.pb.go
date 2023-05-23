@@ -22,6 +22,7 @@ const (
 	Server_Create_FullMethodName        = "/grpcAvito.Server/Create"
 	Server_Sum_FullMethodName           = "/grpcAvito.Server/Sum"
 	Server_Reservation_FullMethodName   = "/grpcAvito.Server/Reservation"
+	Server_Revenue_FullMethodName       = "/grpcAvito.Server/Revenue"
 	Server_Dereservation_FullMethodName = "/grpcAvito.Server/Dereservation"
 )
 
@@ -32,6 +33,7 @@ type ServerClient interface {
 	Create(ctx context.Context, in *CreateReq, opts ...grpc.CallOption) (*CreateReply, error)
 	Sum(ctx context.Context, in *SumReq, opts ...grpc.CallOption) (*SumReply, error)
 	Reservation(ctx context.Context, in *ReservationReq, opts ...grpc.CallOption) (*ReservationReply, error)
+	Revenue(ctx context.Context, in *RevenueReq, opts ...grpc.CallOption) (*RevenueReply, error)
 	Dereservation(ctx context.Context, in *DereservationReq, opts ...grpc.CallOption) (*DereservationReply, error)
 }
 
@@ -70,6 +72,15 @@ func (c *serverClient) Reservation(ctx context.Context, in *ReservationReq, opts
 	return out, nil
 }
 
+func (c *serverClient) Revenue(ctx context.Context, in *RevenueReq, opts ...grpc.CallOption) (*RevenueReply, error) {
+	out := new(RevenueReply)
+	err := c.cc.Invoke(ctx, Server_Revenue_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *serverClient) Dereservation(ctx context.Context, in *DereservationReq, opts ...grpc.CallOption) (*DereservationReply, error) {
 	out := new(DereservationReply)
 	err := c.cc.Invoke(ctx, Server_Dereservation_FullMethodName, in, out, opts...)
@@ -86,6 +97,7 @@ type ServerServer interface {
 	Create(context.Context, *CreateReq) (*CreateReply, error)
 	Sum(context.Context, *SumReq) (*SumReply, error)
 	Reservation(context.Context, *ReservationReq) (*ReservationReply, error)
+	Revenue(context.Context, *RevenueReq) (*RevenueReply, error)
 	Dereservation(context.Context, *DereservationReq) (*DereservationReply, error)
 	mustEmbedUnimplementedServerServer()
 }
@@ -102,6 +114,9 @@ func (UnimplementedServerServer) Sum(context.Context, *SumReq) (*SumReply, error
 }
 func (UnimplementedServerServer) Reservation(context.Context, *ReservationReq) (*ReservationReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Reservation not implemented")
+}
+func (UnimplementedServerServer) Revenue(context.Context, *RevenueReq) (*RevenueReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Revenue not implemented")
 }
 func (UnimplementedServerServer) Dereservation(context.Context, *DereservationReq) (*DereservationReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Dereservation not implemented")
@@ -173,6 +188,24 @@ func _Server_Reservation_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_Revenue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevenueReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).Revenue(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Server_Revenue_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).Revenue(ctx, req.(*RevenueReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Server_Dereservation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DereservationReq)
 	if err := dec(in); err != nil {
@@ -209,6 +242,10 @@ var Server_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Reservation",
 			Handler:    _Server_Reservation_Handler,
+		},
+		{
+			MethodName: "Revenue",
+			Handler:    _Server_Revenue_Handler,
 		},
 		{
 			MethodName: "Dereservation",

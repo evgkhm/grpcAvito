@@ -26,6 +26,13 @@ service Server {
     };
   };
 
+  rpc Revenue(RevenueReq) returns (RevenueReply) {
+    option (google.api.http) = {
+      post: "/revenue"
+      body: "*"
+    };
+  };
+
   rpc Dereservation(DereservationReq) returns (DereservationReply) {
     option (google.api.http) = {
       post: "/dereservation"
@@ -60,6 +67,17 @@ message ReservationReq {
 }
 
 message ReservationReply {
+  bool success = 1;
+}
+
+message RevenueReq {
+  uint32 id = 1;
+  uint32 idService = 2;
+  uint32 idOrder = 3;
+  float cost = 4;
+}
+
+message RevenueReply {
   bool success = 1;
 }
 
