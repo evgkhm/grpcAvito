@@ -19,8 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Server_Create_FullMethodName = "/grpcAvito.Server/Create"
-	Server_Sum_FullMethodName    = "/grpcAvito.Server/Sum"
+	Server_Create_FullMethodName        = "/grpcAvito.Server/Create"
+	Server_Sum_FullMethodName           = "/grpcAvito.Server/Sum"
+	Server_Reservation_FullMethodName   = "/grpcAvito.Server/Reservation"
+	Server_Dereservation_FullMethodName = "/grpcAvito.Server/Dereservation"
 )
 
 // ServerClient is the client API for Server service.
@@ -29,6 +31,8 @@ const (
 type ServerClient interface {
 	Create(ctx context.Context, in *CreateReq, opts ...grpc.CallOption) (*CreateReply, error)
 	Sum(ctx context.Context, in *SumReq, opts ...grpc.CallOption) (*SumReply, error)
+	Reservation(ctx context.Context, in *ReservationReq, opts ...grpc.CallOption) (*ReservationReply, error)
+	Dereservation(ctx context.Context, in *DereservationReq, opts ...grpc.CallOption) (*DereservationReply, error)
 }
 
 type serverClient struct {
@@ -57,12 +61,32 @@ func (c *serverClient) Sum(ctx context.Context, in *SumReq, opts ...grpc.CallOpt
 	return out, nil
 }
 
+func (c *serverClient) Reservation(ctx context.Context, in *ReservationReq, opts ...grpc.CallOption) (*ReservationReply, error) {
+	out := new(ReservationReply)
+	err := c.cc.Invoke(ctx, Server_Reservation_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serverClient) Dereservation(ctx context.Context, in *DereservationReq, opts ...grpc.CallOption) (*DereservationReply, error) {
+	out := new(DereservationReply)
+	err := c.cc.Invoke(ctx, Server_Dereservation_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServerServer is the server API for Server service.
 // All implementations must embed UnimplementedServerServer
 // for forward compatibility
 type ServerServer interface {
 	Create(context.Context, *CreateReq) (*CreateReply, error)
 	Sum(context.Context, *SumReq) (*SumReply, error)
+	Reservation(context.Context, *ReservationReq) (*ReservationReply, error)
+	Dereservation(context.Context, *DereservationReq) (*DereservationReply, error)
 	mustEmbedUnimplementedServerServer()
 }
 
@@ -75,6 +99,12 @@ func (UnimplementedServerServer) Create(context.Context, *CreateReq) (*CreateRep
 }
 func (UnimplementedServerServer) Sum(context.Context, *SumReq) (*SumReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sum not implemented")
+}
+func (UnimplementedServerServer) Reservation(context.Context, *ReservationReq) (*ReservationReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Reservation not implemented")
+}
+func (UnimplementedServerServer) Dereservation(context.Context, *DereservationReq) (*DereservationReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Dereservation not implemented")
 }
 func (UnimplementedServerServer) mustEmbedUnimplementedServerServer() {}
 
@@ -125,6 +155,42 @@ func _Server_Sum_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_Reservation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReservationReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).Reservation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Server_Reservation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).Reservation(ctx, req.(*ReservationReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Server_Dereservation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DereservationReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).Dereservation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Server_Dereservation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).Dereservation(ctx, req.(*DereservationReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Server_ServiceDesc is the grpc.ServiceDesc for Server service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +205,14 @@ var Server_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Sum",
 			Handler:    _Server_Sum_Handler,
+		},
+		{
+			MethodName: "Reservation",
+			Handler:    _Server_Reservation_Handler,
+		},
+		{
+			MethodName: "Dereservation",
+			Handler:    _Server_Dereservation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

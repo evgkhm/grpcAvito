@@ -18,6 +18,20 @@ service Server {
       body: "*"
     };
   };
+
+  rpc Reservation(ReservationReq) returns (ReservationReply) {
+    option (google.api.http) = {
+      post: "/reservation"
+      body: "*"
+    };
+  };
+
+  rpc Dereservation(DereservationReq) returns (DereservationReply) {
+    option (google.api.http) = {
+      post: "/dereservation"
+      body: "*"
+    };
+  };
 }
 
 message CreateReq {
@@ -35,5 +49,27 @@ message SumReq {
 }
 
 message SumReply {
+  bool success = 1;
+}
+
+message ReservationReq {
+  uint32 id = 1;
+  uint32 idService = 2;
+  uint32 idOrder = 3;
+  float cost = 4;
+}
+
+message ReservationReply {
+  bool success = 1;
+}
+
+message DereservationReq {
+  uint32 id = 1;
+  uint32 idService = 2;
+  uint32 idOrder = 3;
+  float cost = 4;
+}
+
+message DereservationReply {
   bool success = 1;
 }

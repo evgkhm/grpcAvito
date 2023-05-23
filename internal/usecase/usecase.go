@@ -42,7 +42,7 @@ func (u UseCase) Sum(ctx context.Context, userDTO entity.User) error {
 
 	newBalance := userDTO.Balance + currBalance
 	userDTO.Balance = newBalance
-	
+
 	err = u.repo.Sum(ctx, tx, userDTO)
 	if err != nil {
 		u.txService.Rollback(tx)
@@ -60,14 +60,28 @@ func (u UseCase) Create(ctx context.Context, userDTO entity.User) error {
 	}
 	defer u.txService.Commit(tx)
 
-	//TODO: проверка что есть такой юзер
-
 	err = u.repo.Create(ctx, tx, userDTO)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err
 	}
 
+	return nil
+}
+
+func (u UseCase) Reservation(ctx context.Context, reservation entity.UserReservation) error {
+	tx, err := u.txService.NewTransaction()
+	if err != nil {
+		u.txService.Rollback(tx)
+		return err
+	}
+	defer u.txService.Commit(tx)
+
+	err = u.repo.Reservation(reservation, tx)
+	if err != nil {
+		u.txService.Rollback(tx)
+		return err
+	}
 	return nil
 }
 
