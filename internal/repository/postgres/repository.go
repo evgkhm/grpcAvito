@@ -20,6 +20,7 @@ type ReservationRepository interface {
 
 type RevenueRepository interface {
 	Revenue(revenue entity.UserRevenue, tx *sqlx.Tx) error
+	MinusReservation(reservation entity.UserReservation, tx *sqlx.Tx) error
 }
 
 type RepositoriesPostgres struct {

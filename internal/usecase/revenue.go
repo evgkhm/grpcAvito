@@ -13,5 +13,25 @@ func (u UseCase) Revenue(ctx context.Context, revenue entity.UserRevenue) error 
 	}
 	defer u.txService.Commit(tx)
 
+	reservation := entity.UserReservation{Id: revenue.Id,
+		IdOrder:   revenue.IdOrder,
+		IdService: revenue.IdService,
+		Cost:      revenue.Cost,
+	}
+
+	//Списать с резервации
+	err = u.repo.MinusReservation(reservation, tx)
+	if err != nil {
+		u.txService.Rollback(tx)
+		return err
+	}
+
+	//Начислить в revenue
+	err = u.repo.Revenue(revenue, tx)
+	if err != nil {
+		u.txService.Rollback(tx)
+		return err
+	}
+
 	return nil
 }
