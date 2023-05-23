@@ -12,6 +12,7 @@ type ServerUseCase interface {
 	Create(ctx context.Context, userDTO entity.User) error
 	Sum(ctx context.Context, userDTO entity.User) error
 	Reservation(ctx context.Context, reservation entity.UserReservation) error
+	Dereservation(dereservation entity.UserReservation, tx *sqlx.Tx) error
 }
 
 type UseCase struct {
