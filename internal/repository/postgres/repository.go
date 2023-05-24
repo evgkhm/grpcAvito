@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	entity "grpcAvito/internal/entity"
+	"grpcAvito/internal/entity"
 )
 
 type UsersRepository interface {
@@ -24,10 +24,15 @@ type RevenueRepository interface {
 	MinusReservation(reservation entity.UserReservation, tx *sqlx.Tx) error
 }
 
+type ReportRepository interface {
+	GetReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error)
+}
+
 type RepositoriesPostgres struct {
 	UsersRepository
 	ReservationRepository
 	RevenueRepository
+	ReportRepository
 }
 
 func NewRepositoryPostgres(db *sqlx.DB, log *logrus.Logger) *RepositoriesPostgres {

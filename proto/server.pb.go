@@ -579,6 +579,108 @@ func (x *DereservationReply) GetSuccess() bool {
 	return false
 }
 
+type ReportReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Year  uint32 `protobuf:"varint,1,opt,name=year,proto3" json:"year,omitempty"`
+	Month uint32 `protobuf:"varint,2,opt,name=month,proto3" json:"month,omitempty"`
+}
+
+func (x *ReportReq) Reset() {
+	*x = ReportReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_server_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ReportReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportReq) ProtoMessage() {}
+
+func (x *ReportReq) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportReq.ProtoReflect.Descriptor instead.
+func (*ReportReq) Descriptor() ([]byte, []int) {
+	return file_server_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *ReportReq) GetYear() uint32 {
+	if x != nil {
+		return x.Year
+	}
+	return 0
+}
+
+func (x *ReportReq) GetMonth() uint32 {
+	if x != nil {
+		return x.Month
+	}
+	return 0
+}
+
+type ReportReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success bool `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+}
+
+func (x *ReportReply) Reset() {
+	*x = ReportReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_server_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ReportReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReportReply) ProtoMessage() {}
+
+func (x *ReportReply) ProtoReflect() protoreflect.Message {
+	mi := &file_server_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReportReply.ProtoReflect.Descriptor instead.
+func (*ReportReply) Descriptor() ([]byte, []int) {
+	return file_server_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ReportReply) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
 var File_server_proto protoreflect.FileDescriptor
 
 var file_server_proto_rawDesc = []byte{
@@ -626,7 +728,13 @@ var file_server_proto_rawDesc = []byte{
 	0x74, 0x22, 0x2e, 0x0a, 0x12, 0x44, 0x65, 0x72, 0x65, 0x73, 0x65, 0x72, 0x76, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65,
 	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73,
-	0x73, 0x32, 0xac, 0x03, 0x0a, 0x06, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x4a, 0x0a, 0x06,
+	0x73, 0x22, 0x35, 0x0a, 0x09, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x52, 0x65, 0x71, 0x12, 0x12,
+	0x0a, 0x04, 0x79, 0x65, 0x61, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x79, 0x65,
+	0x61, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x6d, 0x6f, 0x6e, 0x74, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0d, 0x52, 0x05, 0x6d, 0x6f, 0x6e, 0x74, 0x68, 0x22, 0x27, 0x0a, 0x0b, 0x52, 0x65, 0x70, 0x6f,
+	0x72, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65,
+	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73,
+	0x73, 0x32, 0x84, 0x04, 0x0a, 0x06, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x4a, 0x0a, 0x06,
 	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x12, 0x14, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x41, 0x76, 0x69,
 	0x74, 0x6f, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67,
 	0x72, 0x70, 0x63, 0x41, 0x76, 0x69, 0x74, 0x6f, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52,
@@ -653,8 +761,13 @@ var file_server_proto_rawDesc = []byte{
 	0x74, 0x6f, 0x2e, 0x44, 0x65, 0x72, 0x65, 0x73, 0x65, 0x72, 0x76, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x19, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x13, 0x3a, 0x01, 0x2a,
 	0x22, 0x0e, 0x2f, 0x64, 0x65, 0x72, 0x65, 0x73, 0x65, 0x72, 0x76, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x42, 0x09, 0x5a, 0x07, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x12, 0x56, 0x0a, 0x06, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x12, 0x14, 0x2e, 0x67, 0x72, 0x70,
+	0x63, 0x41, 0x76, 0x69, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x52, 0x65, 0x71,
+	0x1a, 0x16, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x41, 0x76, 0x69, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x70,
+	0x6f, 0x72, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1e, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x18,
+	0x12, 0x16, 0x2f, 0x72, 0x65, 0x70, 0x6f, 0x72, 0x74, 0x2f, 0x7b, 0x79, 0x65, 0x61, 0x72, 0x7d,
+	0x2f, 0x7b, 0x6d, 0x6f, 0x6e, 0x74, 0x68, 0x7d, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x2f, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -669,7 +782,7 @@ func file_server_proto_rawDescGZIP() []byte {
 	return file_server_proto_rawDescData
 }
 
-var file_server_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_server_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_server_proto_goTypes = []interface{}{
 	(*CreateReq)(nil),          // 0: grpcAvito.CreateReq
 	(*CreateReply)(nil),        // 1: grpcAvito.CreateReply
@@ -681,23 +794,27 @@ var file_server_proto_goTypes = []interface{}{
 	(*RevenueReply)(nil),       // 7: grpcAvito.RevenueReply
 	(*DereservationReq)(nil),   // 8: grpcAvito.DereservationReq
 	(*DereservationReply)(nil), // 9: grpcAvito.DereservationReply
+	(*ReportReq)(nil),          // 10: grpcAvito.ReportReq
+	(*ReportReply)(nil),        // 11: grpcAvito.ReportReply
 }
 var file_server_proto_depIdxs = []int32{
-	0, // 0: grpcAvito.Server.Create:input_type -> grpcAvito.CreateReq
-	2, // 1: grpcAvito.Server.Sum:input_type -> grpcAvito.SumReq
-	4, // 2: grpcAvito.Server.Reservation:input_type -> grpcAvito.ReservationReq
-	6, // 3: grpcAvito.Server.Revenue:input_type -> grpcAvito.RevenueReq
-	8, // 4: grpcAvito.Server.Dereservation:input_type -> grpcAvito.DereservationReq
-	1, // 5: grpcAvito.Server.Create:output_type -> grpcAvito.CreateReply
-	3, // 6: grpcAvito.Server.Sum:output_type -> grpcAvito.SumReply
-	5, // 7: grpcAvito.Server.Reservation:output_type -> grpcAvito.ReservationReply
-	7, // 8: grpcAvito.Server.Revenue:output_type -> grpcAvito.RevenueReply
-	9, // 9: grpcAvito.Server.Dereservation:output_type -> grpcAvito.DereservationReply
-	5, // [5:10] is the sub-list for method output_type
-	0, // [0:5] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0,  // 0: grpcAvito.Server.Create:input_type -> grpcAvito.CreateReq
+	2,  // 1: grpcAvito.Server.Sum:input_type -> grpcAvito.SumReq
+	4,  // 2: grpcAvito.Server.Reservation:input_type -> grpcAvito.ReservationReq
+	6,  // 3: grpcAvito.Server.Revenue:input_type -> grpcAvito.RevenueReq
+	8,  // 4: grpcAvito.Server.Dereservation:input_type -> grpcAvito.DereservationReq
+	10, // 5: grpcAvito.Server.Report:input_type -> grpcAvito.ReportReq
+	1,  // 6: grpcAvito.Server.Create:output_type -> grpcAvito.CreateReply
+	3,  // 7: grpcAvito.Server.Sum:output_type -> grpcAvito.SumReply
+	5,  // 8: grpcAvito.Server.Reservation:output_type -> grpcAvito.ReservationReply
+	7,  // 9: grpcAvito.Server.Revenue:output_type -> grpcAvito.RevenueReply
+	9,  // 10: grpcAvito.Server.Dereservation:output_type -> grpcAvito.DereservationReply
+	11, // 11: grpcAvito.Server.Report:output_type -> grpcAvito.ReportReply
+	6,  // [6:12] is the sub-list for method output_type
+	0,  // [0:6] is the sub-list for method input_type
+	0,  // [0:0] is the sub-list for extension type_name
+	0,  // [0:0] is the sub-list for extension extendee
+	0,  // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_server_proto_init() }
@@ -826,6 +943,30 @@ func file_server_proto_init() {
 				return nil
 			}
 		}
+		file_server_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ReportReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_server_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ReportReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -833,7 +974,7 @@ func file_server_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_server_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

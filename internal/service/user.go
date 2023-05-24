@@ -23,11 +23,6 @@ type UsersServiceImpl struct {
 	}
 }*/
 
-type ServerServer interface {
-	Create(context.Context, *proto.CreateReq) (*proto.CreateReply, error)
-	Sum(context.Context, *proto.SumReq) (*proto.SumReply, error)
-}
-
 func (s Service) Create(ctx context.Context, req *proto.CreateReq) (*proto.CreateReply, error) {
 	userDTO := entity.User{Id: req.Id, Balance: req.Balance}
 	err := s.useCase.Create(ctx, userDTO)

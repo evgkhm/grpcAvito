@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"errors"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 )

@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"errors"
+	"github.com/pkg/errors"
 	"grpcAvito/internal/entity"
 )
 

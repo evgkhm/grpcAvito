@@ -39,6 +39,12 @@ service Server {
       body: "*"
     };
   };
+
+  rpc Report(ReportReq) returns (ReportReply) {
+    option (google.api.http) = {
+      get: "/report/{year}/{month}"
+    };
+  };
 }
 
 message CreateReq {
@@ -89,5 +95,14 @@ message DereservationReq {
 }
 
 message DereservationReply {
+  bool success = 1;
+}
+
+message ReportReq {
+  uint32 year = 1;
+  uint32 month = 2;
+}
+
+message ReportReply {
   bool success = 1;
 }

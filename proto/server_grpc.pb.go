@@ -24,6 +24,7 @@ const (
 	Server_Reservation_FullMethodName   = "/grpcAvito.Server/Reservation"
 	Server_Revenue_FullMethodName       = "/grpcAvito.Server/Revenue"
 	Server_Dereservation_FullMethodName = "/grpcAvito.Server/Dereservation"
+	Server_Report_FullMethodName        = "/grpcAvito.Server/Report"
 )
 
 // ServerClient is the client API for Server service.
@@ -35,6 +36,7 @@ type ServerClient interface {
 	Reservation(ctx context.Context, in *ReservationReq, opts ...grpc.CallOption) (*ReservationReply, error)
 	Revenue(ctx context.Context, in *RevenueReq, opts ...grpc.CallOption) (*RevenueReply, error)
 	Dereservation(ctx context.Context, in *DereservationReq, opts ...grpc.CallOption) (*DereservationReply, error)
+	Report(ctx context.Context, in *ReportReq, opts ...grpc.CallOption) (*ReportReply, error)
 }
 
 type serverClient struct {
@@ -90,6 +92,15 @@ func (c *serverClient) Dereservation(ctx context.Context, in *DereservationReq, 
 	return out, nil
 }
 
+func (c *serverClient) Report(ctx context.Context, in *ReportReq, opts ...grpc.CallOption) (*ReportReply, error) {
+	out := new(ReportReply)
+	err := c.cc.Invoke(ctx, Server_Report_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServerServer is the server API for Server service.
 // All implementations must embed UnimplementedServerServer
 // for forward compatibility
@@ -99,6 +110,7 @@ type ServerServer interface {
 	Reservation(context.Context, *ReservationReq) (*ReservationReply, error)
 	Revenue(context.Context, *RevenueReq) (*RevenueReply, error)
 	Dereservation(context.Context, *DereservationReq) (*DereservationReply, error)
+	Report(context.Context, *ReportReq) (*ReportReply, error)
 	mustEmbedUnimplementedServerServer()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedServerServer) Revenue(context.Context, *RevenueReq) (*Revenue
 }
 func (UnimplementedServerServer) Dereservation(context.Context, *DereservationReq) (*DereservationReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Dereservation not implemented")
+}
+func (UnimplementedServerServer) Report(context.Context, *ReportReq) (*ReportReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Report not implemented")
 }
 func (UnimplementedServerServer) mustEmbedUnimplementedServerServer() {}
 
@@ -224,6 +239,24 @@ func _Server_Dereservation_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_Report_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReportReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).Report(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Server_Report_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).Report(ctx, req.(*ReportReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Server_ServiceDesc is the grpc.ServiceDesc for Server service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +283,10 @@ var Server_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Dereservation",
 			Handler:    _Server_Dereservation_Handler,
+		},
+		{
+			MethodName: "Report",
+			Handler:    _Server_Report_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
