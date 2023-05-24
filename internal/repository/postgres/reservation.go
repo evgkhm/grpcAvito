@@ -24,8 +24,8 @@ func NewReservationRepository(db *sqlx.DB, log *logrus.Logger) *ReservationRepos
 func (r ReservationRepositoryImpl) Reservation(reservation *entity.UserReservation, tx *sqlx.Tx) error {
 	var idOrder uint32
 	query := fmt.Sprintf(
-		"INSERT INTO %s (id, balance) "+
-			"VALUES ($1, $2) RETURNING id", reservationTable)
+		"INSERT INTO %s (id, id_service, id_order, cost) "+
+			"VALUES ($1, $2, $3, $4) RETURNING id", reservationTable)
 
 	row := tx.QueryRow(query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {

@@ -11,7 +11,6 @@ func (u UseCase) Revenue(ctx context.Context, revenue entity.UserRevenue) error 
 		u.txService.Rollback(tx)
 		return err
 	}
-	defer u.txService.Commit(tx)
 
 	reservation := entity.UserReservation{Id: revenue.Id,
 		IdOrder:   revenue.IdOrder,
@@ -33,5 +32,5 @@ func (u UseCase) Revenue(ctx context.Context, revenue entity.UserRevenue) error 
 		return err
 	}
 
-	return nil
+	return u.txService.Commit(tx)
 }

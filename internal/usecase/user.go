@@ -12,7 +12,6 @@ func (u UseCase) Sum(ctx context.Context, userDTO *entity.User) error {
 		u.txService.Rollback(tx)
 		return err
 	}
-	defer u.txService.Commit(tx)
 
 	//Проверка на отрицательный баланс
 	if userDTO.Balance < 0 {
@@ -38,7 +37,7 @@ func (u UseCase) Sum(ctx context.Context, userDTO *entity.User) error {
 		return err
 	}
 
-	return nil
+	return u.txService.Commit(tx)
 }
 
 func (u UseCase) Create(ctx context.Context, userDTO entity.User) error {
@@ -47,7 +46,6 @@ func (u UseCase) Create(ctx context.Context, userDTO entity.User) error {
 		u.txService.Rollback(tx)
 		return err
 	}
-	defer u.txService.Commit(tx)
 
 	err = u.repo.Create(ctx, tx, userDTO)
 	if err != nil {
@@ -55,7 +53,7 @@ func (u UseCase) Create(ctx context.Context, userDTO entity.User) error {
 		return err
 	}
 
-	return nil
+	return u.txService.Commit(tx)
 }
 
 func (u UseCase) GetBalance(ctx context.Context, dto *entity.User) error {
@@ -64,7 +62,6 @@ func (u UseCase) GetBalance(ctx context.Context, dto *entity.User) error {
 		u.txService.Rollback(tx)
 		return err
 	}
-	defer u.txService.Commit(tx)
 
 	dto.Balance, err = u.repo.GetBalance(ctx, tx, dto)
 	if err != nil {
@@ -72,5 +69,5 @@ func (u UseCase) GetBalance(ctx context.Context, dto *entity.User) error {
 		return err
 	}
 
-	return nil
+	return u.txService.Commit(tx)
 }

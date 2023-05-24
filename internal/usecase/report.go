@@ -14,7 +14,6 @@ func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 		u.txService.Rollback(tx)
 		return err
 	}
-	defer u.txService.Commit(tx)
 
 	if year < 1975 || year > 2030 {
 		errYear := errors.New("wrong year")
@@ -37,7 +36,7 @@ func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 		return err
 	}
 
-	return nil
+	return u.txService.Commit(tx)
 }
 
 // createReportCSV функция создает csv файл отсчета из мап файла
