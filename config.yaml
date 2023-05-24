@@ -5,11 +5,11 @@ server:
   log_path: logrus.log
 
 postgres:
-  host: localhost
+  host: host.docker.internal #localhost
   port: 5436
   user: admin
   pass: admin
-  name: postgres
+  name: users #postgres
   ssl_mode: disable
 
 grpc:
