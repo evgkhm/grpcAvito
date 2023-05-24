@@ -22,7 +22,7 @@ func (u UseCase) Dereservation(ctx context.Context, dereservation entity.UserRes
 	}
 
 	//Узнать текущий баланс
-	var userDTO entity.User
+	var userDTO *entity.User
 	currBalance, err := u.repo.GetBalance(ctx, tx, userDTO)
 	if err != nil {
 		u.txService.Rollback(tx)
@@ -41,7 +41,7 @@ func (u UseCase) Dereservation(ctx context.Context, dereservation entity.UserRes
 	return nil
 }
 
-func (u UseCase) Reservation(ctx context.Context, reservation entity.UserReservation) error {
+func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		u.txService.Rollback(tx)
@@ -56,7 +56,7 @@ func (u UseCase) Reservation(ctx context.Context, reservation entity.UserReserva
 	}
 
 	//Узнать текущий баланс
-	var userDTO entity.User
+	var userDTO *entity.User
 	currBalance, err := u.repo.GetBalance(ctx, tx, userDTO)
 	if err != nil {
 		u.txService.Rollback(tx)

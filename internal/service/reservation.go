@@ -18,7 +18,7 @@ func (s Service) Dereservation(ctx context.Context, req *proto.DereservationReq)
 
 func (s Service) Reservation(ctx context.Context, req *proto.ReservationReq) (*proto.ReservationReply, error) {
 	userReservation := entity.UserReservation{Id: req.Id, IdService: req.IdService, IdOrder: req.IdOrder, Cost: req.Cost}
-	err := s.useCase.Reservation(ctx, userReservation)
+	err := s.useCase.Reservation(ctx, &userReservation)
 	if err != nil {
 		s.log.Errorf("reservation user: %v", err)
 		return &proto.ReservationReply{Success: false}, err

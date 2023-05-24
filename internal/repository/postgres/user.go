@@ -22,9 +22,9 @@ func NewUsersPostgres(db *sqlx.DB, log *logrus.Logger) *UsersRepositoryImpl {
 	}
 }
 
-func (r UsersRepositoryImpl) GetBalance(ctx context.Context, tx *sqlx.Tx, user entity.User) (float32, error) {
+func (r UsersRepositoryImpl) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (float32, error) {
 	var balance float32
-	query := fmt.Sprintf("SELECT id FROM %s WHERE id=$1", usersTable)
+	query := fmt.Sprintf("SELECT balance FROM %s WHERE id=$1", usersTable)
 	err := tx.Get(&balance, query, user.Id)
 	return balance, err
 }
@@ -47,7 +47,7 @@ func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, user entit
 	return nil
 }
 
-func (r UsersRepositoryImpl) Sum(ctx context.Context, tx *sqlx.Tx, user entity.User) error {
+func (r UsersRepositoryImpl) Sum(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.Exec(query, user.Balance, user.Id)
 	if err != nil {

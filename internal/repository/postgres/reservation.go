@@ -21,7 +21,7 @@ func NewReservationRepository(db *sqlx.DB, log *logrus.Logger) *ReservationRepos
 	}
 }
 
-func (r ReservationRepositoryImpl) Reservation(reservation entity.UserReservation, tx *sqlx.Tx) error {
+func (r ReservationRepositoryImpl) Reservation(reservation *entity.UserReservation, tx *sqlx.Tx) error {
 	var idOrder uint32
 	query := fmt.Sprintf(
 		"INSERT INTO %s (id, balance) "+
@@ -39,7 +39,7 @@ func (r ReservationRepositoryImpl) Reservation(reservation entity.UserReservatio
 	return nil
 }
 
-func (r ReservationRepositoryImpl) MinusBalance(tx *sqlx.Tx, user entity.User) error {
+func (r ReservationRepositoryImpl) MinusBalance(tx *sqlx.Tx, user *entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.Exec(query, user.Balance, user.Id)
 	if err != nil {

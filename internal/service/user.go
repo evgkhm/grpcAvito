@@ -27,7 +27,7 @@ func (s Service) Create(ctx context.Context, req *proto.CreateReq) (*proto.Creat
 
 func (s Service) Sum(ctx context.Context, req *proto.SumReq) (*proto.SumReply, error) {
 	userDTO := entity.User{Id: req.Id, Balance: req.Balance}
-	err := s.useCase.Sum(ctx, userDTO)
+	err := s.useCase.Sum(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("summing user: %v", err)
 		return &proto.SumReply{Success: false}, err
@@ -37,7 +37,7 @@ func (s Service) Sum(ctx context.Context, req *proto.SumReq) (*proto.SumReply, e
 
 func (s Service) GetBalance(ctx context.Context, req *proto.BalanceReq) (*proto.BalanceReply, error) {
 	userDTO := entity.User{Id: req.Id}
-	err := s.useCase.GetBalance(ctx, userDTO)
+	err := s.useCase.GetBalance(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("get balance user: %v", err)
 		return &proto.BalanceReply{Success: false}, err
