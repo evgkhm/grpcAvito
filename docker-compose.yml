@@ -24,6 +24,7 @@ services:
     command: ./wallet-app
     ports:
       - "8888:8888"
+      - "50051:50051"
     depends_on:
       - postgres
     environment:
