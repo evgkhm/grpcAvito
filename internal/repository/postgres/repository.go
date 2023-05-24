@@ -41,5 +41,6 @@ func NewRepositoryPostgres(db *sqlx.DB, log *logrus.Logger) *RepositoriesPostgre
 		UsersRepository:       NewUsersPostgres(db, log),
 		ReservationRepository: NewReservationRepository(db, log),
 		RevenueRepository:     NewRevenueRepository(db, log),
+		ReportRepository:      NewReportRepository(db, log),
 	}
 }

@@ -4,6 +4,9 @@
 # Log files
 *.log
 
+#CSV file
+*.csv
+
 # config files
 #*.env
 #config.yaml

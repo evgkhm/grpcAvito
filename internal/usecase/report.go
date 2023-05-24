@@ -25,6 +25,7 @@ func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 		return errYear
 	}
 
+	//reportMap := make(map[uint32]float32)
 	reportMap, err := u.repo.GetReport(ctx, tx, year, month)
 	if err != nil {
 		return err

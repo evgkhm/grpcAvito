@@ -5,12 +5,32 @@ import (
 	"database/sql"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 	"time"
 )
 
-func (r ReservationRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error) {
-	userRevenue := entity.UserRevenue{}
+type ReportRepositoryImpl struct {
+	db  *sqlx.DB
+	log *logrus.Logger
+}
+
+func NewReportRepository(db *sqlx.DB, log *logrus.Logger) *ReportRepositoryImpl {
+	return &ReportRepositoryImpl{
+		db:  db,
+		log: log,
+	}
+}
+
+type Report struct {
+	userData entity.UserRevenue
+	Year     int `json:"year"`
+	Month    int `json:"month"`
+}
+
+func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error) {
+	//userRevenue := entity.UserRevenue{}
+	report := Report{}
 	reportMap := make(map[uint32]float32)
 	rows, err := tx.Query("SELECT * FROM revenue WHERE EXTRACT(year FROM curr_date) = $1 AND EXTRACT(month FROM curr_date) = $2", year, month)
 	if err != nil {
@@ -27,10 +47,10 @@ func (r ReservationRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, y
 	//Добавление в хэш-таблицу данных с БД
 	for rows.Next() {
 		var stamp time.Time
-		err = rows.Scan(&userRevenue.Id, &userRevenue.IdService, &userRevenue.IdOrder, &userRevenue.Cost, &stamp)
-		//dataDB.Year = stamp.Year()
-		//dataDB.Month = int(stamp.Month())
-		reportMap[userRevenue.IdService] += userRevenue.Cost
+		err = rows.Scan(&report.userData.Id, &report.userData.IdService, &report.userData.IdOrder, &report.userData.Cost, &stamp)
+		report.Year = stamp.Year()
+		report.Month = int(stamp.Month())
+		reportMap[report.userData.IdService] += report.userData.Cost
 	}
 	return reportMap, nil
 }
