@@ -57,3 +57,20 @@ func (u UseCase) Create(ctx context.Context, userDTO entity.User) error {
 
 	return nil
 }
+
+func (u UseCase) GetBalance(ctx context.Context, dto entity.User) error {
+	tx, err := u.txService.NewTransaction()
+	if err != nil {
+		u.txService.Rollback(tx)
+		return err
+	}
+	defer u.txService.Commit(tx)
+
+	dto.Balance, err = u.repo.GetBalance(ctx, tx, dto)
+	if err != nil {
+		u.txService.Rollback(tx)
+		return err
+	}
+
+	return nil
+}

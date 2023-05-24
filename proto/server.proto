@@ -45,6 +45,12 @@ service Server {
       get: "/report/{year}/{month}"
     };
   };
+
+  rpc GetBalance(BalanceReq) returns (BalanceReply) {
+    option (google.api.http) = {
+      get: "/get_balance/{id}"
+    };
+  };
 }
 
 message CreateReq {
@@ -105,4 +111,14 @@ message ReportReq {
 
 message ReportReply {
   bool success = 1;
+}
+
+message BalanceReq {
+  uint32 id = 1;
+}
+
+message BalanceReply {
+  uint32 id = 1;
+  float balance = 2;
+  bool success = 3;
 }

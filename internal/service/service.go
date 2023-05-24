@@ -28,4 +28,5 @@ type ServerServer interface {
 	Dereservation(ctx context.Context, req *proto.DereservationReq) (*proto.DereservationReply, error)
 	Reservation(ctx context.Context, req *proto.ReservationReq) (*proto.ReservationReply, error)
 	Report(ctx context.Context, req *proto.ReportReq) (*proto.ReportReply, error)
+	GetBalance(ctx context.Context, req *proto.BalanceReq) (*proto.BalanceReply, error)
 }

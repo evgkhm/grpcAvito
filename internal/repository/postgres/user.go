@@ -24,7 +24,7 @@ func NewUsersPostgres(db *sqlx.DB, log *logrus.Logger) *UsersRepositoryImpl {
 
 func (r UsersRepositoryImpl) GetBalance(ctx context.Context, tx *sqlx.Tx, user entity.User) (float32, error) {
 	var balance float32
-	query := fmt.Sprintf("SELECT id FROM %s WHERE user_id=$1", usersTable)
+	query := fmt.Sprintf("SELECT id FROM %s WHERE id=$1", usersTable)
 	err := tx.Get(&balance, query, user.Id)
 	return balance, err
 }

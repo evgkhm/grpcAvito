@@ -25,6 +25,7 @@ const (
 	Server_Revenue_FullMethodName       = "/grpcAvito.Server/Revenue"
 	Server_Dereservation_FullMethodName = "/grpcAvito.Server/Dereservation"
 	Server_Report_FullMethodName        = "/grpcAvito.Server/Report"
+	Server_GetBalance_FullMethodName    = "/grpcAvito.Server/GetBalance"
 )
 
 // ServerClient is the client API for Server service.
@@ -37,6 +38,7 @@ type ServerClient interface {
 	Revenue(ctx context.Context, in *RevenueReq, opts ...grpc.CallOption) (*RevenueReply, error)
 	Dereservation(ctx context.Context, in *DereservationReq, opts ...grpc.CallOption) (*DereservationReply, error)
 	Report(ctx context.Context, in *ReportReq, opts ...grpc.CallOption) (*ReportReply, error)
+	GetBalance(ctx context.Context, in *BalanceReq, opts ...grpc.CallOption) (*BalanceReply, error)
 }
 
 type serverClient struct {
@@ -101,6 +103,15 @@ func (c *serverClient) Report(ctx context.Context, in *ReportReq, opts ...grpc.C
 	return out, nil
 }
 
+func (c *serverClient) GetBalance(ctx context.Context, in *BalanceReq, opts ...grpc.CallOption) (*BalanceReply, error) {
+	out := new(BalanceReply)
+	err := c.cc.Invoke(ctx, Server_GetBalance_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServerServer is the server API for Server service.
 // All implementations must embed UnimplementedServerServer
 // for forward compatibility
@@ -111,6 +122,7 @@ type ServerServer interface {
 	Revenue(context.Context, *RevenueReq) (*RevenueReply, error)
 	Dereservation(context.Context, *DereservationReq) (*DereservationReply, error)
 	Report(context.Context, *ReportReq) (*ReportReply, error)
+	GetBalance(context.Context, *BalanceReq) (*BalanceReply, error)
 	mustEmbedUnimplementedServerServer()
 }
 
@@ -135,6 +147,9 @@ func (UnimplementedServerServer) Dereservation(context.Context, *DereservationRe
 }
 func (UnimplementedServerServer) Report(context.Context, *ReportReq) (*ReportReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Report not implemented")
+}
+func (UnimplementedServerServer) GetBalance(context.Context, *BalanceReq) (*BalanceReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBalance not implemented")
 }
 func (UnimplementedServerServer) mustEmbedUnimplementedServerServer() {}
 
@@ -257,6 +272,24 @@ func _Server_Report_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_GetBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BalanceReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).GetBalance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Server_GetBalance_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).GetBalance(ctx, req.(*BalanceReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Server_ServiceDesc is the grpc.ServiceDesc for Server service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -287,6 +320,10 @@ var Server_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Report",
 			Handler:    _Server_Report_Handler,
+		},
+		{
+			MethodName: "GetBalance",
+			Handler:    _Server_GetBalance_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
