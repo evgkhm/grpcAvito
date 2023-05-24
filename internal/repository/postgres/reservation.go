@@ -49,7 +49,7 @@ func (r ReservationRepositoryImpl) MinusBalance(tx *sqlx.Tx, user *entity.User) 
 }
 
 func (r ReservationRepositoryImpl) Dereservation(dereservation entity.UserReservation, tx *sqlx.Tx) error {
-	query := fmt.Sprintf("DELETE FROM %s WHERE user_id=$1 and id_service=$2 and id_order=$3 and cost=$4", reservationTable)
+	query := fmt.Sprintf("DELETE FROM %s WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4", reservationTable)
 	_, err := tx.Exec(query, dereservation.Id, dereservation.IdService, dereservation.IdOrder, dereservation.Cost)
 	if err != nil {
 		return err
