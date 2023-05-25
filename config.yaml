@@ -1,7 +1,7 @@
 ---
 server:
   port: 8888
-  host_port: localhost:8888
+  host_port: 0.0.0.0:8888
   log_path: logrus.log
 
 postgres:
@@ -14,6 +14,6 @@ postgres:
 
 grpc:
   port: 50051
-  host_port: localhost:50051
+  host_port: 0.0.0.0:50051
 
 ...
