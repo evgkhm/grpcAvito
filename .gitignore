@@ -1,14 +1,8 @@
 # JetBrains IDE
-.idea/
+/.idea
 
 # Log files
 *.log
 
-#CSV file
-#*.csv
-
-
-# config files
-#*.env
-#config.yaml
-#configs/config.yml
+# Client
+/client
