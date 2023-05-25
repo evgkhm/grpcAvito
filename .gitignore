@@ -7,6 +7,9 @@
 #CSV file
 #*.csv
 
+#PNG files
+*.png
+
 # config files
 #*.env
 #config.yaml
