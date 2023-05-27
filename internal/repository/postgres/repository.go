@@ -16,12 +16,11 @@ type UsersRepository interface {
 type ReservationRepository interface {
 	Reservation(ctx context.Context, reservation *entity.UserReservation, tx *sqlx.Tx) error
 	MinusBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
-	Dereservation(ctx context.Context, dereservation entity.UserReservation, tx *sqlx.Tx) error
+	DeleteReservation(ctx context.Context, reservation entity.UserReservation, tx *sqlx.Tx) error
 }
 
 type RevenueRepository interface {
 	Revenue(ctx context.Context, revenue entity.UserRevenue, tx *sqlx.Tx) error
-	MinusReservation(ctx context.Context, reservation entity.UserReservation, tx *sqlx.Tx) error
 }
 
 type ReportRepository interface {

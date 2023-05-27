@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Server_Create_FullMethodName        = "/grpcAvito.Server/Create"
-	Server_Sum_FullMethodName           = "/grpcAvito.Server/Sum"
-	Server_Reservation_FullMethodName   = "/grpcAvito.Server/Reservation"
-	Server_Revenue_FullMethodName       = "/grpcAvito.Server/Revenue"
-	Server_Dereservation_FullMethodName = "/grpcAvito.Server/Dereservation"
-	Server_Report_FullMethodName        = "/grpcAvito.Server/Report"
-	Server_GetBalance_FullMethodName    = "/grpcAvito.Server/GetBalance"
+	Server_Create_FullMethodName            = "/grpcAvito.Server/Create"
+	Server_Sum_FullMethodName               = "/grpcAvito.Server/Sum"
+	Server_Reservation_FullMethodName       = "/grpcAvito.Server/Reservation"
+	Server_Revenue_FullMethodName           = "/grpcAvito.Server/Revenue"
+	Server_DeleteReservation_FullMethodName = "/grpcAvito.Server/DeleteReservation"
+	Server_Report_FullMethodName            = "/grpcAvito.Server/Report"
+	Server_GetBalance_FullMethodName        = "/grpcAvito.Server/GetBalance"
 )
 
 // ServerClient is the client API for Server service.
@@ -36,7 +36,7 @@ type ServerClient interface {
 	Sum(ctx context.Context, in *SumReq, opts ...grpc.CallOption) (*SumReply, error)
 	Reservation(ctx context.Context, in *ReservationReq, opts ...grpc.CallOption) (*ReservationReply, error)
 	Revenue(ctx context.Context, in *RevenueReq, opts ...grpc.CallOption) (*RevenueReply, error)
-	Dereservation(ctx context.Context, in *DereservationReq, opts ...grpc.CallOption) (*DereservationReply, error)
+	DeleteReservation(ctx context.Context, in *DeleteReservationReq, opts ...grpc.CallOption) (*DeleteReservationReply, error)
 	Report(ctx context.Context, in *ReportReq, opts ...grpc.CallOption) (*ReportReply, error)
 	GetBalance(ctx context.Context, in *BalanceReq, opts ...grpc.CallOption) (*BalanceReply, error)
 }
@@ -85,9 +85,9 @@ func (c *serverClient) Revenue(ctx context.Context, in *RevenueReq, opts ...grpc
 	return out, nil
 }
 
-func (c *serverClient) Dereservation(ctx context.Context, in *DereservationReq, opts ...grpc.CallOption) (*DereservationReply, error) {
-	out := new(DereservationReply)
-	err := c.cc.Invoke(ctx, Server_Dereservation_FullMethodName, in, out, opts...)
+func (c *serverClient) DeleteReservation(ctx context.Context, in *DeleteReservationReq, opts ...grpc.CallOption) (*DeleteReservationReply, error) {
+	out := new(DeleteReservationReply)
+	err := c.cc.Invoke(ctx, Server_DeleteReservation_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ type ServerServer interface {
 	Sum(context.Context, *SumReq) (*SumReply, error)
 	Reservation(context.Context, *ReservationReq) (*ReservationReply, error)
 	Revenue(context.Context, *RevenueReq) (*RevenueReply, error)
-	Dereservation(context.Context, *DereservationReq) (*DereservationReply, error)
+	DeleteReservation(context.Context, *DeleteReservationReq) (*DeleteReservationReply, error)
 	Report(context.Context, *ReportReq) (*ReportReply, error)
 	GetBalance(context.Context, *BalanceReq) (*BalanceReply, error)
 	mustEmbedUnimplementedServerServer()
@@ -142,8 +142,8 @@ func (UnimplementedServerServer) Reservation(context.Context, *ReservationReq) (
 func (UnimplementedServerServer) Revenue(context.Context, *RevenueReq) (*RevenueReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Revenue not implemented")
 }
-func (UnimplementedServerServer) Dereservation(context.Context, *DereservationReq) (*DereservationReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Dereservation not implemented")
+func (UnimplementedServerServer) DeleteReservation(context.Context, *DeleteReservationReq) (*DeleteReservationReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteReservation not implemented")
 }
 func (UnimplementedServerServer) Report(context.Context, *ReportReq) (*ReportReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Report not implemented")
@@ -236,20 +236,20 @@ func _Server_Revenue_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Server_Dereservation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DereservationReq)
+func _Server_DeleteReservation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteReservationReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServerServer).Dereservation(ctx, in)
+		return srv.(ServerServer).DeleteReservation(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Server_Dereservation_FullMethodName,
+		FullMethod: Server_DeleteReservation_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServerServer).Dereservation(ctx, req.(*DereservationReq))
+		return srv.(ServerServer).DeleteReservation(ctx, req.(*DeleteReservationReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -314,8 +314,8 @@ var Server_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Server_Revenue_Handler,
 		},
 		{
-			MethodName: "Dereservation",
-			Handler:    _Server_Dereservation_Handler,
+			MethodName: "DeleteReservation",
+			Handler:    _Server_DeleteReservation_Handler,
 		},
 		{
 			MethodName: "Report",

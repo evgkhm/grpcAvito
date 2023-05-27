@@ -20,15 +20,15 @@ func NewRevenueRepository(db *sqlx.DB, log *logrus.Logger) *RevenueRepositoryImp
 	}
 }
 
-func (r RevenueRepositoryImpl) MinusReservation(ctx context.Context, reservation entity.UserReservation, tx *sqlx.Tx) error {
-	query := `DELETE FROM reservation 
+/*func (r RevenueRepositoryImpl) DeleteReservation(ctx context.Context, reservation entity.UserReservation, tx *sqlx.Tx) error {
+	query := `DELETE FROM reservation
        WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4`
 	_, err := tx.ExecContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err != nil {
 		return err
 	}
 	return nil
-}
+}*/
 
 func (r RevenueRepositoryImpl) Revenue(ctx context.Context, revenue entity.UserRevenue, tx *sqlx.Tx) error {
 	var idOrder uint32

@@ -6,7 +6,7 @@ import (
 	"grpcAvito/internal/entity"
 )
 
-func (u UseCase) Dereservation(ctx context.Context, dereservation entity.UserReservation) error {
+func (u UseCase) DeleteReservation(ctx context.Context, reservation entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		u.txService.Rollback(tx)
@@ -14,7 +14,7 @@ func (u UseCase) Dereservation(ctx context.Context, dereservation entity.UserRes
 	}
 
 	//Убрать резерв
-	err = u.repo.Dereservation(ctx, dereservation, tx)
+	err = u.repo.DeleteReservation(ctx, reservation, tx)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err
@@ -22,7 +22,7 @@ func (u UseCase) Dereservation(ctx context.Context, dereservation entity.UserRes
 
 	//Узнать текущий баланс
 	//var userDTO *entity.User
-	userDTO := entity.User{Id: dereservation.Id}
+	userDTO := entity.User{Id: reservation.Id}
 	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
 		u.txService.Rollback(tx)
@@ -30,7 +30,7 @@ func (u UseCase) Dereservation(ctx context.Context, dereservation entity.UserRes
 	}
 
 	//Начисление баланса
-	newBalance := currBalance + dereservation.Cost
+	newBalance := currBalance + reservation.Cost
 	userDTO.Balance = newBalance
 	err = u.repo.Sum(ctx, tx, &userDTO)
 	if err != nil {

@@ -6,14 +6,14 @@ import (
 	"grpcAvito/proto"
 )
 
-func (s Service) Dereservation(ctx context.Context, req *proto.DereservationReq) (*proto.DereservationReply, error) {
+func (s Service) DeleteReservation(ctx context.Context, req *proto.DeleteReservationReq) (*proto.DeleteReservationReply, error) {
 	userReservation := entity.UserReservation{Id: req.Id, IdService: req.IdService, IdOrder: req.IdOrder, Cost: req.Cost}
-	err := s.useCase.Dereservation(ctx, userReservation)
+	err := s.useCase.DeleteReservation(ctx, userReservation)
 	if err != nil {
 		s.log.Errorf("revenue user: %v", err)
-		return &proto.DereservationReply{Success: false}, err
+		return &proto.DeleteReservationReply{Success: false}, err
 	}
-	return &proto.DereservationReply{Success: true}, nil
+	return &proto.DeleteReservationReply{Success: true}, nil
 }
 
 func (s Service) Reservation(ctx context.Context, req *proto.ReservationReq) (*proto.ReservationReply, error) {

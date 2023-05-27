@@ -33,9 +33,9 @@ service Server {
     };
   };
 
-  rpc Dereservation(DereservationReq) returns (DereservationReply) {
+  rpc DeleteReservation(DeleteReservationReq) returns (DeleteReservationReply) {
     option (google.api.http) = {
-      post: "/dereservation"
+      post: "/delete_reservation"
       body: "*"
     };
   };
@@ -93,14 +93,14 @@ message RevenueReply {
   bool success = 1;
 }
 
-message DereservationReq {
+message DeleteReservationReq {
   uint32 id = 1;
   uint32 idService = 2;
   uint32 idOrder = 3;
   float cost = 4;
 }
 
-message DereservationReply {
+message DeleteReservationReply {
   bool success = 1;
 }
 

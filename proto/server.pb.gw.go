@@ -167,8 +167,8 @@ func local_request_Server_Revenue_0(ctx context.Context, marshaler runtime.Marsh
 
 }
 
-func request_Server_Dereservation_0(ctx context.Context, marshaler runtime.Marshaler, client ServerClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DereservationReq
+func request_Server_DeleteReservation_0(ctx context.Context, marshaler runtime.Marshaler, client ServerClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DeleteReservationReq
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -179,13 +179,13 @@ func request_Server_Dereservation_0(ctx context.Context, marshaler runtime.Marsh
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.Dereservation(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.DeleteReservation(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Server_Dereservation_0(ctx context.Context, marshaler runtime.Marshaler, server ServerServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DereservationReq
+func local_request_Server_DeleteReservation_0(ctx context.Context, marshaler runtime.Marshaler, server ServerServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DeleteReservationReq
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -196,7 +196,7 @@ func local_request_Server_Dereservation_0(ctx context.Context, marshaler runtime
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.Dereservation(ctx, &protoReq)
+	msg, err := server.DeleteReservation(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -431,7 +431,7 @@ func RegisterServerHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 
 	})
 
-	mux.Handle("POST", pattern_Server_Dereservation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Server_DeleteReservation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -439,12 +439,12 @@ func RegisterServerHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/grpcAvito.Server/Dereservation", runtime.WithHTTPPathPattern("/dereservation"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/grpcAvito.Server/DeleteReservation", runtime.WithHTTPPathPattern("/delete_reservation"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Server_Dereservation_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Server_DeleteReservation_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
@@ -452,7 +452,7 @@ func RegisterServerHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 			return
 		}
 
-		forward_Server_Dereservation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Server_DeleteReservation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -635,25 +635,25 @@ func RegisterServerHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 
 	})
 
-	mux.Handle("POST", pattern_Server_Dereservation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Server_DeleteReservation_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/grpcAvito.Server/Dereservation", runtime.WithHTTPPathPattern("/dereservation"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/grpcAvito.Server/DeleteReservation", runtime.WithHTTPPathPattern("/delete_reservation"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Server_Dereservation_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Server_DeleteReservation_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Server_Dereservation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Server_DeleteReservation_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -713,7 +713,7 @@ var (
 
 	pattern_Server_Revenue_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"revenue"}, ""))
 
-	pattern_Server_Dereservation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"dereservation"}, ""))
+	pattern_Server_DeleteReservation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"delete_reservation"}, ""))
 
 	pattern_Server_Report_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1, 1, 0, 4, 1, 5, 2}, []string{"report", "year", "month"}, ""))
 
@@ -729,7 +729,7 @@ var (
 
 	forward_Server_Revenue_0 = runtime.ForwardResponseMessage
 
-	forward_Server_Dereservation_0 = runtime.ForwardResponseMessage
+	forward_Server_DeleteReservation_0 = runtime.ForwardResponseMessage
 
 	forward_Server_Report_0 = runtime.ForwardResponseMessage
 
