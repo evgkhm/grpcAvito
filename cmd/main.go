@@ -30,13 +30,13 @@ func main() {
 		log.Fatalf("Failed to initialize database connection: %s", err.Error())
 	}
 
-	postgresRepository := postgres.NewRepositoryPostgres(postgresDB, log)
+	postgresRepository := postgres.New(postgresDB, log)
 
-	useCases := usecase.NewUseCase(postgresRepository, log, postgresDB)
+	useCases := usecase.New(postgresRepository, log, postgresDB)
 
-	service := service.NewService(useCases, log)
+	service := service.New(useCases, log)
 
-	grpcServer := server.NewGRPCServer(service, log)
+	grpcServer := server.New(service, log)
 
 	listen, err := net.Listen("tcp", config.GRPC.HostPort)
 	if err != nil {

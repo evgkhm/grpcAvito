@@ -35,7 +35,7 @@ type RepositoriesPostgres struct {
 	ReportRepository
 }
 
-func NewRepositoryPostgres(db *sqlx.DB, log *logrus.Logger) *RepositoriesPostgres {
+func New(db *sqlx.DB, log *logrus.Logger) *RepositoriesPostgres {
 
 	return &RepositoriesPostgres{
 		UsersRepository:       NewUsersPostgres(db, log),

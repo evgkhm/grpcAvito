@@ -24,7 +24,7 @@ type UseCase struct {
 	log       *logrus.Logger
 }
 
-func NewUseCase(repo *postgres.RepositoriesPostgres, log *logrus.Logger, postgresDB *sqlx.DB) *UseCase {
+func New(repo *postgres.RepositoriesPostgres, log *logrus.Logger, postgresDB *sqlx.DB) *UseCase {
 	txService := NewTransactionService(postgresDB, log)
 	return &UseCase{
 		repo:      repo,

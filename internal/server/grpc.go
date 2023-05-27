@@ -10,7 +10,7 @@ import (
 	"grpcAvito/proto"
 )
 
-func NewGRPCServer(service *service.Service, logger *logrus.Logger) *grpc.Server {
+func New(service *service.Service, logger *logrus.Logger) *grpc.Server {
 	logger.Info("new grpc server")
 	log := logrus.NewEntry(logger)
 	var opts = []grpc.ServerOption{

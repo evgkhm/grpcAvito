@@ -13,7 +13,7 @@ type Service struct {
 	log     *logrus.Logger
 }
 
-func NewService(useCase *usecase.UseCase, log *logrus.Logger) *Service {
+func New(useCase *usecase.UseCase, log *logrus.Logger) *Service {
 	return &Service{
 		UnimplementedServerServer: proto.UnimplementedServerServer{},
 		useCase:                   useCase,
