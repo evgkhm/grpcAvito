@@ -35,7 +35,6 @@ type RepositoriesPostgres struct {
 }
 
 func New(db *sqlx.DB, log *logrus.Logger) *RepositoriesPostgres {
-
 	return &RepositoriesPostgres{
 		UsersRepository:       NewUsersPostgres(db, log),
 		ReservationRepository: NewReservationRepository(db, log),
