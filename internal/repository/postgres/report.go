@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
@@ -34,7 +35,7 @@ func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year u
 		AND EXTRACT(month FROM curr_date)=$2`
 	rows, err := tx.QueryxContext(ctx, query, year, month)
 	if err != nil {
-		return nil, ErrGetYearMonth
+		return nil, fmt.Errorf("postgres: %w", ErrGetYearMonth)
 	}
 	defer func(rows *sqlx.Rows) {
 		err = rows.Close()

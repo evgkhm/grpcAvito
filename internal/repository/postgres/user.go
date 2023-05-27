@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 	"github.com/sirupsen/logrus"
@@ -24,7 +25,10 @@ func (r UsersRepositoryImpl) GetBalance(ctx context.Context, tx *sqlx.Tx, user *
 	var balance float32
 	query := `SELECT balance FROM usr WHERE id=$1 `
 	err := tx.GetContext(ctx, &balance, query, user.Id)
-	return balance, err
+	if err != nil {
+		return 0, fmt.Errorf("postgres: %w", err)
+	}
+	return balance, nil
 }
 
 func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
@@ -33,9 +37,9 @@ func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, user *enti
 	row := tx.QueryRowxContext(ctx, query, user.Id, user.Balance)
 	if err, ok := row.Scan(&id).(*pq.Error); ok {
 		if err.Code == "23505" {
-			return ErrUserAlreadyExist
+			return fmt.Errorf("postgres: %w", ErrUserAlreadyExist)
 		}
-		return err
+		return fmt.Errorf("postgres: %w", err)
 	}
 	return nil
 }
@@ -44,7 +48,7 @@ func (r UsersRepositoryImpl) Sum(ctx context.Context, tx *sqlx.Tx, user *entity.
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.Id)
 	if err != nil {
-		return err
+		return fmt.Errorf("postgres: %w", err)
 	}
 	return nil
 }

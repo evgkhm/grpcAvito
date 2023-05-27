@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 	"github.com/sirupsen/logrus"
@@ -30,9 +31,9 @@ func (r ReservationRepositoryImpl) Reservation(ctx context.Context, tx *sqlx.Tx,
 	row := tx.QueryRowxContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {
 		if err.Code == "23505" {
-			return ErrUserNotExist
+			return fmt.Errorf("postgres: %w", ErrUserNotExist)
 		}
-		return err
+		return fmt.Errorf("postgres: %w", err)
 	}
 
 	return nil
@@ -42,7 +43,7 @@ func (r ReservationRepositoryImpl) MinusBalance(ctx context.Context, tx *sqlx.Tx
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.Id)
 	if err != nil {
-		return err
+		return fmt.Errorf("postgres: %w", err)
 	}
 	return nil
 }
@@ -52,7 +53,7 @@ func (r ReservationRepositoryImpl) DeleteReservation(ctx context.Context, tx *sq
        WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4`
 	_, err := tx.ExecContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err != nil {
-		return err
+		return fmt.Errorf("postgres: %w", err)
 	}
 
 	return nil

@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 	"github.com/sirupsen/logrus"
@@ -28,9 +29,9 @@ func (r RevenueRepositoryImpl) Revenue(ctx context.Context, tx *sqlx.Tx, revenue
 	row := tx.QueryRowxContext(ctx, query, revenue.Id, revenue.IdService, revenue.IdOrder, revenue.Cost)
 	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {
 		if err.Code == "23505" {
-			return ErrUserAlreadyExist
+			return fmt.Errorf("postgres: %w", ErrUserAlreadyExist)
 		}
-		return err
+		return fmt.Errorf("postgres: %w", err)
 	}
 
 	return nil
