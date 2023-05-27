@@ -36,7 +36,7 @@ func main() {
 
 	service := service.New(useCases, log)
 
-	grpcServer := server.New(service, log)
+	grpcServer := server.NewGRPCServer(service, log)
 
 	listen, err := net.Listen("tcp", config.GRPC.HostPort)
 	if err != nil {
