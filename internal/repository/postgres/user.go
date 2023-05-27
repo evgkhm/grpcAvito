@@ -4,14 +4,8 @@ import (
 	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
-)
-
-var (
-	ErrUserAlreadyExist = errors.New("such user already exists")
-	ErrUserNotExist     = errors.New("such user does not exist")
 )
 
 type UsersRepositoryImpl struct {

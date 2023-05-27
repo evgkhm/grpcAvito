@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 	"time"
@@ -29,13 +28,14 @@ type Report struct {
 }
 
 func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error) {
-	//userRevenue := entity.UserRevenue{}
 	report := Report{}
 	reportMap := make(map[uint32]float32)
-	rows, err := tx.Query("SELECT * FROM revenue WHERE EXTRACT(year FROM curr_date) = $1 AND EXTRACT(month FROM curr_date) = $2", year, month)
+	query := `SELECT * FROM revenue 
+		WHERE EXTRACT(year FROM curr_date)=$1 
+		AND EXTRACT(month FROM curr_date)=$2`
+	rows, err := tx.Query(query, year, month)
 	if err != nil {
-		errGetYearMonth := errors.New("getting year or month")
-		return nil, errGetYearMonth
+		return nil, ErrGetYearMonth
 	}
 	defer func(rows *sql.Rows) {
 		err = rows.Close()

@@ -14,7 +14,7 @@ func (u UseCase) Dereservation(ctx context.Context, dereservation entity.UserRes
 	}
 
 	//Убрать резерв
-	err = u.repo.Dereservation(dereservation, tx)
+	err = u.repo.Dereservation(ctx, dereservation, tx)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err
@@ -48,7 +48,7 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 		return err
 	}
 
-	err = u.repo.Reservation(reservation, tx)
+	err = u.repo.Reservation(ctx, reservation, tx)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err
@@ -75,7 +75,7 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 	userDTO.Id = reservation.Id
 	userDTO.Balance = newBalance
 
-	err = u.repo.MinusBalance(tx, &userDTO)
+	err = u.repo.MinusBalance(ctx, tx, &userDTO)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err

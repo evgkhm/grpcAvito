@@ -1,10 +1,9 @@
 package postgres
 
 import (
-	"fmt"
+	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 )
@@ -21,17 +20,17 @@ func NewReservationRepository(db *sqlx.DB, log *logrus.Logger) *ReservationRepos
 	}
 }
 
-func (r ReservationRepositoryImpl) Reservation(reservation *entity.UserReservation, tx *sqlx.Tx) error {
+func (r ReservationRepositoryImpl) Reservation(ctx context.Context, reservation *entity.UserReservation, tx *sqlx.Tx) error {
 	var idOrder uint32
-	query := fmt.Sprintf(
-		"INSERT INTO %s (id, id_service, id_order, cost) "+
-			"VALUES ($1, $2, $3, $4) RETURNING id", reservationTable)
 
-	row := tx.QueryRow(query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
+	query := `INSERT INTO reservation 
+    	(id, id_service, id_order, cost) 
+			VALUES ($1, $2, $3, $4) RETURNING id`
+
+	row := tx.QueryRowxContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {
 		if err.Code == "23505" {
-			ErrUserAlreadyExist := errors.New("such idOrder already exists")
-			return ErrUserAlreadyExist
+			return ErrUserNotExist
 		}
 		return err
 	}
@@ -39,18 +38,19 @@ func (r ReservationRepositoryImpl) Reservation(reservation *entity.UserReservati
 	return nil
 }
 
-func (r ReservationRepositoryImpl) MinusBalance(tx *sqlx.Tx, user *entity.User) error {
+func (r ReservationRepositoryImpl) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
-	_, err := tx.Exec(query, user.Balance, user.Id)
+	_, err := tx.ExecContext(ctx, query, user.Balance, user.Id)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r ReservationRepositoryImpl) Dereservation(dereservation entity.UserReservation, tx *sqlx.Tx) error {
-	query := fmt.Sprintf("DELETE FROM %s WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4", reservationTable)
-	_, err := tx.Exec(query, dereservation.Id, dereservation.IdService, dereservation.IdOrder, dereservation.Cost)
+func (r ReservationRepositoryImpl) Dereservation(ctx context.Context, dereservation entity.UserReservation, tx *sqlx.Tx) error {
+	query := `DELETE FROM reservation 
+       WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4`
+	_, err := tx.ExecContext(ctx, query, dereservation.Id, dereservation.IdService, dereservation.IdOrder, dereservation.Cost)
 	if err != nil {
 		return err
 	}

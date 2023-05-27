@@ -19,14 +19,14 @@ func (u UseCase) Revenue(ctx context.Context, revenue entity.UserRevenue) error 
 	}
 
 	//Списать с резервации
-	err = u.repo.MinusReservation(reservation, tx)
+	err = u.repo.MinusReservation(ctx, reservation, tx)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err
 	}
 
 	//Начислить в revenue
-	err = u.repo.Revenue(revenue, tx)
+	err = u.repo.Revenue(ctx, revenue, tx)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err

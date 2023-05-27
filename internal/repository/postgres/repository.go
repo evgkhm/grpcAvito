@@ -14,14 +14,14 @@ type UsersRepository interface {
 }
 
 type ReservationRepository interface {
-	Reservation(reservation *entity.UserReservation, tx *sqlx.Tx) error
-	MinusBalance(tx *sqlx.Tx, userDTO *entity.User) error
-	Dereservation(dereservation entity.UserReservation, tx *sqlx.Tx) error
+	Reservation(ctx context.Context, reservation *entity.UserReservation, tx *sqlx.Tx) error
+	MinusBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
+	Dereservation(ctx context.Context, dereservation entity.UserReservation, tx *sqlx.Tx) error
 }
 
 type RevenueRepository interface {
-	Revenue(revenue entity.UserRevenue, tx *sqlx.Tx) error
-	MinusReservation(reservation entity.UserReservation, tx *sqlx.Tx) error
+	Revenue(ctx context.Context, revenue entity.UserRevenue, tx *sqlx.Tx) error
+	MinusReservation(ctx context.Context, reservation entity.UserReservation, tx *sqlx.Tx) error
 }
 
 type ReportRepository interface {
