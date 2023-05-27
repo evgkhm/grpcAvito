@@ -22,8 +22,8 @@ func New(useCase *usecase.UseCase, log *logrus.Logger) *Service {
 }
 
 type ServerServer interface {
-	Create(context.Context, *proto.CreateReq) (*proto.CreateReply, error)
-	Sum(context.Context, *proto.SumReq) (*proto.SumReply, error)
+	Create(ctx context.Context, req *proto.CreateReq) (*proto.CreateReply, error)
+	Sum(ctx context.Context, req *proto.SumReq) (*proto.SumReply, error)
 	Revenue(ctx context.Context, req *proto.RevenueReq) (*proto.RevenueReply, error)
 	DeleteReservation(ctx context.Context, req *proto.DeleteReservationReq) (*proto.DeleteReservationReply, error)
 	Reservation(ctx context.Context, req *proto.ReservationReq) (*proto.ReservationReply, error)

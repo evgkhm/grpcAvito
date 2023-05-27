@@ -20,7 +20,7 @@ func NewReservationRepository(db *sqlx.DB, log *logrus.Logger) *ReservationRepos
 	}
 }
 
-func (r ReservationRepositoryImpl) Reservation(ctx context.Context, reservation *entity.UserReservation, tx *sqlx.Tx) error {
+func (r ReservationRepositoryImpl) Reservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
 	var idOrder uint32
 
 	query := `INSERT INTO reservation 
@@ -47,10 +47,10 @@ func (r ReservationRepositoryImpl) MinusBalance(ctx context.Context, tx *sqlx.Tx
 	return nil
 }
 
-func (r ReservationRepositoryImpl) DeleteReservation(ctx context.Context, dereservation entity.UserReservation, tx *sqlx.Tx) error {
+func (r ReservationRepositoryImpl) DeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
 	query := `DELETE FROM reservation 
        WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4`
-	_, err := tx.ExecContext(ctx, query, dereservation.Id, dereservation.IdService, dereservation.IdOrder, dereservation.Cost)
+	_, err := tx.ExecContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err != nil {
 		return err
 	}

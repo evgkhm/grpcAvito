@@ -8,19 +8,19 @@ import (
 )
 
 type UsersRepository interface {
-	Create(ctx context.Context, tx *sqlx.Tx, userDTO entity.User) error
+	Create(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
 	Sum(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
 	GetBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) (float32, error)
 }
 
 type ReservationRepository interface {
-	Reservation(ctx context.Context, reservation *entity.UserReservation, tx *sqlx.Tx) error
+	Reservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
 	MinusBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
-	DeleteReservation(ctx context.Context, reservation entity.UserReservation, tx *sqlx.Tx) error
+	DeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
 }
 
 type RevenueRepository interface {
-	Revenue(ctx context.Context, revenue entity.UserRevenue, tx *sqlx.Tx) error
+	Revenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error
 }
 
 type ReportRepository interface {

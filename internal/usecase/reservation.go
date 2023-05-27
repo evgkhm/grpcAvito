@@ -6,7 +6,7 @@ import (
 	"grpcAvito/internal/entity"
 )
 
-func (u UseCase) DeleteReservation(ctx context.Context, reservation entity.UserReservation) error {
+func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		u.txService.Rollback(tx)
@@ -14,7 +14,7 @@ func (u UseCase) DeleteReservation(ctx context.Context, reservation entity.UserR
 	}
 
 	//Убрать резерв
-	err = u.repo.DeleteReservation(ctx, reservation, tx)
+	err = u.repo.DeleteReservation(ctx, tx, reservation)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err
@@ -48,7 +48,7 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 		return err
 	}
 
-	err = u.repo.Reservation(ctx, reservation, tx)
+	err = u.repo.Reservation(ctx, tx, reservation)
 	if err != nil {
 		u.txService.Rollback(tx)
 		return err

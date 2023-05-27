@@ -17,7 +17,7 @@ type UsersServiceImpl struct {
 
 func (s Service) Create(ctx context.Context, req *proto.CreateReq) (*proto.CreateReply, error) {
 	userDTO := entity.User{Id: req.Id, Balance: req.Balance}
-	err := s.useCase.Create(ctx, userDTO)
+	err := s.useCase.Create(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("creating user: %v", err)
 		return &proto.CreateReply{Success: false}, err

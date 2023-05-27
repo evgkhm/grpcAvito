@@ -40,7 +40,7 @@ func (u UseCase) Sum(ctx context.Context, userDTO *entity.User) error {
 	return u.txService.Commit(tx)
 }
 
-func (u UseCase) Create(ctx context.Context, userDTO entity.User) error {
+func (u UseCase) Create(ctx context.Context, userDTO *entity.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		u.txService.Rollback(tx)

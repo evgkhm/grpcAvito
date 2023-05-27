@@ -27,7 +27,7 @@ func (r UsersRepositoryImpl) GetBalance(ctx context.Context, tx *sqlx.Tx, user *
 	return balance, err
 }
 
-func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, user entity.User) error {
+func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	var id int64
 	query := `INSERT INTO usr (id, balance) VALUES ($1, $2) RETURNING id`
 	row := tx.QueryRowxContext(ctx, query, user.Id, user.Balance)

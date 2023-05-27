@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"context"
-	"database/sql"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
@@ -33,11 +32,11 @@ func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year u
 	query := `SELECT * FROM revenue 
 		WHERE EXTRACT(year FROM curr_date)=$1 
 		AND EXTRACT(month FROM curr_date)=$2`
-	rows, err := tx.Query(query, year, month)
+	rows, err := tx.QueryxContext(ctx, query, year, month)
 	if err != nil {
 		return nil, ErrGetYearMonth
 	}
-	defer func(rows *sql.Rows) {
+	defer func(rows *sqlx.Rows) {
 		err = rows.Close()
 		if err != nil {
 			return
