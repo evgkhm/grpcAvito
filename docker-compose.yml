@@ -6,12 +6,11 @@ services:
     restart: always
     ports:
       - "5436:5432"
-    env_file:
-      - .env
     environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_USER=admin
       - POSTGRES_DB=users #postgres
+      - POSTGRES_SSLMODE=disable
     image: postgres:15.0-alpine3.16
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -29,5 +28,5 @@ services:
       - postgres
     environment:
      - CONFIG_PATH=/go/config.yaml
-    env_file:
-      - /.env
+     - POSTGRES_HOST=host.docker.internal
+     - POSTGRES_PORT=5436
