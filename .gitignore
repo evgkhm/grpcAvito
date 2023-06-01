@@ -1,6 +1,9 @@
 # JetBrains IDE
 /.idea
 
+# Build
+/build
+
 # Log files
 *.log
 

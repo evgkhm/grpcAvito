@@ -10,8 +10,7 @@
 
 # Getting Started
 1. `git clone https://github.com/evgkhm/grpcAvito`
-2. `cd grpcAvito`
-3. `docker-compose up --build`
+2. `make run`
 
 # Implemented
 1. Метод начисления средств на баланс
@@ -44,7 +43,7 @@
 4. Подключение к БД psql -U admin -d users
 
 # For proto-files generating
-protoc -I ./proto --go_out ./proto --go_opt paths=source_relative --go-grpc_out ./proto --go-grpc_opt paths=source_relative --grpc-gateway_out ./proto --grpc-gateway_opt paths=source_relative ./proto/server.proto
+`make proto`
 
 # For start local without docker
 Add path to config.yaml. E.g.:
