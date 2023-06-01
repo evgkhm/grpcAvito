@@ -7,6 +7,7 @@
 + sqlx
 + logrus
 + Docker
++ golangci-lint
 
 # Getting Started
 1. `git clone https://github.com/evgkhm/grpcAvito`
