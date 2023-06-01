@@ -9,14 +9,14 @@ import (
 func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
 	//Убрать резерв
 	err = u.repo.DeleteReservation(ctx, tx, reservation)
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
@@ -25,7 +25,7 @@ func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.User
 	userDTO := entity.User{Id: reservation.Id}
 	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
@@ -34,7 +34,7 @@ func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.User
 	userDTO.Balance = newBalance
 	err = u.repo.Sum(ctx, tx, &userDTO)
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
@@ -44,13 +44,13 @@ func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.User
 func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
 	err = u.repo.Reservation(ctx, tx, reservation)
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
@@ -59,14 +59,14 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 	userDTO := entity.User{Id: reservation.Id}
 	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
 	//Проверка на отрицательный баланс
 	newBalance := currBalance - reservation.Cost
 	if newBalance < 0 {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		errUserNegativeBalance := errors.New("you cannot reserve with negative balance")
 		return errUserNegativeBalance
 	}
@@ -77,7 +77,7 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 
 	err = u.repo.MinusBalance(ctx, tx, &userDTO)
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 

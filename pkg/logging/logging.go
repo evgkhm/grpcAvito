@@ -17,7 +17,7 @@ func (hook writerHook) Fire(entry *logrus.Entry) error {
 		return err
 	}
 	for _, w := range hook.Writer {
-		w.Write([]byte(line))
+		_, err = w.Write([]byte(line))
 	}
 	return err
 }
@@ -33,11 +33,11 @@ func GetLogger() *logrus.Logger {
 	})
 	l.SetReportCaller(true)
 
-	/*err := os.MkdirAll("./logs", 0644)
+	err := os.MkdirAll("./logs", 0644)
 	if err != nil {
 		panic(err)
-	}*/
-	logFile, err := os.OpenFile("all.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	}
+	logFile, err := os.OpenFile("./logs/all.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		l.Printf("Couldn't open logfile. %s", err.Error())
 	}

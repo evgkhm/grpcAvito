@@ -8,7 +8,7 @@ import (
 func (u UseCase) Revenue(ctx context.Context, revenue *entity.UserRevenue) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
@@ -21,14 +21,14 @@ func (u UseCase) Revenue(ctx context.Context, revenue *entity.UserRevenue) error
 	//Списать с резервации
 	err = u.repo.DeleteReservation(ctx, tx, reservation)
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
 	//Начислить в revenue
 	err = u.repo.Revenue(ctx, tx, revenue)
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 

@@ -1,6 +1,7 @@
 .PHONY: \
 	protoc \
 	run \
+	lint \
 
 proto:
 	protoc -I ./proto --go_out ./proto \
@@ -12,3 +13,9 @@ proto:
 
 run:
     docker-compose up --build
+
+lint:
+	golangci-lint cache clean
+	golangci-lint run
+
+

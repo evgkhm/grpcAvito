@@ -11,7 +11,7 @@ import (
 func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
-		u.txService.Rollback(tx)
+		_ = u.txService.Rollback(tx)
 		return err
 	}
 
@@ -20,7 +20,7 @@ func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 		return errYear
 	}
 
-	if month < 0 || month > 12 {
+	if month > 12 {
 		errYear := errors.New("wrong month")
 		return errYear
 	}

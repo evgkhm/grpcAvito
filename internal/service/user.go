@@ -2,18 +2,9 @@ package service
 
 import (
 	"context"
-	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
-	"grpcAvito/internal/repository/postgres"
-	"grpcAvito/internal/usecase"
 	"grpcAvito/proto"
 )
-
-type UsersServiceImpl struct {
-	repo      postgres.UsersRepository
-	txService *usecase.TransactionServiceImpl
-	log       *logrus.Logger
-}
 
 func (s Service) Create(ctx context.Context, req *proto.CreateReq) (*proto.CreateReply, error) {
 	userDTO := entity.User{Id: req.Id, Balance: req.Balance}
