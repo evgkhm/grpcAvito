@@ -30,7 +30,7 @@
 | /sum                   |    POST     |   Метод начисления средств на баланс |
 | /reservation           |    POST     |         Метод резервирования средств |
 | /revenue               |    POST     |              Метод признания выручки |
-| /dereservation         |    POST     |              Метод разрезервирования |
+| /delete_reservation    |    POST     |               Метод удаления резерва |
 | /report/{year}/{month} |     GET     |          Получение месячного отсчета |
 
 # Example
