@@ -1,5 +1,5 @@
 .PHONY: \
-	protoc \
+	proto \
 	run \
 	lint \
 
