@@ -11,7 +11,8 @@
 
 # Getting Started
 1. `git clone https://github.com/evgkhm/grpcAvito`
-2. `make run`
+2. `cd grpcAvito`
+3. `make run`
 
 # Implemented
 1. Метод начисления средств на баланс
