@@ -23,7 +23,6 @@ func (u *TransactionServiceImpl) NewTransaction() (*sqlx.Tx, error) {
 
 func (u *TransactionServiceImpl) Rollback(tx *sqlx.Tx) error {
 	if err := tx.Rollback(); err != nil {
-		u.log.Printf("service: unable to rollback transaction. %s", err.Error())
 		return err
 	}
 	return nil
@@ -31,7 +30,6 @@ func (u *TransactionServiceImpl) Rollback(tx *sqlx.Tx) error {
 
 func (u TransactionServiceImpl) Commit(tx *sqlx.Tx) error {
 	if err := tx.Commit(); err != nil {
-		u.log.Printf("service: unable to commit transaction. %s", err.Error())
 		return err
 	}
 	return nil
