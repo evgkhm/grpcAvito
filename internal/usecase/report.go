@@ -17,23 +17,23 @@ func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 
 	err = checkYear(year)
 	if err != nil {
-		return fmt.Errorf("usecase: Report: checkYear: %w", err)
+		return fmt.Errorf("usecase - UseCase - Report - checkYear: %w", err)
 	}
 
 	err = checkMonth(month)
 	if err != nil {
-		return fmt.Errorf("usecase: Report: checkMonth: %w", err)
+		return fmt.Errorf("usecase - UseCase - Report - checkMonth: %w", err)
 	}
 
 	reportMap, err := u.repo.GetReport(ctx, tx, year, month)
 	if err != nil {
-		return fmt.Errorf("usecase: Report: GetReport: %w", err)
+		return fmt.Errorf("usecase - UseCase - Report - u.repo.GetReport: %w", err)
 	}
 
 	//Создание csv файла
 	err = createReportCSV(reportMap)
 	if err != nil {
-		return fmt.Errorf("usecase: Report: createReportCSV: %w", err)
+		return fmt.Errorf("usecase - UseCase - Report - createReportCSV: %w", err)
 	}
 
 	return u.txService.Commit(tx)
@@ -60,14 +60,14 @@ func createReportCSV(data map[uint32]float32) error {
 		res = append(res, str4)
 		err = cswWriter.Write(res)
 		if err != nil {
-			return fmt.Errorf("write: %w", err)
+			return fmt.Errorf("createReportCSV - cswWriter.Write: %w", err)
 		}
 	}
 	cswWriter.Flush()
 
 	err = csvfile.Close()
 	if err != nil {
-		return fmt.Errorf("close: %w", err)
+		return fmt.Errorf("createReportCSV - csvfile.Close: %w", err)
 	}
 
 	return nil

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"golang.org/x/sync/errgroup"
 
@@ -27,7 +28,7 @@ func main() {
 	log := logging.GetLogger()
 	postgresDB, err := postgres.NewPostgresDB()
 	if err != nil {
-		log.Fatalf("Failed to initialize database connection: %s", err.Error())
+		log.Fatal(fmt.Errorf("main - postgres.NewPostgresDB: %w", err))
 	}
 
 	postgresRepository := postgres.New(postgresDB, log)
@@ -40,7 +41,7 @@ func main() {
 
 	listen, err := net.Listen("tcp", config.GRPC.HostPort)
 	if err != nil {
-		log.Panic(err)
+		log.Fatal(fmt.Errorf("main - net.Listen: %w", err))
 	}
 
 	mux := server.NewHTTPServer(config.GRPC.Port, log)

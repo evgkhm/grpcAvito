@@ -35,7 +35,7 @@ func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year u
 		AND EXTRACT(month FROM curr_date)=$2`
 	rows, err := tx.QueryxContext(ctx, query, year, month)
 	if err != nil {
-		return nil, fmt.Errorf("postgres: GetReport: QueryxContext: %w", errGetYearMonth)
+		return nil, fmt.Errorf("postgres - ReportRepositoryImpl - GetReport - tx.QueryxContext: %w", errGetYearMonth)
 	}
 	defer func(rows *sqlx.Rows) {
 		err = rows.Close()
@@ -49,7 +49,7 @@ func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year u
 		var stamp time.Time
 		err = rows.Scan(&report.userData.Id, &report.userData.IdService, &report.userData.IdOrder, &report.userData.Cost, &stamp)
 		if err != nil {
-			return nil, fmt.Errorf("postgres: GetReport: Scan: %w", err)
+			return nil, fmt.Errorf("postgres - ReportRepositoryImpl - GetReport - rows.Scan: %w", err)
 		}
 		report.Year = stamp.Year()
 		report.Month = int(stamp.Month())

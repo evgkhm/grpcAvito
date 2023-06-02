@@ -13,12 +13,12 @@ func NewPostgresDB() (*sqlx.DB, error) {
 
 	db, err := sqlx.Open("postgres", dbURL)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("postgres - NewPostgresDB - sqlx.Open: %w", err)
 	}
 
 	err = db.Ping()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("postgres - NewPostgresDB - db.Ping: %w", err)
 	}
 
 	return db, nil
