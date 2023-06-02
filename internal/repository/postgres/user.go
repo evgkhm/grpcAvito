@@ -44,7 +44,7 @@ func (r UsersRepositoryImpl) Create(ctx context.Context, tx *sqlx.Tx, user *enti
 		if err.Code == "23505" {
 			return fmt.Errorf("postgres: Create: QueryRowxContext: Scan: %w", errUserAlreadyExist)
 		}
-		return fmt.Errorf("postgres: %w", err)
+		return fmt.Errorf("postgres: Create: QueryRowxContext: Scan: %w", err)
 	}
 	return nil
 }

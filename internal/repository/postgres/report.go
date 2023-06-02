@@ -48,6 +48,9 @@ func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year u
 	for rows.Next() {
 		var stamp time.Time
 		err = rows.Scan(&report.userData.Id, &report.userData.IdService, &report.userData.IdOrder, &report.userData.Cost, &stamp)
+		if err != nil {
+			return nil, fmt.Errorf("postgres: GetReport: Scan: %w", err)
+		}
 		report.Year = stamp.Year()
 		report.Month = int(stamp.Month())
 		reportMap[report.userData.IdService] += report.userData.Cost

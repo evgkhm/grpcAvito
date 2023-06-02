@@ -43,7 +43,7 @@ func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 func createReportCSV(data map[uint32]float32) error {
 	csvfile, err := os.Create("./report.csv")
 	if err != nil {
-		return err
+		return fmt.Errorf("create: %w", err)
 	}
 	cswWriter := csv.NewWriter(csvfile)
 
@@ -60,14 +60,14 @@ func createReportCSV(data map[uint32]float32) error {
 		res = append(res, str4)
 		err = cswWriter.Write(res)
 		if err != nil {
-			return fmt.Errorf("usecase: %w", err)
+			return fmt.Errorf("write: %w", err)
 		}
 	}
 	cswWriter.Flush()
 
 	err = csvfile.Close()
 	if err != nil {
-		return fmt.Errorf("usecase: %w", err)
+		return fmt.Errorf("close: %w", err)
 	}
 
 	return nil

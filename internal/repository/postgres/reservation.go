@@ -31,9 +31,9 @@ func (r ReservationRepositoryImpl) Reservation(ctx context.Context, tx *sqlx.Tx,
 	row := tx.QueryRowxContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {
 		if err.Code == "23505" {
-			return fmt.Errorf("postgres: Reservation: QueryRowxContext: %w", errUserNotExist)
+			return fmt.Errorf("postgres: Reservation: QueryRowxContext: Scan: %w", errUserNotExist)
 		}
-		return fmt.Errorf("postgres: %w", err)
+		return fmt.Errorf("postgres: Reservation: QueryRowxContext: Scan: %w", err)
 	}
 
 	return nil
