@@ -12,7 +12,7 @@ proto:
 	 --grpc-gateway_opt paths=source_relative ./proto/server.proto
 
 run:
-    docker-compose up --build
+	docker-compose up --build
 
 lint:
 	golangci-lint cache clean
