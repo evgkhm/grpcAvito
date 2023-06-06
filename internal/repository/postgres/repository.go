@@ -7,38 +7,25 @@ import (
 	"grpcAvito/internal/entity"
 )
 
-type UsersRepository interface {
+type Repo struct {
+	db  *sqlx.DB
+	log *logrus.Logger
+}
+
+type Repository interface {
 	Create(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
 	Sum(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
 	GetBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) (float32, error)
-}
-
-type ReservationRepository interface {
+	GetReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error)
+	Revenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error
 	Reservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
 	MinusBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
 	DeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
 }
 
-type RevenueRepository interface {
-	Revenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error
-}
-
-type ReportRepository interface {
-	GetReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error)
-}
-
-type RepositoriesPostgres struct {
-	UsersRepository
-	ReservationRepository
-	RevenueRepository
-	ReportRepository
-}
-
-func New(db *sqlx.DB, log *logrus.Logger) *RepositoriesPostgres {
-	return &RepositoriesPostgres{
-		UsersRepository:       NewUsersPostgres(db, log),
-		ReservationRepository: NewReservationRepository(db, log),
-		RevenueRepository:     NewRevenueRepository(db, log),
-		ReportRepository:      NewReportRepository(db, log),
+func New(db *sqlx.DB, log *logrus.Logger) *Repo {
+	return &Repo{
+		db:  db,
+		log: log,
 	}
 }

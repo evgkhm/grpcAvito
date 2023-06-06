@@ -5,23 +5,10 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 )
 
-type ReservationRepositoryImpl struct {
-	db  *sqlx.DB
-	log *logrus.Logger
-}
-
-func NewReservationRepository(db *sqlx.DB, log *logrus.Logger) *ReservationRepositoryImpl {
-	return &ReservationRepositoryImpl{
-		db:  db,
-		log: log,
-	}
-}
-
-func (r ReservationRepositoryImpl) Reservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
+func (r Repo) Reservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
 	var idOrder uint32
 
 	query := `INSERT INTO reservation 
@@ -39,7 +26,7 @@ func (r ReservationRepositoryImpl) Reservation(ctx context.Context, tx *sqlx.Tx,
 	return nil
 }
 
-func (r ReservationRepositoryImpl) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (r Repo) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.Id)
 	if err != nil {
@@ -48,7 +35,7 @@ func (r ReservationRepositoryImpl) MinusBalance(ctx context.Context, tx *sqlx.Tx
 	return nil
 }
 
-func (r ReservationRepositoryImpl) DeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
+func (r Repo) DeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
 	query := `DELETE FROM reservation 
        WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4`
 	_, err := tx.ExecContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)

@@ -5,23 +5,10 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 )
 
-type RevenueRepositoryImpl struct {
-	db  *sqlx.DB
-	log *logrus.Logger
-}
-
-func NewRevenueRepository(db *sqlx.DB, log *logrus.Logger) *RevenueRepositoryImpl {
-	return &RevenueRepositoryImpl{
-		db:  db,
-		log: log,
-	}
-}
-
-func (r RevenueRepositoryImpl) Revenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error {
+func (r Repo) Revenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error {
 	var idOrder uint32
 	query := `INSERT INTO revenue 
     	(id, id_service, id_order, cost)

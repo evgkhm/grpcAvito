@@ -8,7 +8,7 @@ import (
 
 type Service struct {
 	proto.UnimplementedServerServer
-	useCase *usecase.UseCase
+	useCase usecase.Usecase
 	log     *logrus.Logger
 }
 
