@@ -16,6 +16,6 @@ run:
 
 lint:
 	golangci-lint cache clean
-	golangci-lint run
+	golangci-lint run --config=./.golangci.yaml
 
 

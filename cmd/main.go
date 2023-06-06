@@ -35,9 +35,9 @@ func main() {
 
 	useCases := usecase.New(postgresRepository, log, postgresDB)
 
-	service := service.New(useCases, log)
+	services := service.New(useCases, log)
 
-	grpcServer := server.NewGRPCServer(service, log)
+	grpcServer := server.NewGRPCServer(services, log)
 
 	listen, err := net.Listen("tcp", config.GRPC.HostPort)
 	if err != nil {
