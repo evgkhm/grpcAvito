@@ -16,9 +16,9 @@ func (r Repo) Revenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserReve
 	row := tx.QueryRowxContext(ctx, query, revenue.Id, revenue.IdService, revenue.IdOrder, revenue.Cost)
 	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {
 		if err.Code == "23505" {
-			return fmt.Errorf("postgres - RevenueRepositoryImpl - Revenue - tx.QueryRowxContext - row.Scan: %w", errUserAlreadyExist)
+			return fmt.Errorf("postgres - RevenueRepositoryImpl - UserOrderRevenue - tx.QueryRowxContext - row.Scan: %w", errUserAlreadyExist)
 		}
-		return fmt.Errorf("postgres - RevenueRepositoryImpl - Revenue - tx.QueryRowxContext - row.Scan: %w", err)
+		return fmt.Errorf("postgres - RevenueRepositoryImpl - UserOrderRevenue - tx.QueryRowxContext - row.Scan: %w", err)
 	}
 
 	return nil

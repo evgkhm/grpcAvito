@@ -4,25 +4,25 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"grpcAvito/internal/entity"
-	"grpcAvito/proto"
+	"grpcAvito/internal/service/spec"
 )
 
-func (s Service) DeleteReservation(ctx context.Context, req *proto.DeleteReservationReq) (*proto.DeleteReservationReply, error) {
+func (s Service) UserOrderDeleteReservation(ctx context.Context, req *spec.UserOrderDeleteReservationRequest) (*spec.UserOrderDeleteReservationReply, error) {
 	userReservation := entity.UserReservation{Id: req.Id, IdService: req.IdService, IdOrder: req.IdOrder, Cost: req.Cost}
 	err := s.useCase.DeleteReservation(ctx, &userReservation)
 	if err != nil {
-		s.log.Errorf("service - Service - DeleteReservation - s.useCase.DeleteReservation: %v", err)
-		return &proto.DeleteReservationReply{Success: false}, errors.Unwrap(err)
+		s.log.Errorf("service - Service - UserOrderDeleteReservation - s.useCase.UserOrderDeleteReservation: %v", err)
+		return &spec.UserOrderDeleteReservationReply{Success: false}, errors.Unwrap(err)
 	}
-	return &proto.DeleteReservationReply{Success: true}, nil
+	return &spec.UserOrderDeleteReservationReply{Success: true}, nil
 }
 
-func (s Service) Reservation(ctx context.Context, req *proto.ReservationReq) (*proto.ReservationReply, error) {
+func (s Service) UserOrderReservation(ctx context.Context, req *spec.UserOrderReservationRequest) (*spec.UserOrderReservationReply, error) {
 	userReservation := entity.UserReservation{Id: req.Id, IdService: req.IdService, IdOrder: req.IdOrder, Cost: req.Cost}
 	err := s.useCase.Reservation(ctx, &userReservation)
 	if err != nil {
-		s.log.Errorf("service - Service - Reservation - s.useCase.Reservation: %v", err)
-		return &proto.ReservationReply{Success: false}, errors.Unwrap(err)
+		s.log.Errorf("service - Service - UserOrderReservation - s.useCase.UserOrderReservation: %v", err)
+		return &spec.UserOrderReservationReply{Success: false}, errors.Unwrap(err)
 	}
-	return &proto.ReservationReply{Success: true}, nil
+	return &spec.UserOrderReservationReply{Success: true}, nil
 }

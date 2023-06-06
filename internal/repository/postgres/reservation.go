@@ -18,9 +18,9 @@ func (r Repo) Reservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.
 	row := tx.QueryRowxContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {
 		if err.Code == "23505" {
-			return fmt.Errorf("postgres - ReservationRepositoryImpl - Reservation - tx.QueryRowxContext - row.Scan: %w", errUserNotExist)
+			return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderReservation - tx.QueryRowxContext - row.Scan: %w", errUserNotExist)
 		}
-		return fmt.Errorf("postgres - ReservationRepositoryImpl - Reservation - tx.QueryRowxContext - row.Scan: %w", err)
+		return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderReservation - tx.QueryRowxContext - row.Scan: %w", err)
 	}
 
 	return nil
@@ -40,7 +40,7 @@ func (r Repo) DeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *e
        WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4`
 	_, err := tx.ExecContext(ctx, query, reservation.Id, reservation.IdService, reservation.IdOrder, reservation.Cost)
 	if err != nil {
-		return fmt.Errorf("postgres - ReservationRepositoryImpl - DeleteReservation - tx.ExecContext: %w", err)
+		return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderDeleteReservation - tx.ExecContext: %w", err)
 	}
 
 	return nil

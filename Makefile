@@ -4,11 +4,11 @@
 	lint \
 
 proto:
-	protoc -I ./proto --go_out ./proto \
+	protoc -I ./proto --go_out ./internal/service/spec \
 	--go_opt paths=source_relative \
-	--go-grpc_out ./proto \
+	--go-grpc_out ./internal/service/spec \
 	--go-grpc_opt paths=source_relative \
-	--grpc-gateway_out ./proto \
+	--grpc-gateway_out ./internal/service/spec \
 	 --grpc-gateway_opt paths=source_relative ./proto/server.proto
 
 run:

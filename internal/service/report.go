@@ -3,16 +3,16 @@ package service
 import (
 	"context"
 	"github.com/pkg/errors"
-	"grpcAvito/proto"
+	"grpcAvito/internal/service/spec"
 )
 
-func (s Service) Report(ctx context.Context, req *proto.ReportReq) (*proto.ReportReply, error) {
+func (s Service) CreateMonthReport(ctx context.Context, req *spec.CreateMonthReportRequest) (*spec.CreateMonthReportReply, error) {
 	Year, Month := req.Year, req.Month
 	err := s.useCase.Report(ctx, Year, Month)
 	if err != nil {
-		s.log.Errorf("service - Service - s.useCase.Report: %v", err)
-		return &proto.ReportReply{Success: false}, errors.Unwrap(err)
+		s.log.Errorf("service - Service - s.useCase.CreateMonthReport: %v", err)
+		return &spec.CreateMonthReportReply{Success: false}, errors.Unwrap(err)
 	}
-	return &proto.ReportReply{Success: true}, nil
+	return &spec.CreateMonthReportReply{Success: true}, nil
 
 }

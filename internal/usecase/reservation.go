@@ -10,14 +10,14 @@ func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.User
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - DeleteReservation - u.txService.NewTransaction: %w", err)
+		return fmt.Errorf("usecase - UseCase - UserOrderDeleteReservation - u.txService.NewTransaction: %w", err)
 	}
 
 	//Убрать резерв
 	err = u.repo.DeleteReservation(ctx, tx, reservation)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - DeleteReservation - u.repo.DeleteReservation: %w", err)
+		return fmt.Errorf("usecase - UseCase - UserOrderDeleteReservation - u.repo.UserOrderDeleteReservation: %w", err)
 	}
 
 	//Узнать текущий баланс
@@ -26,7 +26,7 @@ func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.User
 	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - DeleteReservation - u.repo.GetBalance: %w", err)
+		return fmt.Errorf("usecase - UseCase - UserOrderDeleteReservation - u.repo.GetBalance: %w", err)
 	}
 
 	//Начисление баланса
@@ -35,7 +35,7 @@ func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.User
 	err = u.repo.Sum(ctx, tx, &userDTO)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - DeleteReservation - u.repo.Sum: %w", err)
+		return fmt.Errorf("usecase - UseCase - UserOrderDeleteReservation - u.repo.Sum: %w", err)
 	}
 
 	return u.txService.Commit(tx)
@@ -45,13 +45,13 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - Reservation - u.txService.NewTransaction: %w", err)
+		return fmt.Errorf("usecase - UseCase - UserOrderReservation - u.txService.NewTransaction: %w", err)
 	}
 
 	err = u.repo.Reservation(ctx, tx, reservation)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - Reservation - u.repo.Reservation: %w", err)
+		return fmt.Errorf("usecase - UseCase - UserOrderReservation - u.repo.UserOrderReservation: %w", err)
 	}
 
 	//Узнать текущий баланс
@@ -60,14 +60,14 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - Reservation - u.repo.GetBalance: %w", err)
+		return fmt.Errorf("usecase - UseCase - UserOrderReservation - u.repo.GetBalance: %w", err)
 	}
 
 	//Проверка на отрицательный баланс
 	newBalance := currBalance - reservation.Cost
 	if newBalance < 0 {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - Reservation: %w", errUserNegativeBalance)
+		return fmt.Errorf("usecase - UseCase - UserOrderReservation: %w", errUserNegativeBalance)
 	}
 
 	//Списание баланса
@@ -77,7 +77,7 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 	err = u.repo.MinusBalance(ctx, tx, &userDTO)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
-		return fmt.Errorf("usecase - UseCase - Reservation - u.repo.MinusBalance: %w", err)
+		return fmt.Errorf("usecase - UseCase - UserOrderReservation - u.repo.MinusBalance: %w", err)
 	}
 
 	return u.txService.Commit(tx)

@@ -1,123 +1,123 @@
 syntax = "proto3";
 
 package grpcAvito;
-option go_package = "./proto";
+option go_package = "./internal/service/spec";
 import "google/api/annotations.proto";
 
 service Server {
-  rpc Create(CreateReq) returns (CreateReply) {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserReply) {
     option (google.api.http) = {
-      post: "/create"
+      post: "/create_user"
       body: "*"
     };
   };
 
-  rpc Sum(SumReq) returns (SumReply) {
+  rpc UserBalanceAccrual(UserBalanceAccrualRequest) returns (UserBalanceAccrualReply) {
     option (google.api.http) = {
-      post: "/sum"
+      post: "/accrual_balance"
       body: "*"
     };
   };
 
-  rpc Reservation(ReservationReq) returns (ReservationReply) {
+  rpc UserOrderReservation(UserOrderReservationRequest) returns (UserOrderReservationReply) {
     option (google.api.http) = {
-      post: "/reservation"
+      post: "/order_reservation"
       body: "*"
     };
   };
 
-  rpc Revenue(RevenueReq) returns (RevenueReply) {
+  rpc UserOrderRevenue(UserOrderRevenueRequest) returns (UserOrderRevenueReply) {
     option (google.api.http) = {
-      post: "/revenue"
+      post: "/order_revenue"
       body: "*"
     };
   };
 
-  rpc DeleteReservation(DeleteReservationReq) returns (DeleteReservationReply) {
+  rpc UserOrderDeleteReservation(UserOrderDeleteReservationRequest) returns (UserOrderDeleteReservationReply) {
     option (google.api.http) = {
       post: "/delete_reservation"
       body: "*"
     };
   };
 
-  rpc Report(ReportReq) returns (ReportReply) {
+  rpc CreateMonthReport(CreateMonthReportRequest) returns (CreateMonthReportReply) {
     option (google.api.http) = {
-      get: "/report/{year}/{month}"
+      get: "/create_month_report/{year}/{month}"
     };
   };
 
-  rpc GetBalance(BalanceReq) returns (BalanceReply) {
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceReply) {
     option (google.api.http) = {
       get: "/get_balance/{id}"
     };
   };
 }
 
-message CreateReq {
+message CreateUserRequest {
   uint32 id = 1;
   float balance = 2;
 }
 
-message CreateReply {
+message CreateUserReply {
   bool success = 1;
 }
 
-message SumReq {
+message UserBalanceAccrualRequest {
   uint32 id = 1;
   float balance = 2;
 }
 
-message SumReply {
+message UserBalanceAccrualReply {
   bool success = 1;
 }
 
-message ReservationReq {
+message UserOrderReservationRequest {
   uint32 id = 1;
   uint32 idService = 2;
   uint32 idOrder = 3;
   float cost = 4;
 }
 
-message ReservationReply {
+message UserOrderReservationReply {
   bool success = 1;
 }
 
-message RevenueReq {
+message UserOrderRevenueRequest {
   uint32 id = 1;
   uint32 idService = 2;
   uint32 idOrder = 3;
   float cost = 4;
 }
 
-message RevenueReply {
+message UserOrderRevenueReply {
   bool success = 1;
 }
 
-message DeleteReservationReq {
+message UserOrderDeleteReservationRequest {
   uint32 id = 1;
   uint32 idService = 2;
   uint32 idOrder = 3;
   float cost = 4;
 }
 
-message DeleteReservationReply {
+message UserOrderDeleteReservationReply {
   bool success = 1;
 }
 
-message ReportReq {
+message CreateMonthReportRequest {
   uint32 year = 1;
   uint32 month = 2;
 }
 
-message ReportReply {
+message CreateMonthReportReply {
   bool success = 1;
 }
 
-message BalanceReq {
+message GetBalanceRequest {
   uint32 id = 1;
 }
 
-message BalanceReply {
+message GetBalanceReply {
   uint32 id = 1;
   float balance = 2;
   bool success = 3;

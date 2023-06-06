@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"grpcAvito/internal/service"
-	"grpcAvito/proto"
+	"grpcAvito/internal/service/spec"
 )
 
 func NewGRPCServer(service *service.Service, logger *logrus.Logger) *grpc.Server {
@@ -25,7 +25,7 @@ func NewGRPCServer(service *service.Service, logger *logrus.Logger) *grpc.Server
 	}
 
 	srv := grpc.NewServer(opts...)
-	proto.RegisterServerServer(srv, service)
+	spec.RegisterServerServer(srv, service)
 
 	return srv
 }
