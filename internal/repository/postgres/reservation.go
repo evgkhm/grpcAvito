@@ -20,7 +20,7 @@ func (r Repo) UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation
 	err := row.Scan(&idOrder)
 	switch {
 	case errors.As(err, &duplicateEntryError):
-		return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderReservation - tx.QueryRowxContext - row.Scan: %w", ErrOrderAlreadyExist)
+		return ErrOrderAlreadyExist // return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderReservation - tx.QueryRowxContext - row.Scan: %w", ErrOrderAlreadyExist)
 	case err != nil:
 		return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderReservation - tx.QueryRowxContext - row.Scan: %w", err)
 	}

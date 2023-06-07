@@ -16,7 +16,7 @@ func (r Repo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (f
 	err := tx.GetContext(ctx, &balance, query, user.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return 0, fmt.Errorf("postgres - UsersRepositoryImpl - GetBalance - tx.GetContext: %w", ErrUserNotExist)
+			return 0, ErrUserNotExist // return 0, fmt.Errorf("postgres - UsersRepositoryImpl - GetBalance - tx.GetContext: %w", ErrUserNotExist)
 		}
 		return 0, fmt.Errorf("postgres - UsersRepositoryImpl - GetBalance - tx.GetContext: %w", err)
 	}
@@ -31,7 +31,7 @@ func (r Repo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) er
 	err := row.Scan(&id)
 	switch {
 	case errors.As(err, &duplicateEntryError):
-		return fmt.Errorf("postgres - UsersRepositoryImpl - CreateUser - tx.QueryRowxContext - row.Scan: %w", ErrUserAlreadyExist)
+		return ErrUserAlreadyExist // return fmt.Errorf("postgres - UsersRepositoryImpl - CreateUser - tx.QueryRowxContext - row.Scan: %w", ErrUserAlreadyExist)
 	case err != nil:
 		return fmt.Errorf("postgres - UsersRepositoryImpl - CreateUser - tx.QueryRowxContext - row.Scan: %w", err)
 	}

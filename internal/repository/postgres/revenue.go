@@ -19,7 +19,7 @@ func (r Repo) UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *entity
 	err := row.Scan(&idOrder)
 	switch {
 	case errors.As(err, &duplicateEntryError):
-		return fmt.Errorf("postgres - RevenueRepositoryImpl - UserOrderRevenue - tx.QueryRowxContext - row.Scan: %w", ErrRevenueAlreadyExist)
+		return ErrRevenueAlreadyExist // return fmt.Errorf("postgres - RevenueRepositoryImpl - UserOrderRevenue - tx.QueryRowxContext - row.Scan: %w", ErrRevenueAlreadyExist)
 	case err != nil:
 		return fmt.Errorf("postgres - RevenueRepositoryImpl - UserOrderRevenue - tx.QueryRowxContext - row.Scan: %w", err)
 	}
