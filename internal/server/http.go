@@ -15,7 +15,7 @@ func NewHTTPServer(endpoint string, log *logrus.Logger) *runtime.ServeMux {
 
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	err := spec.RegisterServerHandlerFromEndpoint(context.Background(), mux, endpoint, opts)
+	err := spec.RegisterWalletAppServiceHandlerFromEndpoint(context.Background(), mux, endpoint, opts)
 	if err != nil {
 		log.Panic(err)
 	}

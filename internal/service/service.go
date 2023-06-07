@@ -7,15 +7,15 @@ import (
 )
 
 type Service struct {
-	spec.UnimplementedServerServer
+	spec.UnimplementedWalletAppServiceServer
 	useCase usecase.Usecase
 	log     *logrus.Logger
 }
 
 func New(useCase *usecase.UseCase, log *logrus.Logger) *Service {
 	return &Service{
-		UnimplementedServerServer: spec.UnimplementedServerServer{},
-		useCase:                   useCase,
-		log:                       log,
+		UnimplementedWalletAppServiceServer: spec.UnimplementedWalletAppServiceServer{},
+		useCase:                             useCase,
+		log:                                 log,
 	}
 }

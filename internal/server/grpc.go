@@ -25,7 +25,7 @@ func NewGRPCServer(service *service.Service, logger *logrus.Logger) *grpc.Server
 	}
 
 	srv := grpc.NewServer(opts...)
-	spec.RegisterServerServer(srv, service)
+	spec.RegisterWalletAppServiceServer(srv, service)
 
 	return srv
 }

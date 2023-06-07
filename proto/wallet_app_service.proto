@@ -3,8 +3,9 @@ syntax = "proto3";
 package grpcAvito;
 option go_package = "./internal/service/spec";
 import "google/api/annotations.proto";
+import "wallet_app.proto";
 
-service Server {
+service WalletAppService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserReply) {
     option (google.api.http) = {
       post: "/create_user"
@@ -51,74 +52,4 @@ service Server {
       get: "/get_balance/{id}"
     };
   };
-}
-
-message CreateUserRequest {
-  uint32 id = 1;
-  float balance = 2;
-}
-
-message CreateUserReply {
-  bool success = 1;
-}
-
-message UserBalanceAccrualRequest {
-  uint32 id = 1;
-  float balance = 2;
-}
-
-message UserBalanceAccrualReply {
-  bool success = 1;
-}
-
-message UserOrderReservationRequest {
-  uint32 id = 1;
-  uint32 idService = 2;
-  uint32 idOrder = 3;
-  float cost = 4;
-}
-
-message UserOrderReservationReply {
-  bool success = 1;
-}
-
-message UserOrderRevenueRequest {
-  uint32 id = 1;
-  uint32 idService = 2;
-  uint32 idOrder = 3;
-  float cost = 4;
-}
-
-message UserOrderRevenueReply {
-  bool success = 1;
-}
-
-message UserOrderDeleteReservationRequest {
-  uint32 id = 1;
-  uint32 idService = 2;
-  uint32 idOrder = 3;
-  float cost = 4;
-}
-
-message UserOrderDeleteReservationReply {
-  bool success = 1;
-}
-
-message CreateMonthReportRequest {
-  uint32 year = 1;
-  uint32 month = 2;
-}
-
-message CreateMonthReportReply {
-  bool success = 1;
-}
-
-message GetBalanceRequest {
-  uint32 id = 1;
-}
-
-message GetBalanceReply {
-  uint32 id = 1;
-  float balance = 2;
-  bool success = 3;
 }

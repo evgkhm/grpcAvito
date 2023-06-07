@@ -9,7 +9,7 @@ proto:
 	--go-grpc_out ./internal/service/spec \
 	--go-grpc_opt paths=source_relative \
 	--grpc-gateway_out ./internal/service/spec \
-	 --grpc-gateway_opt paths=source_relative ./proto/server.proto
+	 --grpc-gateway_opt paths=source_relative ./proto/wallet_app.proto ./proto/wallet_app_service.proto
 
 run:
 	docker-compose up --build
