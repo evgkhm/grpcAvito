@@ -13,23 +13,22 @@ func (u UseCase) DeleteReservation(ctx context.Context, reservation *entity.User
 		return fmt.Errorf("usecase - UseCase - UserOrderDeleteReservation - u.txService.NewTransaction: %w", err)
 	}
 
-	//Убрать резерв
+	// Убрать резерв
 	err = u.repo.DeleteReservation(ctx, tx, reservation)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
 		return fmt.Errorf("usecase - UseCase - UserOrderDeleteReservation - u.repo.UserOrderDeleteReservation: %w", err)
 	}
 
-	//Узнать текущий баланс
-	//var userDTO *entity.User
-	userDTO := entity.User{Id: reservation.Id}
+	// Узнать текущий баланс
+	userDTO := entity.User{ID: reservation.ID}
 	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
 		return fmt.Errorf("usecase - UseCase - UserOrderDeleteReservation - u.repo.GetBalance: %w", err)
 	}
 
-	//Начисление баланса
+	// Начисление баланса
 	newBalance := currBalance + reservation.Cost
 	userDTO.Balance = newBalance
 	err = u.repo.Sum(ctx, tx, &userDTO)
@@ -54,24 +53,23 @@ func (u UseCase) Reservation(ctx context.Context, reservation *entity.UserReserv
 		return fmt.Errorf("usecase - UseCase - UserOrderReservation - u.repo.UserOrderReservation: %w", err)
 	}
 
-	//Узнать текущий баланс
-	//var userDTO *entity.User
-	userDTO := entity.User{Id: reservation.Id}
+	// Узнать текущий баланс
+	userDTO := entity.User{ID: reservation.ID}
 	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
 		return fmt.Errorf("usecase - UseCase - UserOrderReservation - u.repo.GetBalance: %w", err)
 	}
 
-	//Проверка на отрицательный баланс
+	// Проверка на отрицательный баланс
 	newBalance := currBalance - reservation.Cost
 	if newBalance < 0 {
 		_ = u.txService.Rollback(tx)
 		return fmt.Errorf("usecase - UseCase - UserOrderReservation: %w", errUserNegativeBalance)
 	}
 
-	//Списание баланса
-	userDTO.Id = reservation.Id
+	// Списание баланса
+	userDTO.ID = reservation.ID
 	userDTO.Balance = newBalance
 
 	err = u.repo.MinusBalance(ctx, tx, &userDTO)

@@ -8,7 +8,7 @@ import (
 )
 
 func (s Service) CreateUser(ctx context.Context, req *spec.CreateUserRequest) (*spec.CreateUserReply, error) {
-	userDTO := entity.User{Id: req.Id, Balance: req.Balance}
+	userDTO := entity.User{ID: req.Id, Balance: req.Balance}
 	err := s.useCase.Create(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("service - Service - CreateUser - s.useCase.CreateUser: %v", err)
@@ -18,7 +18,7 @@ func (s Service) CreateUser(ctx context.Context, req *spec.CreateUserRequest) (*
 }
 
 func (s Service) UserBalanceAccrual(ctx context.Context, req *spec.UserBalanceAccrualRequest) (*spec.UserBalanceAccrualReply, error) {
-	userDTO := entity.User{Id: req.Id, Balance: req.Balance}
+	userDTO := entity.User{ID: req.Id, Balance: req.Balance}
 	err := s.useCase.Sum(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("service - Service - UserBalanceAccrual - s.useCase.UserBalanceAccrual: %v", err)
@@ -28,11 +28,11 @@ func (s Service) UserBalanceAccrual(ctx context.Context, req *spec.UserBalanceAc
 }
 
 func (s Service) GetBalance(ctx context.Context, req *spec.GetBalanceRequest) (*spec.GetBalanceReply, error) {
-	userDTO := entity.User{Id: req.Id}
+	userDTO := entity.User{ID: req.Id}
 	err := s.useCase.GetBalance(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("service - Service - GetBalance - s.useCase.GetBalance: %v", err)
 		return &spec.GetBalanceReply{Success: false}, errors.Unwrap(err)
 	}
-	return &spec.GetBalanceReply{Id: userDTO.Id, Balance: userDTO.Balance, Success: true}, nil
+	return &spec.GetBalanceReply{Id: userDTO.ID, Balance: userDTO.Balance, Success: true}, nil
 }

@@ -19,7 +19,7 @@ import (
 func init() {
 	config.InitAll([]config.Config{
 		config.PostgresConfig{},
-		config.HttpConfig{},
+		config.HTTPConfig{},
 		config.GRPCConfig{},
 	})
 }

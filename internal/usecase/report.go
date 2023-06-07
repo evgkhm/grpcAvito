@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
+func (u UseCase) Report(ctx context.Context, year, month uint32) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		_ = u.txService.Rollback(tx)
@@ -30,7 +30,7 @@ func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 		return fmt.Errorf("usecase - UseCase - Report - u.repo.GetReport: %w", err)
 	}
 
-	//Создание csv файла
+	// Создание csv файла
 	err = createReportCSV(reportMap)
 	if err != nil {
 		return fmt.Errorf("usecase - UseCase - Report - createReportCSV: %w", err)
@@ -39,7 +39,7 @@ func (u UseCase) Report(ctx context.Context, year uint32, month uint32) error {
 	return u.txService.Commit(tx)
 }
 
-// createReportCSV функция создает csv файл отсчета из мап файла
+// createReportCSV функция создает csv файл отсчета из мап файла.
 func createReportCSV(data map[uint32]float32) error {
 	csvfile, err := os.Create("./report.csv")
 	if err != nil {
@@ -54,10 +54,7 @@ func createReportCSV(data map[uint32]float32) error {
 		str4 := strconv.FormatFloat(float64(value), 'f', 2, 64)
 
 		var res []string
-		res = append(res, str1)
-		res = append(res, str2)
-		res = append(res, str3)
-		res = append(res, str4)
+		res = append(res, str1, str2, str3, str4)
 		err = cswWriter.Write(res)
 		if err != nil {
 			return fmt.Errorf("createReportCSV - cswWriter.Write: %w", err)

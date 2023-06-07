@@ -10,7 +10,7 @@ import (
 	"grpcAvito/internal/service/spec"
 )
 
-func NewGRPCServer(service *service.Service, logger *logrus.Logger) *grpc.Server {
+func NewGRPCServer(services *service.Service, logger *logrus.Logger) *grpc.Server {
 	logger.Info("new grpc server")
 	log := logrus.NewEntry(logger)
 	var opts = []grpc.ServerOption{
@@ -25,7 +25,7 @@ func NewGRPCServer(service *service.Service, logger *logrus.Logger) *grpc.Server
 	}
 
 	srv := grpc.NewServer(opts...)
-	spec.RegisterWalletAppServiceServer(srv, service)
+	spec.RegisterWalletAppServiceServer(srv, services)
 
 	return srv
 }

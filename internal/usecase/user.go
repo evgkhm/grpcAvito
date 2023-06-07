@@ -13,20 +13,20 @@ func (u UseCase) Sum(ctx context.Context, userDTO *entity.User) error {
 		return fmt.Errorf("usecase - UseCase - Sum - u.txService.NewTransaction: %w", err)
 	}
 
-	//Проверка на отрицательный баланс
+	// Проверка на отрицательный баланс
 	if userDTO.Balance < 0 {
 		_ = u.txService.Rollback(tx)
 		return fmt.Errorf("usecase - UseCase - Sum: %w", errUserNegativeBalance)
 	}
 
-	//Узнать текущий баланс
+	// Узнать текущий баланс
 	currBalance, err := u.repo.GetBalance(ctx, tx, userDTO)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
 		return fmt.Errorf("usecase - UseCase - Sum - u.repo.GetBalance: %w", err)
 	}
 
-	//Начислить новый баланс
+	// Начислить новый баланс
 	newBalance := userDTO.Balance + currBalance
 	userDTO.Balance = newBalance
 

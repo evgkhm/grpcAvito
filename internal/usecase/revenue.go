@@ -13,20 +13,20 @@ func (u UseCase) Revenue(ctx context.Context, revenue *entity.UserRevenue) error
 		return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.txService.NewTransaction: %w", err)
 	}
 
-	reservation := &entity.UserReservation{Id: revenue.Id,
-		IdOrder:   revenue.IdOrder,
-		IdService: revenue.IdService,
+	reservation := &entity.UserReservation{ID: revenue.ID,
+		IDOrder:   revenue.IDOrder,
+		IDService: revenue.IDService,
 		Cost:      revenue.Cost,
 	}
 
-	//Списать с резервации
+	// Списать с резервации
 	err = u.repo.DeleteReservation(ctx, tx, reservation)
 	if err != nil {
 		_ = u.txService.Rollback(tx)
 		return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderDeleteReservation: %w", err)
 	}
 
-	//Начислить в revenue
+	// Начислить в revenue
 	err = u.repo.Revenue(ctx, tx, revenue)
 	if err != nil {
 		_ = u.txService.Rollback(tx)

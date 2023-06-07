@@ -4,16 +4,16 @@ import (
 	"github.com/spf13/viper"
 )
 
-type HttpConfig struct {
+type HTTPConfig struct {
 	Port     string
 	HostPort string
 	LogPath  string
 }
 
-var HTTP *HttpConfig
+var HTTP *HTTPConfig
 
-func (h HttpConfig) Init() {
-	HTTP = &HttpConfig{
+func (h HTTPConfig) Init() {
+	HTTP = &HTTPConfig{
 		Port:     viper.GetString("server.port"),
 		HostPort: viper.GetString("server.host_port"),
 		LogPath:  viper.GetString("server.log_path"),
