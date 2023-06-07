@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-
 	"golang.org/x/sync/errgroup"
 
 	config "grpcAvito/internal/config"
@@ -51,7 +50,13 @@ func main() {
 		return grpcServer.Serve(listen)
 	})
 	g.Go(func() (err error) {
-		return http.ListenAndServe(config.HTTP.HostPort, mux)
+		serv := http.Server{
+			Addr:         config.HTTP.HostPort,
+			ReadTimeout:  config.HTTP.Duration,
+			WriteTimeout: config.HTTP.Duration,
+			Handler:      mux,
+		}
+		return serv.ListenAndServe()
 	})
 
 	err = g.Wait()

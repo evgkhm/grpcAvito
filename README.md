@@ -49,4 +49,10 @@
 
 # For start local without docker
 Add path to config.yaml. E.g.:
+
 `CONFIG_PATH=C:\Users\User\grpcAvito\internal\config\config.yaml`
+
+# For start linter
+`make lint`
+
+Linter will create lint.txt file
