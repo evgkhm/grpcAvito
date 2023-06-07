@@ -9,7 +9,7 @@ import (
 
 func (s Service) UserOrderDeleteReservation(ctx context.Context, req *spec.UserOrderDeleteReservationRequest) (*spec.UserOrderDeleteReservationReply, error) {
 	userReservation := entity.UserReservation{ID: req.Id, IDService: req.IdService, IDOrder: req.IdOrder, Cost: req.Cost}
-	err := s.useCase.DeleteReservation(ctx, &userReservation)
+	err := s.useCase.UserOrderDeleteReservation(ctx, &userReservation)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderDeleteReservation - s.useCase.UserOrderDeleteReservation: %v", err)
 		return &spec.UserOrderDeleteReservationReply{Success: false}, errors.Unwrap(err)
@@ -19,7 +19,7 @@ func (s Service) UserOrderDeleteReservation(ctx context.Context, req *spec.UserO
 
 func (s Service) UserOrderReservation(ctx context.Context, req *spec.UserOrderReservationRequest) (*spec.UserOrderReservationReply, error) {
 	userReservation := entity.UserReservation{ID: req.Id, IDService: req.IdService, IDOrder: req.IdOrder, Cost: req.Cost}
-	err := s.useCase.Reservation(ctx, &userReservation)
+	err := s.useCase.UserOrderReservation(ctx, &userReservation)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderReservation - s.useCase.UserOrderReservation: %v", err)
 		return &spec.UserOrderReservationReply{Success: false}, errors.Unwrap(err)

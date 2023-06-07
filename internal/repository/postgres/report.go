@@ -14,7 +14,7 @@ type Report struct {
 	Month    int `json:"month"`
 }
 
-func (r Repo) GetReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
+func (r Repo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
 	report := Report{}
 	reportMap := make(map[uint32]float32)
 	query := `SELECT * FROM revenue 
@@ -22,7 +22,7 @@ func (r Repo) GetReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (m
 		AND EXTRACT(month FROM curr_date)=$2`
 	rows, err := tx.QueryxContext(ctx, query, year, month)
 	if err != nil {
-		return nil, fmt.Errorf("postgres - ReportRepositoryImpl - GetReport - tx.QueryxContext: %w", ErrGetYearMonth)
+		return nil, fmt.Errorf("postgres - ReportRepositoryImpl - CreateMonthReport - tx.QueryxContext: %w", ErrGetYearMonth)
 	}
 	defer func(rows *sqlx.Rows) {
 		err = rows.Close()
@@ -36,7 +36,7 @@ func (r Repo) GetReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (m
 		var stamp time.Time
 		err = rows.Scan(&report.userData.ID, &report.userData.IDService, &report.userData.IDOrder, &report.userData.Cost, &stamp)
 		if err != nil {
-			return nil, fmt.Errorf("postgres - ReportRepositoryImpl - GetReport - rows.Scan: %w", err)
+			return nil, fmt.Errorf("postgres - ReportRepositoryImpl - CreateMonthReport - rows.Scan: %w", err)
 		}
 		report.Year = stamp.Year()
 		report.Month = int(stamp.Month())

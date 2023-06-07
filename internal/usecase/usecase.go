@@ -15,13 +15,13 @@ type UseCase struct {
 }
 
 type Usecase interface {
-	Sum(ctx context.Context, userDTO *entity.User) error
-	Create(ctx context.Context, userDTO *entity.User) error
+	UserBalanceAccrual(ctx context.Context, userDTO *entity.User) error
+	CreateUser(ctx context.Context, userDTO *entity.User) error
 	GetBalance(ctx context.Context, dto *entity.User) error
-	Revenue(ctx context.Context, revenue *entity.UserRevenue) error
-	DeleteReservation(ctx context.Context, reservation *entity.UserReservation) error
-	Reservation(ctx context.Context, reservation *entity.UserReservation) error
-	Report(ctx context.Context, year uint32, month uint32) error
+	UserOrderRevenue(ctx context.Context, revenue *entity.UserRevenue) error
+	UserOrderDeleteReservation(ctx context.Context, reservation *entity.UserReservation) error
+	UserOrderReservation(ctx context.Context, reservation *entity.UserReservation) error
+	CreateMonthReport(ctx context.Context, year uint32, month uint32) error
 }
 
 func New(repo *postgres.Repo, log *logrus.Logger, postgresDB *sqlx.DB) *UseCase {

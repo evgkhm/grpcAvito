@@ -8,32 +8,43 @@ import (
 	"strconv"
 )
 
-func (u UseCase) Report(ctx context.Context, year, month uint32) error {
+func (u UseCase) CreateMonthReport(ctx context.Context, year, month uint32) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
-		_ = u.txService.Rollback(tx)
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - CreateMonthReport - u.txService.NewTransaction - u.txService.Rollback: %w", err)
+		}
 		return err
 	}
 
 	err = checkYear(year)
 	if err != nil {
-		return fmt.Errorf("usecase - UseCase - Report - checkYear: %w", err)
+		return fmt.Errorf("usecase - UseCase - CreateMonthReport - checkYear: %w", err)
 	}
 
 	err = checkMonth(month)
 	if err != nil {
-		return fmt.Errorf("usecase - UseCase - Report - checkMonth: %w", err)
+		return fmt.Errorf("usecase - UseCase - CreateMonthReport - checkMonth: %w", err)
 	}
 
-	reportMap, err := u.repo.GetReport(ctx, tx, year, month)
+	reportMap, err := u.repo.CreateMonthReport(ctx, tx, year, month)
 	if err != nil {
-		return fmt.Errorf("usecase - UseCase - Report - u.repo.GetReport: %w", err)
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - CreateMonthReport - u.repo.CreateMonthReport - u.txService.Rollback: %w", err)
+		}
+		return fmt.Errorf("usecase - UseCase - CreateMonthReport - u.repo.CreateMonthReport: %w", err)
 	}
 
 	// Создание csv файла
 	err = createReportCSV(reportMap)
 	if err != nil {
-		return fmt.Errorf("usecase - UseCase - Report - createReportCSV: %w", err)
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - CreateMonthReport - createReportCSV - u.txService.Rollback: %w", err)
+		}
+		return fmt.Errorf("usecase - UseCase - CreateMonthReport - createReportCSV: %w", err)
 	}
 
 	return u.txService.Commit(tx)
@@ -72,14 +83,14 @@ func createReportCSV(data map[uint32]float32) error {
 
 func checkYear(year uint32) error {
 	if year < 1975 || year > 2030 {
-		return errWrongYear
+		return ErrWrongYear
 	}
 	return nil
 }
 
 func checkMonth(month uint32) error {
 	if month > 12 {
-		return errWrongMonth
+		return ErrWrongMonth
 	}
 	return nil
 }

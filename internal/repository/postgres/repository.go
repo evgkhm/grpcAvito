@@ -13,14 +13,14 @@ type Repo struct {
 }
 
 type Repository interface {
-	Create(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
-	Sum(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
+	CreateUser(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
+	UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
 	GetBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) (float32, error)
-	GetReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error)
-	Revenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error
-	Reservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
+	CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error)
+	UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error
+	UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
 	MinusBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
-	DeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
+	UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
 }
 
 func New(db *sqlx.DB, log *logrus.Logger) *Repo {

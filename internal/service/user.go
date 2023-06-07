@@ -9,7 +9,7 @@ import (
 
 func (s Service) CreateUser(ctx context.Context, req *spec.CreateUserRequest) (*spec.CreateUserReply, error) {
 	userDTO := entity.User{ID: req.Id, Balance: req.Balance}
-	err := s.useCase.Create(ctx, &userDTO)
+	err := s.useCase.CreateUser(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("service - Service - CreateUser - s.useCase.CreateUser: %v", err)
 		return &spec.CreateUserReply{Success: false}, errors.Unwrap(err)
@@ -19,7 +19,7 @@ func (s Service) CreateUser(ctx context.Context, req *spec.CreateUserRequest) (*
 
 func (s Service) UserBalanceAccrual(ctx context.Context, req *spec.UserBalanceAccrualRequest) (*spec.UserBalanceAccrualReply, error) {
 	userDTO := entity.User{ID: req.Id, Balance: req.Balance}
-	err := s.useCase.Sum(ctx, &userDTO)
+	err := s.useCase.UserBalanceAccrual(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("service - Service - UserBalanceAccrual - s.useCase.UserBalanceAccrual: %v", err)
 		return &spec.UserBalanceAccrualReply{Success: false}, errors.Unwrap(err)

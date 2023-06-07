@@ -9,7 +9,7 @@ import (
 	"grpcAvito/internal/entity"
 )
 
-func (r Repo) Revenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error {
+func (r Repo) UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error {
 	var idOrder uint32
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO revenue 

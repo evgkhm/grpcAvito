@@ -6,10 +6,13 @@ import (
 	"grpcAvito/internal/entity"
 )
 
-func (u UseCase) Revenue(ctx context.Context, revenue *entity.UserRevenue) error {
+func (u UseCase) UserOrderRevenue(ctx context.Context, revenue *entity.UserRevenue) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
-		_ = u.txService.Rollback(tx)
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.txService.NewTransaction - u.txService.Rollback: %w", err)
+		}
 		return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.txService.NewTransaction: %w", err)
 	}
 
@@ -20,16 +23,22 @@ func (u UseCase) Revenue(ctx context.Context, revenue *entity.UserRevenue) error
 	}
 
 	// Списать с резервации
-	err = u.repo.DeleteReservation(ctx, tx, reservation)
+	err = u.repo.UserOrderDeleteReservation(ctx, tx, reservation)
 	if err != nil {
-		_ = u.txService.Rollback(tx)
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderDeleteReservation - u.txService.Rollback: %w", err)
+		}
 		return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderDeleteReservation: %w", err)
 	}
 
 	// Начислить в revenue
-	err = u.repo.Revenue(ctx, tx, revenue)
+	err = u.repo.UserOrderRevenue(ctx, tx, revenue)
 	if err != nil {
-		_ = u.txService.Rollback(tx)
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderRevenue - u.txService.Rollback: %w", err)
+		}
 		return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderRevenue: %w", err)
 	}
 

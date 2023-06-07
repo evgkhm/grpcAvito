@@ -23,25 +23,25 @@ func (r Repo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (f
 	return balance, nil
 }
 
-func (r Repo) Create(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (r Repo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	var id int64
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO usr (id, balance) VALUES ($1, $2) RETURNING id`
 	row := tx.QueryRowxContext(ctx, query, user.ID, user.Balance)
 	if err, ok := row.Scan(&id).(*pq.Error); ok {
 		if errors.As(err, &duplicateEntryError) {
-			return fmt.Errorf("postgres - UsersRepositoryImpl - Create - tx.QueryRowxContext - row.Scan: %w", ErrUserAlreadyExist)
+			return fmt.Errorf("postgres - UsersRepositoryImpl - CreateUser - tx.QueryRowxContext - row.Scan: %w", ErrUserAlreadyExist)
 		}
-		return fmt.Errorf("postgres - UsersRepositoryImpl - Create - tx.QueryRowxContext - row.Scan: %w", err)
+		return fmt.Errorf("postgres - UsersRepositoryImpl - CreateUser - tx.QueryRowxContext - row.Scan: %w", err)
 	}
 	return nil
 }
 
-func (r Repo) Sum(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (r Repo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.ID)
 	if err != nil {
-		return fmt.Errorf("postgres - UsersRepositoryImpl - Sum - tx.ExecContext: %w", err)
+		return fmt.Errorf("postgres - UsersRepositoryImpl - UserBalanceAccrual - tx.ExecContext: %w", err)
 	}
 	return nil
 }

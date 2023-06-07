@@ -9,7 +9,7 @@ import (
 	"grpcAvito/internal/entity"
 )
 
-func (r Repo) Reservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
+func (r Repo) UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
 	var idOrder uint32
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO reservation 
@@ -36,7 +36,7 @@ func (r Repo) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) 
 	return nil
 }
 
-func (r Repo) DeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
+func (r Repo) UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
 	query := `DELETE FROM reservation 
        WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4`
 	_, err := tx.ExecContext(ctx, query, reservation.ID, reservation.IDService, reservation.IDOrder, reservation.Cost)
