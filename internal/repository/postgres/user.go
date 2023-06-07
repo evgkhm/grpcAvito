@@ -28,10 +28,11 @@ func (r Repo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) er
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO usr (id, balance) VALUES ($1, $2) RETURNING id`
 	row := tx.QueryRowxContext(ctx, query, user.ID, user.Balance)
-	if err, ok := row.Scan(&id).(*pq.Error); ok {
-		if errors.As(err, &duplicateEntryError) {
-			return fmt.Errorf("postgres - UsersRepositoryImpl - CreateUser - tx.QueryRowxContext - row.Scan: %w", ErrUserAlreadyExist)
-		}
+	err := row.Scan(&id)
+	switch {
+	case errors.As(err, &duplicateEntryError):
+		return fmt.Errorf("postgres - UsersRepositoryImpl - CreateUser - tx.QueryRowxContext - row.Scan: %w", ErrUserAlreadyExist)
+	case err != nil:
 		return fmt.Errorf("postgres - UsersRepositoryImpl - CreateUser - tx.QueryRowxContext - row.Scan: %w", err)
 	}
 	return nil

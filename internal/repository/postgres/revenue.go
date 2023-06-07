@@ -16,12 +16,12 @@ func (r Repo) UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *entity
     	(id, id_service, id_order, cost)
 			VALUES ($1, $2, $3, $4) RETURNING id`
 	row := tx.QueryRowxContext(ctx, query, revenue.ID, revenue.IDService, revenue.IDOrder, revenue.Cost)
-	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {
-		if errors.As(err, &duplicateEntryError) {
-			return fmt.Errorf("postgres - RevenueRepositoryImpl - UserOrderRevenue - tx.QueryRowxContext - row.Scan: %w", ErrRevenueAlreadyExist)
-		}
+	err := row.Scan(&idOrder)
+	switch {
+	case errors.As(err, &duplicateEntryError):
+		return fmt.Errorf("postgres - RevenueRepositoryImpl - UserOrderRevenue - tx.QueryRowxContext - row.Scan: %w", ErrRevenueAlreadyExist)
+	case err != nil:
 		return fmt.Errorf("postgres - RevenueRepositoryImpl - UserOrderRevenue - tx.QueryRowxContext - row.Scan: %w", err)
 	}
-
 	return nil
 }

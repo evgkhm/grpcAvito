@@ -17,13 +17,13 @@ func (r Repo) UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation
 			VALUES ($1, $2, $3, $4) RETURNING id`
 
 	row := tx.QueryRowxContext(ctx, query, reservation.ID, reservation.IDService, reservation.IDOrder, reservation.Cost)
-	if err, ok := row.Scan(&idOrder).(*pq.Error); ok {
-		if errors.As(err, &duplicateEntryError) {
-			return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderReservation - tx.QueryRowxContext - row.Scan: %w", ErrOrderAlreadyExist)
-		}
+	err := row.Scan(&idOrder)
+	switch {
+	case errors.As(err, &duplicateEntryError):
+		return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderReservation - tx.QueryRowxContext - row.Scan: %w", ErrOrderAlreadyExist)
+	case err != nil:
 		return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderReservation - tx.QueryRowxContext - row.Scan: %w", err)
 	}
-
 	return nil
 }
 
@@ -43,6 +43,5 @@ func (r Repo) UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reser
 	if err != nil {
 		return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderDeleteReservation - tx.ExecContext: %w", err)
 	}
-
 	return nil
 }
