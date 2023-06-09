@@ -4,22 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 	"time"
 )
-
-type ReportRepositoryImpl struct {
-	db  *sqlx.DB
-	log *logrus.Logger
-}
-
-func NewReportRepository(db *sqlx.DB, log *logrus.Logger) *ReportRepositoryImpl {
-	return &ReportRepositoryImpl{
-		db:  db,
-		log: log,
-	}
-}
 
 type Report struct {
 	userData entity.UserRevenue
@@ -27,7 +14,7 @@ type Report struct {
 	Month    int `json:"month"`
 }
 
-func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year uint32, month uint32) (map[uint32]float32, error) {
+func (r Repo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
 	report := Report{}
 	reportMap := make(map[uint32]float32)
 	query := `SELECT * FROM revenue 
@@ -35,7 +22,7 @@ func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year u
 		AND EXTRACT(month FROM curr_date)=$2`
 	rows, err := tx.QueryxContext(ctx, query, year, month)
 	if err != nil {
-		return nil, fmt.Errorf("postgres - ReportRepositoryImpl - GetReport - tx.QueryxContext: %w", errGetYearMonth)
+		return nil, fmt.Errorf("postgres - ReportRepositoryImpl - CreateMonthReport - tx.QueryxContext: %w", ErrGetYearMonth)
 	}
 	defer func(rows *sqlx.Rows) {
 		err = rows.Close()
@@ -44,16 +31,16 @@ func (r ReportRepositoryImpl) GetReport(ctx context.Context, tx *sqlx.Tx, year u
 		}
 	}(rows)
 
-	//Добавление в хэш-таблицу данных с БД
+	// Добавление в хэш-таблицу данных с БД
 	for rows.Next() {
 		var stamp time.Time
-		err = rows.Scan(&report.userData.Id, &report.userData.IdService, &report.userData.IdOrder, &report.userData.Cost, &stamp)
+		err = rows.Scan(&report.userData.ID, &report.userData.IDService, &report.userData.IDOrder, &report.userData.Cost, &stamp)
 		if err != nil {
-			return nil, fmt.Errorf("postgres - ReportRepositoryImpl - GetReport - rows.Scan: %w", err)
+			return nil, fmt.Errorf("postgres - ReportRepositoryImpl - CreateMonthReport - rows.Scan: %w", err)
 		}
 		report.Year = stamp.Year()
 		report.Month = int(stamp.Month())
-		reportMap[report.userData.IdService] += report.userData.Cost
+		reportMap[report.userData.IDService] += report.userData.Cost
 	}
 	return reportMap, nil
 }

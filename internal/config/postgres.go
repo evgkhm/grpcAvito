@@ -13,7 +13,6 @@ type PostgresConfig struct {
 	SSLMode string
 }
 
-// Postgres содержит информацию о базе данных
 var Postgres *PostgresConfig
 
 func (p PostgresConfig) Init() {

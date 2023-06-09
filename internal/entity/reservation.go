@@ -1,8 +1,8 @@
 package entity
 
 type UserReservation struct {
-	Id        uint32  `json:"id"`
-	IdService uint32  `json:"id_service"`
-	IdOrder   uint32  `json:"id_order"`
+	ID        uint32  `json:"id"`
+	IDService uint32  `json:"id_service"`
+	IDOrder   uint32  `json:"id_order"`
 	Cost      float32 `json:"cost"`
 }

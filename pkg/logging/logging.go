@@ -33,11 +33,11 @@ func GetLogger() *logrus.Logger {
 	})
 	l.SetReportCaller(true)
 
-	err := os.MkdirAll("./logs", 0644)
+	err := os.MkdirAll("./logs", 0o644)
 	if err != nil {
 		panic(err)
 	}
-	logFile, err := os.OpenFile("./logs/all.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logFile, err := os.OpenFile("./logs/all.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
 	if err != nil {
 		l.Printf("Couldn't open logfile. %s", err.Error())
 	}

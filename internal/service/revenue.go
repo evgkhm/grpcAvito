@@ -4,15 +4,15 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"grpcAvito/internal/entity"
-	"grpcAvito/proto"
+	"grpcAvito/internal/service/spec"
 )
 
-func (s Service) Revenue(ctx context.Context, req *proto.RevenueReq) (*proto.RevenueReply, error) {
-	userReservation := entity.UserRevenue{Id: req.Id, IdService: req.IdService, IdOrder: req.IdOrder, Cost: req.Cost}
-	err := s.useCase.Revenue(ctx, &userReservation)
+func (s Service) UserOrderRevenue(ctx context.Context, req *spec.UserOrderRevenueRequest) (*spec.UserOrderRevenueReply, error) {
+	userReservation := entity.UserRevenue{ID: req.Id, IDService: req.IdService, IDOrder: req.IdOrder, Cost: req.Cost}
+	err := s.useCase.UserOrderRevenue(ctx, &userReservation)
 	if err != nil {
-		s.log.Errorf("service - Service - Revenue - s.useCase.Revenue %v", err)
-		return &proto.RevenueReply{Success: false}, errors.Unwrap(err)
+		s.log.Errorf("service - Service - UserOrderRevenue - s.useCase.UserOrderRevenue %v", err)
+		return &spec.UserOrderRevenueReply{Success: false}, errors.Unwrap(err)
 	}
-	return &proto.RevenueReply{Success: true}, nil
+	return &spec.UserOrderRevenueReply{Success: true}, nil
 }

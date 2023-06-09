@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package grpcAvito;
+option go_package = "./internal/service/spec";
+import "google/api/annotations.proto";
+import "wallet_app.proto";
+
+service WalletAppService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserReply) {
+    option (google.api.http) = {
+      post: "/create_user"
+      body: "*"
+    };
+  };
+
+  rpc UserBalanceAccrual(UserBalanceAccrualRequest) returns (UserBalanceAccrualReply) {
+    option (google.api.http) = {
+      post: "/accrual_balance"
+      body: "*"
+    };
+  };
+
+  rpc UserOrderReservation(UserOrderReservationRequest) returns (UserOrderReservationReply) {
+    option (google.api.http) = {
+      post: "/order_reservation"
+      body: "*"
+    };
+  };
+
+  rpc UserOrderRevenue(UserOrderRevenueRequest) returns (UserOrderRevenueReply) {
+    option (google.api.http) = {
+      post: "/order_revenue"
+      body: "*"
+    };
+  };
+
+  rpc UserOrderDeleteReservation(UserOrderDeleteReservationRequest) returns (UserOrderDeleteReservationReply) {
+    option (google.api.http) = {
+      post: "/delete_reservation"
+      body: "*"
+    };
+  };
+
+  rpc CreateMonthReport(CreateMonthReportRequest) returns (CreateMonthReportReply) {
+    option (google.api.http) = {
+      get: "/create_month_report/{year}/{month}"
+    };
+  };
+
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceReply) {
+    option (google.api.http) = {
+      get: "/get_balance/{id}"
+    };
+  };
+}

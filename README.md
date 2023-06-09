@@ -24,15 +24,15 @@
  - Сценарий разрезервирования денег
 
 # API
-| Endpoint               | gRPC method |                          Description |
-|------------------------|:-----------:|-------------------------------------:|
-| /get_balance/{id}      |     GET     | Метод получения баланса пользователя |
-| /create                |    POST     |          Метод создания пользователя |
-| /sum                   |    POST     |   Метод начисления средств на баланс |
-| /reservation           |    POST     |         Метод резервирования средств |
-| /revenue               |    POST     |              Метод признания выручки |
-| /delete_reservation    |    POST     |               Метод удаления резерва |
-| /report/{year}/{month} |     GET     |          Получение месячного отсчета |
+| Endpoint                            | gRPC method |                          Description |
+|-------------------------------------|:-----------:|-------------------------------------:|
+| /get_balance/{id}                   |     GET     | Метод получения баланса пользователя |
+| /create_user                        |    POST     |          Метод создания пользователя |
+| /accrual_balance                    |    POST     |   Метод начисления средств на баланс |
+| /order_reservation                  |    POST     |         Метод резервирования средств |
+| /order_revenue                      |    POST     |              Метод признания выручки |
+| /delete_reservation                 |    POST     |               Метод удаления резерва |
+| /create_month_report/{year}/{month} |     GET     |          Получение месячного отсчета |
 
 # Example
 Получение текущего баланса
@@ -49,4 +49,10 @@
 
 # For start local without docker
 Add path to config.yaml. E.g.:
+
 `CONFIG_PATH=C:\Users\User\grpcAvito\internal\config\config.yaml`
+
+# For start linter
+`make lint`
+
+Linter will create lint.txt file

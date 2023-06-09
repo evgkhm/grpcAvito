@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-
 	"golang.org/x/sync/errgroup"
 
 	config "grpcAvito/internal/config"
@@ -19,7 +18,7 @@ import (
 func init() {
 	config.InitAll([]config.Config{
 		config.PostgresConfig{},
-		config.HttpConfig{},
+		config.HTTPConfig{},
 		config.GRPCConfig{},
 	})
 }
@@ -35,9 +34,9 @@ func main() {
 
 	useCases := usecase.New(postgresRepository, log, postgresDB)
 
-	service := service.New(useCases, log)
+	services := service.New(useCases, log)
 
-	grpcServer := server.NewGRPCServer(service, log)
+	grpcServer := server.NewGRPCServer(services, log)
 
 	listen, err := net.Listen("tcp", config.GRPC.HostPort)
 	if err != nil {
@@ -51,7 +50,13 @@ func main() {
 		return grpcServer.Serve(listen)
 	})
 	g.Go(func() (err error) {
-		return http.ListenAndServe(config.HTTP.HostPort, mux)
+		serv := http.Server{
+			Addr:         config.HTTP.HostPort,
+			ReadTimeout:  config.HTTP.Duration,
+			WriteTimeout: config.HTTP.Duration,
+			Handler:      mux,
+		}
+		return serv.ListenAndServe()
 	})
 
 	err = g.Wait()

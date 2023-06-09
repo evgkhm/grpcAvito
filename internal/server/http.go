@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"grpcAvito/proto"
+	"grpcAvito/internal/service/spec"
 )
 
 func NewHTTPServer(endpoint string, log *logrus.Logger) *runtime.ServeMux {
@@ -15,7 +15,7 @@ func NewHTTPServer(endpoint string, log *logrus.Logger) *runtime.ServeMux {
 
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	err := proto.RegisterServerHandlerFromEndpoint(context.Background(), mux, endpoint, opts)
+	err := spec.RegisterWalletAppServiceHandlerFromEndpoint(context.Background(), mux, endpoint, opts)
 	if err != nil {
 		log.Panic(err)
 	}

@@ -4,18 +4,18 @@
 	lint \
 
 proto:
-	protoc -I ./proto --go_out ./proto \
+	protoc -I ./proto --go_out ./internal/service/spec \
 	--go_opt paths=source_relative \
-	--go-grpc_out ./proto \
+	--go-grpc_out ./internal/service/spec \
 	--go-grpc_opt paths=source_relative \
-	--grpc-gateway_out ./proto \
-	 --grpc-gateway_opt paths=source_relative ./proto/server.proto
+	--grpc-gateway_out ./internal/service/spec \
+	 --grpc-gateway_opt paths=source_relative ./proto/wallet_app.proto ./proto/wallet_app_service.proto
 
 run:
 	docker-compose up --build
 
 lint:
 	golangci-lint cache clean
-	golangci-lint run
+	golangci-lint run --config=./.golangci.yaml
 
 
