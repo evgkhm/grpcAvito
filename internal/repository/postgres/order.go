@@ -40,15 +40,6 @@ func (o OrderRepo) UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reserv
 	return nil
 }
 
-func (o OrderRepo) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
-	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
-	_, err := tx.ExecContext(ctx, query, user.Balance, user.ID)
-	if err != nil {
-		return fmt.Errorf("postgres - ReservationRepositoryImpl - MinusBalance - tx.ExecContext: %w", err)
-	}
-	return nil
-}
-
 func (o OrderRepo) UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
 	query := `DELETE FROM reservation 
        WHERE id=$1 and service_id=$2 and order_id=$3 and cost=$4`
