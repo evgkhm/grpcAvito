@@ -11,16 +11,21 @@ import (
 )
 
 type ReportUseCase struct {
-	repo      postgres.Repository
-	log       *logrus.Logger
-	txService *TransactionServiceImpl
+	userRepo   postgres.UserRepository
+	orderRepo  postgres.OrderRepository
+	reportRepo postgres.ReportRepository
+	log        *logrus.Logger
+	txService  *TransactionServiceImpl
 }
 
-func NewReportUseCase(repo *postgres.Repo, log *logrus.Logger, txService *TransactionServiceImpl) *ReportUseCase {
+func NewReportUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRepository, reportRepo postgres.ReportRepository,
+	log *logrus.Logger, txService *TransactionServiceImpl) *ReportUseCase {
 	return &ReportUseCase{
-		repo:      repo,
-		log:       log,
-		txService: txService,
+		userRepo:   userRepo,
+		orderRepo:  orderRepo,
+		reportRepo: reportRepo,
+		log:        log,
+		txService:  txService,
 	}
 }
 
@@ -44,7 +49,7 @@ func (u ReportUseCase) CreateMonthReport(ctx context.Context, year, month uint32
 		return fmt.Errorf("usecase - UseCase - CreateMonthReport - checkMonth: %w", err)
 	}
 
-	reportMap, err := u.repo.CreateMonthReport(ctx, tx, year, month)
+	reportMap, err := u.reportRepo.CreateMonthReport(ctx, tx, year, month)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {

@@ -4,18 +4,31 @@ import (
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 	"time"
 )
 
-type Report struct {
+type ReportRepo struct {
+	db  *sqlx.DB
+	log *logrus.Logger
+}
+
+func NewReportRepository(db *sqlx.DB, log *logrus.Logger) *ReportRepo {
+	return &ReportRepo{
+		db:  db,
+		log: log,
+	}
+}
+
+type reportMonth struct {
 	userData entity.UserRevenue
 	Year     int `json:"year"`
 	Month    int `json:"month"`
 }
 
-func (r Repo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
-	report := Report{}
+func (r ReportRepo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
+	report := reportMonth{}
 	reportMap := make(map[uint32]float32)
 	query := `SELECT * FROM revenue 
 		WHERE EXTRACT(year FROM curr_date)=$1 

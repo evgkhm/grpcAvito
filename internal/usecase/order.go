@@ -9,16 +9,21 @@ import (
 )
 
 type OrderUseCase struct {
-	repo      postgres.Repository
-	log       *logrus.Logger
-	txService *TransactionServiceImpl
+	userRepo   postgres.UserRepository
+	orderRepo  postgres.OrderRepository
+	reportRepo postgres.ReportRepository
+	log        *logrus.Logger
+	txService  *TransactionServiceImpl
 }
 
-func NewOrderUseCase(repo *postgres.Repo, log *logrus.Logger, txService *TransactionServiceImpl) *OrderUseCase {
+func NewOrderUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRepository, reportRepo postgres.ReportRepository,
+	log *logrus.Logger, txService *TransactionServiceImpl) *OrderUseCase {
 	return &OrderUseCase{
-		repo:      repo,
-		log:       log,
-		txService: txService,
+		userRepo:   userRepo,
+		orderRepo:  orderRepo,
+		reportRepo: reportRepo,
+		log:        log,
+		txService:  txService,
 	}
 }
 
@@ -39,7 +44,7 @@ func (u OrderUseCase) UserOrderRevenue(ctx context.Context, revenue *entity.User
 	}
 
 	// Списать с резервации
-	err = u.repo.UserOrderDeleteReservation(ctx, tx, reservation)
+	err = u.orderRepo.UserOrderDeleteReservation(ctx, tx, reservation)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -49,7 +54,7 @@ func (u OrderUseCase) UserOrderRevenue(ctx context.Context, revenue *entity.User
 	}
 
 	// Начислить в revenue
-	err = u.repo.UserOrderRevenue(ctx, tx, revenue)
+	err = u.orderRepo.UserOrderRevenue(ctx, tx, revenue)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -72,7 +77,7 @@ func (u OrderUseCase) UserOrderDeleteReservation(ctx context.Context, reservatio
 	}
 
 	// Убрать резерв
-	err = u.repo.UserOrderDeleteReservation(ctx, tx, reservation)
+	err = u.orderRepo.UserOrderDeleteReservation(ctx, tx, reservation)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -83,7 +88,7 @@ func (u OrderUseCase) UserOrderDeleteReservation(ctx context.Context, reservatio
 
 	// Узнать текущий баланс
 	userDTO := entity.User{ID: reservation.ID}
-	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
+	currBalance, err := u.userRepo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -95,7 +100,7 @@ func (u OrderUseCase) UserOrderDeleteReservation(ctx context.Context, reservatio
 	// Начисление баланса
 	newBalance := currBalance + reservation.Cost
 	userDTO.Balance = newBalance
-	err = u.repo.UserBalanceAccrual(ctx, tx, &userDTO)
+	err = u.userRepo.UserBalanceAccrual(ctx, tx, &userDTO)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -117,7 +122,7 @@ func (u OrderUseCase) UserOrderReservation(ctx context.Context, reservation *ent
 		return fmt.Errorf("usecase - UseCase - UserOrderReservation - u.txService.NewTransaction: %w", err)
 	}
 
-	err = u.repo.UserOrderReservation(ctx, tx, reservation)
+	err = u.orderRepo.UserOrderReservation(ctx, tx, reservation)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -128,7 +133,7 @@ func (u OrderUseCase) UserOrderReservation(ctx context.Context, reservation *ent
 
 	// Узнать текущий баланс
 	userDTO := entity.User{ID: reservation.ID}
-	currBalance, err := u.repo.GetBalance(ctx, tx, &userDTO)
+	currBalance, err := u.userRepo.GetBalance(ctx, tx, &userDTO)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -151,7 +156,7 @@ func (u OrderUseCase) UserOrderReservation(ctx context.Context, reservation *ent
 	userDTO.ID = reservation.ID
 	userDTO.Balance = newBalance
 
-	err = u.repo.MinusBalance(ctx, tx, &userDTO)
+	err = u.orderRepo.MinusBalance(ctx, tx, &userDTO)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {

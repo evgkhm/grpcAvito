@@ -30,11 +30,11 @@ type Report interface {
 	CreateMonthReport(ctx context.Context, year uint32, month uint32) error
 }
 
-func New(repo *postgres.Repo, log *logrus.Logger, postgresDB *sqlx.DB) *UseCase {
+func New(repo *postgres.Repository, log *logrus.Logger, postgresDB *sqlx.DB) *UseCase {
 	txService := NewTransactionService(postgresDB, log)
 	return &UseCase{
-		User:   NewUserUseCase(repo, log, txService),
-		Order:  NewOrderUseCase(repo, log, txService),
-		Report: NewReportUseCase(repo, log, txService),
+		User:   NewUserUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
+		Order:  NewOrderUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
+		Report: NewReportUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
 	}
 }

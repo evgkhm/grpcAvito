@@ -7,10 +7,23 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 )
 
-func (r Repo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (float32, error) {
+type UserRepo struct {
+	db  *sqlx.DB
+	log *logrus.Logger
+}
+
+func NewUserRepository(db *sqlx.DB, log *logrus.Logger) *UserRepo {
+	return &UserRepo{
+		db:  db,
+		log: log,
+	}
+}
+
+func (u UserRepo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (float32, error) {
 	var balance float32
 	query := `SELECT balance FROM usr WHERE id=$1 `
 	err := tx.GetContext(ctx, &balance, query, user.ID)
@@ -23,7 +36,7 @@ func (r Repo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (f
 	return balance, nil
 }
 
-func (r Repo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (u UserRepo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	var id int64
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO usr (id, balance) VALUES ($1, $2) RETURNING id`
@@ -38,7 +51,7 @@ func (r Repo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) er
 	return nil
 }
 
-func (r Repo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (u UserRepo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.ID)
 	if err != nil {
