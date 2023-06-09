@@ -5,6 +5,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
+	"grpcAvito/internal/repository/postgres/order"
+	"grpcAvito/internal/repository/postgres/report"
+	"grpcAvito/internal/repository/postgres/user"
 )
 
 type Repository struct {
@@ -32,8 +35,8 @@ type ReportRepository interface {
 
 func New(db *sqlx.DB, log *logrus.Logger) *Repository {
 	return &Repository{
-		UserRepository:   NewUserRepository(db, log),
-		OrderRepository:  NewOrderRepository(db, log),
-		ReportRepository: NewReportRepository(db, log),
+		UserRepository:   user.NewUserRepository(db, log),
+		OrderRepository:  order.NewOrderRepository(db, log),
+		ReportRepository: report.NewReportRepository(db, log),
 	}
 }
