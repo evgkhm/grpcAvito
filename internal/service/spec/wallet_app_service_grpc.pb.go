@@ -32,13 +32,13 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type WalletAppServiceClient interface {
-	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
-	UserBalanceAccrual(ctx context.Context, in *UserBalanceAccrualRequest, opts ...grpc.CallOption) (*UserBalanceAccrualReply, error)
-	UserOrderReservation(ctx context.Context, in *UserOrderReservationRequest, opts ...grpc.CallOption) (*UserOrderReservationReply, error)
-	UserOrderRevenue(ctx context.Context, in *UserOrderRevenueRequest, opts ...grpc.CallOption) (*UserOrderRevenueReply, error)
-	UserOrderDeleteReservation(ctx context.Context, in *UserOrderDeleteReservationRequest, opts ...grpc.CallOption) (*UserOrderDeleteReservationReply, error)
-	CreateMonthReport(ctx context.Context, in *CreateMonthReportRequest, opts ...grpc.CallOption) (*CreateMonthReportReply, error)
-	GetBalance(ctx context.Context, in *GetBalanceRequest, opts ...grpc.CallOption) (*GetBalanceReply, error)
+	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	UserBalanceAccrual(ctx context.Context, in *UserBalanceAccrualRequest, opts ...grpc.CallOption) (*UserBalanceAccrualResponse, error)
+	UserOrderReservation(ctx context.Context, in *UserOrderReservationRequest, opts ...grpc.CallOption) (*UserOrderReservationResponse, error)
+	UserOrderRevenue(ctx context.Context, in *UserOrderRevenueRequest, opts ...grpc.CallOption) (*UserOrderRevenueResponse, error)
+	UserOrderDeleteReservation(ctx context.Context, in *UserOrderDeleteReservationRequest, opts ...grpc.CallOption) (*UserOrderDeleteReservationResponse, error)
+	CreateMonthReport(ctx context.Context, in *CreateMonthReportRequest, opts ...grpc.CallOption) (*CreateMonthReportResponse, error)
+	GetBalance(ctx context.Context, in *GetBalanceRequest, opts ...grpc.CallOption) (*GetBalanceResponse, error)
 }
 
 type walletAppServiceClient struct {
@@ -49,8 +49,8 @@ func NewWalletAppServiceClient(cc grpc.ClientConnInterface) WalletAppServiceClie
 	return &walletAppServiceClient{cc}
 }
 
-func (c *walletAppServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error) {
-	out := new(CreateUserReply)
+func (c *walletAppServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+	out := new(CreateUserResponse)
 	err := c.cc.Invoke(ctx, WalletAppService_CreateUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -58,8 +58,8 @@ func (c *walletAppServiceClient) CreateUser(ctx context.Context, in *CreateUserR
 	return out, nil
 }
 
-func (c *walletAppServiceClient) UserBalanceAccrual(ctx context.Context, in *UserBalanceAccrualRequest, opts ...grpc.CallOption) (*UserBalanceAccrualReply, error) {
-	out := new(UserBalanceAccrualReply)
+func (c *walletAppServiceClient) UserBalanceAccrual(ctx context.Context, in *UserBalanceAccrualRequest, opts ...grpc.CallOption) (*UserBalanceAccrualResponse, error) {
+	out := new(UserBalanceAccrualResponse)
 	err := c.cc.Invoke(ctx, WalletAppService_UserBalanceAccrual_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -67,8 +67,8 @@ func (c *walletAppServiceClient) UserBalanceAccrual(ctx context.Context, in *Use
 	return out, nil
 }
 
-func (c *walletAppServiceClient) UserOrderReservation(ctx context.Context, in *UserOrderReservationRequest, opts ...grpc.CallOption) (*UserOrderReservationReply, error) {
-	out := new(UserOrderReservationReply)
+func (c *walletAppServiceClient) UserOrderReservation(ctx context.Context, in *UserOrderReservationRequest, opts ...grpc.CallOption) (*UserOrderReservationResponse, error) {
+	out := new(UserOrderReservationResponse)
 	err := c.cc.Invoke(ctx, WalletAppService_UserOrderReservation_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,8 +76,8 @@ func (c *walletAppServiceClient) UserOrderReservation(ctx context.Context, in *U
 	return out, nil
 }
 
-func (c *walletAppServiceClient) UserOrderRevenue(ctx context.Context, in *UserOrderRevenueRequest, opts ...grpc.CallOption) (*UserOrderRevenueReply, error) {
-	out := new(UserOrderRevenueReply)
+func (c *walletAppServiceClient) UserOrderRevenue(ctx context.Context, in *UserOrderRevenueRequest, opts ...grpc.CallOption) (*UserOrderRevenueResponse, error) {
+	out := new(UserOrderRevenueResponse)
 	err := c.cc.Invoke(ctx, WalletAppService_UserOrderRevenue_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -85,8 +85,8 @@ func (c *walletAppServiceClient) UserOrderRevenue(ctx context.Context, in *UserO
 	return out, nil
 }
 
-func (c *walletAppServiceClient) UserOrderDeleteReservation(ctx context.Context, in *UserOrderDeleteReservationRequest, opts ...grpc.CallOption) (*UserOrderDeleteReservationReply, error) {
-	out := new(UserOrderDeleteReservationReply)
+func (c *walletAppServiceClient) UserOrderDeleteReservation(ctx context.Context, in *UserOrderDeleteReservationRequest, opts ...grpc.CallOption) (*UserOrderDeleteReservationResponse, error) {
+	out := new(UserOrderDeleteReservationResponse)
 	err := c.cc.Invoke(ctx, WalletAppService_UserOrderDeleteReservation_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -94,8 +94,8 @@ func (c *walletAppServiceClient) UserOrderDeleteReservation(ctx context.Context,
 	return out, nil
 }
 
-func (c *walletAppServiceClient) CreateMonthReport(ctx context.Context, in *CreateMonthReportRequest, opts ...grpc.CallOption) (*CreateMonthReportReply, error) {
-	out := new(CreateMonthReportReply)
+func (c *walletAppServiceClient) CreateMonthReport(ctx context.Context, in *CreateMonthReportRequest, opts ...grpc.CallOption) (*CreateMonthReportResponse, error) {
+	out := new(CreateMonthReportResponse)
 	err := c.cc.Invoke(ctx, WalletAppService_CreateMonthReport_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -103,8 +103,8 @@ func (c *walletAppServiceClient) CreateMonthReport(ctx context.Context, in *Crea
 	return out, nil
 }
 
-func (c *walletAppServiceClient) GetBalance(ctx context.Context, in *GetBalanceRequest, opts ...grpc.CallOption) (*GetBalanceReply, error) {
-	out := new(GetBalanceReply)
+func (c *walletAppServiceClient) GetBalance(ctx context.Context, in *GetBalanceRequest, opts ...grpc.CallOption) (*GetBalanceResponse, error) {
+	out := new(GetBalanceResponse)
 	err := c.cc.Invoke(ctx, WalletAppService_GetBalance_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -116,13 +116,13 @@ func (c *walletAppServiceClient) GetBalance(ctx context.Context, in *GetBalanceR
 // All implementations must embed UnimplementedWalletAppServiceServer
 // for forward compatibility
 type WalletAppServiceServer interface {
-	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
-	UserBalanceAccrual(context.Context, *UserBalanceAccrualRequest) (*UserBalanceAccrualReply, error)
-	UserOrderReservation(context.Context, *UserOrderReservationRequest) (*UserOrderReservationReply, error)
-	UserOrderRevenue(context.Context, *UserOrderRevenueRequest) (*UserOrderRevenueReply, error)
-	UserOrderDeleteReservation(context.Context, *UserOrderDeleteReservationRequest) (*UserOrderDeleteReservationReply, error)
-	CreateMonthReport(context.Context, *CreateMonthReportRequest) (*CreateMonthReportReply, error)
-	GetBalance(context.Context, *GetBalanceRequest) (*GetBalanceReply, error)
+	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	UserBalanceAccrual(context.Context, *UserBalanceAccrualRequest) (*UserBalanceAccrualResponse, error)
+	UserOrderReservation(context.Context, *UserOrderReservationRequest) (*UserOrderReservationResponse, error)
+	UserOrderRevenue(context.Context, *UserOrderRevenueRequest) (*UserOrderRevenueResponse, error)
+	UserOrderDeleteReservation(context.Context, *UserOrderDeleteReservationRequest) (*UserOrderDeleteReservationResponse, error)
+	CreateMonthReport(context.Context, *CreateMonthReportRequest) (*CreateMonthReportResponse, error)
+	GetBalance(context.Context, *GetBalanceRequest) (*GetBalanceResponse, error)
 	mustEmbedUnimplementedWalletAppServiceServer()
 }
 
@@ -130,25 +130,25 @@ type WalletAppServiceServer interface {
 type UnimplementedWalletAppServiceServer struct {
 }
 
-func (UnimplementedWalletAppServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error) {
+func (UnimplementedWalletAppServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedWalletAppServiceServer) UserBalanceAccrual(context.Context, *UserBalanceAccrualRequest) (*UserBalanceAccrualReply, error) {
+func (UnimplementedWalletAppServiceServer) UserBalanceAccrual(context.Context, *UserBalanceAccrualRequest) (*UserBalanceAccrualResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserBalanceAccrual not implemented")
 }
-func (UnimplementedWalletAppServiceServer) UserOrderReservation(context.Context, *UserOrderReservationRequest) (*UserOrderReservationReply, error) {
+func (UnimplementedWalletAppServiceServer) UserOrderReservation(context.Context, *UserOrderReservationRequest) (*UserOrderReservationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserOrderReservation not implemented")
 }
-func (UnimplementedWalletAppServiceServer) UserOrderRevenue(context.Context, *UserOrderRevenueRequest) (*UserOrderRevenueReply, error) {
+func (UnimplementedWalletAppServiceServer) UserOrderRevenue(context.Context, *UserOrderRevenueRequest) (*UserOrderRevenueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserOrderRevenue not implemented")
 }
-func (UnimplementedWalletAppServiceServer) UserOrderDeleteReservation(context.Context, *UserOrderDeleteReservationRequest) (*UserOrderDeleteReservationReply, error) {
+func (UnimplementedWalletAppServiceServer) UserOrderDeleteReservation(context.Context, *UserOrderDeleteReservationRequest) (*UserOrderDeleteReservationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserOrderDeleteReservation not implemented")
 }
-func (UnimplementedWalletAppServiceServer) CreateMonthReport(context.Context, *CreateMonthReportRequest) (*CreateMonthReportReply, error) {
+func (UnimplementedWalletAppServiceServer) CreateMonthReport(context.Context, *CreateMonthReportRequest) (*CreateMonthReportResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateMonthReport not implemented")
 }
-func (UnimplementedWalletAppServiceServer) GetBalance(context.Context, *GetBalanceRequest) (*GetBalanceReply, error) {
+func (UnimplementedWalletAppServiceServer) GetBalance(context.Context, *GetBalanceRequest) (*GetBalanceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBalance not implemented")
 }
 func (UnimplementedWalletAppServiceServer) mustEmbedUnimplementedWalletAppServiceServer() {}

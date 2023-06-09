@@ -7,22 +7,22 @@ import (
 	"grpcAvito/internal/service/spec"
 )
 
-func (s Service) UserOrderDeleteReservation(ctx context.Context, req *spec.UserOrderDeleteReservationRequest) (*spec.UserOrderDeleteReservationReply, error) {
+func (s Service) UserOrderDeleteReservation(ctx context.Context, req *spec.UserOrderDeleteReservationRequest) (*spec.UserOrderDeleteReservationResponse, error) {
 	userReservation := entity.UserReservation{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
 	err := s.useCase.UserOrderDeleteReservation(ctx, &userReservation)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderDeleteReservation - s.useCase.UserOrderDeleteReservation: %v", err)
-		return &spec.UserOrderDeleteReservationReply{Success: false}, errors.Unwrap(err)
+		return &spec.UserOrderDeleteReservationResponse{Success: false}, errors.Unwrap(err)
 	}
-	return &spec.UserOrderDeleteReservationReply{Success: true}, nil
+	return &spec.UserOrderDeleteReservationResponse{Success: true}, nil
 }
 
-func (s Service) UserOrderReservation(ctx context.Context, req *spec.UserOrderReservationRequest) (*spec.UserOrderReservationReply, error) {
+func (s Service) UserOrderReservation(ctx context.Context, req *spec.UserOrderReservationRequest) (*spec.UserOrderReservationResponse, error) {
 	userReservation := entity.UserReservation{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
 	err := s.useCase.UserOrderReservation(ctx, &userReservation)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderReservation - s.useCase.UserOrderReservation: %v", err)
-		return &spec.UserOrderReservationReply{Success: false}, errors.Unwrap(err)
+		return &spec.UserOrderReservationResponse{Success: false}, errors.Unwrap(err)
 	}
-	return &spec.UserOrderReservationReply{Success: true}, nil
+	return &spec.UserOrderReservationResponse{Success: true}, nil
 }

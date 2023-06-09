@@ -6,48 +6,48 @@ import "google/api/annotations.proto";
 import "wallet_app.proto";
 
 service WalletAppService {
-  rpc CreateUser(CreateUserRequest) returns (CreateUserReply) {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
     option (google.api.http) = {
       post: "/create_user"
       body: "*"
     };
   };
 
-  rpc UserBalanceAccrual(UserBalanceAccrualRequest) returns (UserBalanceAccrualReply) {
+  rpc UserBalanceAccrual(UserBalanceAccrualRequest) returns (UserBalanceAccrualResponse) {
     option (google.api.http) = {
       post: "/accrual_balance"
       body: "*"
     };
   };
 
-  rpc UserOrderReservation(UserOrderReservationRequest) returns (UserOrderReservationReply) {
+  rpc UserOrderReservation(UserOrderReservationRequest) returns (UserOrderReservationResponse) {
     option (google.api.http) = {
       post: "/order_reservation"
       body: "*"
     };
   };
 
-  rpc UserOrderRevenue(UserOrderRevenueRequest) returns (UserOrderRevenueReply) {
+  rpc UserOrderRevenue(UserOrderRevenueRequest) returns (UserOrderRevenueResponse) {
     option (google.api.http) = {
       post: "/order_revenue"
       body: "*"
     };
   };
 
-  rpc UserOrderDeleteReservation(UserOrderDeleteReservationRequest) returns (UserOrderDeleteReservationReply) {
+  rpc UserOrderDeleteReservation(UserOrderDeleteReservationRequest) returns (UserOrderDeleteReservationResponse) {
     option (google.api.http) = {
       post: "/delete_reservation"
       body: "*"
     };
   };
 
-  rpc CreateMonthReport(CreateMonthReportRequest) returns (CreateMonthReportReply) {
+  rpc CreateMonthReport(CreateMonthReportRequest) returns (CreateMonthReportResponse) {
     option (google.api.http) = {
       get: "/create_month_report/{year}/{month}"
     };
   };
 
-  rpc GetBalance(GetBalanceRequest) returns (GetBalanceReply) {
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse) {
     option (google.api.http) = {
       get: "/get_balance/{id}"
     };

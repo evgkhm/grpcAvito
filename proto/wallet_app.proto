@@ -9,7 +9,7 @@ message CreateUserRequest {
   float balance = 2;
 }
 
-message CreateUserReply {
+message CreateUserResponse {
   bool success = 1;
 }
 
@@ -18,7 +18,7 @@ message UserBalanceAccrualRequest {
   float balance = 2;
 }
 
-message UserBalanceAccrualReply {
+message UserBalanceAccrualResponse {
   bool success = 1;
 }
 
@@ -29,7 +29,7 @@ message UserOrderReservationRequest {
   float cost = 4;
 }
 
-message UserOrderReservationReply {
+message UserOrderReservationResponse {
   bool success = 1;
 }
 
@@ -40,7 +40,7 @@ message UserOrderRevenueRequest {
   float cost = 4;
 }
 
-message UserOrderRevenueReply {
+message UserOrderRevenueResponse {
   bool success = 1;
 }
 
@@ -51,7 +51,7 @@ message UserOrderDeleteReservationRequest {
   float cost = 4;
 }
 
-message UserOrderDeleteReservationReply {
+message UserOrderDeleteReservationResponse {
   bool success = 1;
 }
 
@@ -60,7 +60,7 @@ message CreateMonthReportRequest {
   uint32 month = 2;
 }
 
-message CreateMonthReportReply {
+message CreateMonthReportResponse {
   bool success = 1;
 }
 
@@ -68,7 +68,7 @@ message GetBalanceRequest {
   uint32 id = 1;
 }
 
-message GetBalanceReply {
+message GetBalanceResponse {
   uint32 id = 1;
   float balance = 2;
   bool success = 3;
