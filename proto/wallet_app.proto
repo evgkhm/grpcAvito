@@ -24,8 +24,8 @@ message UserBalanceAccrualReply {
 
 message UserOrderReservationRequest {
   uint32 id = 1;
-  uint32 idService = 2;
-  uint32 idOrder = 3;
+  uint32 serviceId = 2;
+  uint32 orderId = 3;
   float cost = 4;
 }
 
@@ -35,8 +35,8 @@ message UserOrderReservationReply {
 
 message UserOrderRevenueRequest {
   uint32 id = 1;
-  uint32 idService = 2;
-  uint32 idOrder = 3;
+  uint32 serviceId = 2;
+  uint32 orderId = 3;
   float cost = 4;
 }
 
@@ -46,8 +46,8 @@ message UserOrderRevenueReply {
 
 message UserOrderDeleteReservationRequest {
   uint32 id = 1;
-  uint32 idService = 2;
-  uint32 idOrder = 3;
+  uint32 serviceId = 2;
+  uint32 orderId = 3;
   float cost = 4;
 }
 

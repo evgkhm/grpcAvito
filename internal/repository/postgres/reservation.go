@@ -13,10 +13,10 @@ func (r Repo) UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation
 	var idOrder uint32
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO reservation 
-    	(id, id_service, id_order, cost) 
+    	(id, service_id, order_id, cost) 
 			VALUES ($1, $2, $3, $4) RETURNING id`
 
-	row := tx.QueryRowxContext(ctx, query, reservation.ID, reservation.IDService, reservation.IDOrder, reservation.Cost)
+	row := tx.QueryRowxContext(ctx, query, reservation.ID, reservation.ServiceID, reservation.OrderID, reservation.Cost)
 	err := row.Scan(&idOrder)
 	switch {
 	case errors.As(err, &duplicateEntryError):
@@ -38,8 +38,8 @@ func (r Repo) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) 
 
 func (r Repo) UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
 	query := `DELETE FROM reservation 
-       WHERE id=$1 and id_service=$2 and id_order=$3 and cost=$4`
-	_, err := tx.ExecContext(ctx, query, reservation.ID, reservation.IDService, reservation.IDOrder, reservation.Cost)
+       WHERE id=$1 and service_id=$2 and order_id=$3 and cost=$4`
+	_, err := tx.ExecContext(ctx, query, reservation.ID, reservation.ServiceID, reservation.OrderID, reservation.Cost)
 	if err != nil {
 		return fmt.Errorf("postgres - ReservationRepositoryImpl - UserOrderDeleteReservation - tx.ExecContext: %w", err)
 	}

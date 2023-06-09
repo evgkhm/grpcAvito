@@ -34,13 +34,13 @@ func (r Repo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month ui
 	// Добавление в хэш-таблицу данных с БД
 	for rows.Next() {
 		var stamp time.Time
-		err = rows.Scan(&report.userData.ID, &report.userData.IDService, &report.userData.IDOrder, &report.userData.Cost, &stamp)
+		err = rows.Scan(&report.userData.ID, &report.userData.ServiceID, &report.userData.OrderID, &report.userData.Cost, &stamp)
 		if err != nil {
 			return nil, fmt.Errorf("postgres - ReportRepositoryImpl - CreateMonthReport - rows.Scan: %w", err)
 		}
 		report.Year = stamp.Year()
 		report.Month = int(stamp.Month())
-		reportMap[report.userData.IDService] += report.userData.Cost
+		reportMap[report.userData.ServiceID] += report.userData.Cost
 	}
 	return reportMap, nil
 }

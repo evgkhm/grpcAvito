@@ -8,7 +8,7 @@ import (
 )
 
 func (s Service) UserOrderRevenue(ctx context.Context, req *spec.UserOrderRevenueRequest) (*spec.UserOrderRevenueReply, error) {
-	userReservation := entity.UserRevenue{ID: req.Id, IDService: req.IdService, IDOrder: req.IdOrder, Cost: req.Cost}
+	userReservation := entity.UserRevenue{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
 	err := s.useCase.UserOrderRevenue(ctx, &userReservation)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderRevenue - s.useCase.UserOrderRevenue %v", err)

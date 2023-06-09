@@ -13,9 +13,9 @@ func (r Repo) UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *entity
 	var idOrder uint32
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO revenue 
-    	(id, id_service, id_order, cost)
+    	(id, service_id, order_id, cost)
 			VALUES ($1, $2, $3, $4) RETURNING id`
-	row := tx.QueryRowxContext(ctx, query, revenue.ID, revenue.IDService, revenue.IDOrder, revenue.Cost)
+	row := tx.QueryRowxContext(ctx, query, revenue.ID, revenue.ServiceID, revenue.OrderID, revenue.Cost)
 	err := row.Scan(&idOrder)
 	switch {
 	case errors.As(err, &duplicateEntryError):

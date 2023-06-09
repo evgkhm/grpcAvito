@@ -17,8 +17,8 @@ func (u UseCase) UserOrderRevenue(ctx context.Context, revenue *entity.UserReven
 	}
 
 	reservation := &entity.UserReservation{ID: revenue.ID,
-		IDOrder:   revenue.IDOrder,
-		IDService: revenue.IDService,
+		OrderID:   revenue.OrderID,
+		ServiceID: revenue.ServiceID,
 		Cost:      revenue.Cost,
 	}
 
