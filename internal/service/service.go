@@ -8,14 +8,14 @@ import (
 
 type Service struct {
 	spec.UnimplementedWalletAppServiceServer
-	useCase usecase.Usecase
+	useCase usecase.UseCase
 	log     *logrus.Logger
 }
 
 func New(useCase *usecase.UseCase, log *logrus.Logger) *Service {
 	return &Service{
 		UnimplementedWalletAppServiceServer: spec.UnimplementedWalletAppServiceServer{},
-		useCase:                             useCase,
 		log:                                 log,
+		useCase:                             *useCase,
 	}
 }

@@ -4,11 +4,27 @@ import (
 	"context"
 	"encoding/csv"
 	"fmt"
+	"github.com/sirupsen/logrus"
+	"grpcAvito/internal/repository/postgres"
 	"os"
 	"strconv"
 )
 
-func (u UseCase) CreateMonthReport(ctx context.Context, year, month uint32) error {
+type ReportUseCase struct {
+	repo      postgres.Repository
+	log       *logrus.Logger
+	txService *TransactionServiceImpl
+}
+
+func NewReportUseCase(repo *postgres.Repo, log *logrus.Logger, txService *TransactionServiceImpl) *ReportUseCase {
+	return &ReportUseCase{
+		repo:      repo,
+		log:       log,
+		txService: txService,
+	}
+}
+
+func (u ReportUseCase) CreateMonthReport(ctx context.Context, year, month uint32) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)

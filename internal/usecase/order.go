@@ -3,10 +3,65 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
+	"grpcAvito/internal/repository/postgres"
 )
 
-func (u UseCase) UserOrderDeleteReservation(ctx context.Context, reservation *entity.UserReservation) error {
+type OrderUseCase struct {
+	repo      postgres.Repository
+	log       *logrus.Logger
+	txService *TransactionServiceImpl
+}
+
+func NewOrderUseCase(repo *postgres.Repo, log *logrus.Logger, txService *TransactionServiceImpl) *OrderUseCase {
+	return &OrderUseCase{
+		repo:      repo,
+		log:       log,
+		txService: txService,
+	}
+}
+
+func (u OrderUseCase) UserOrderRevenue(ctx context.Context, revenue *entity.UserRevenue) error {
+	tx, err := u.txService.NewTransaction()
+	if err != nil {
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.txService.NewTransaction - u.txService.Rollback: %w", err)
+		}
+		return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.txService.NewTransaction: %w", err)
+	}
+
+	reservation := &entity.UserReservation{ID: revenue.ID,
+		OrderID:   revenue.OrderID,
+		ServiceID: revenue.ServiceID,
+		Cost:      revenue.Cost,
+	}
+
+	// Списать с резервации
+	err = u.repo.UserOrderDeleteReservation(ctx, tx, reservation)
+	if err != nil {
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderDeleteReservation - u.txService.Rollback: %w", err)
+		}
+		return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderDeleteReservation: %w", err)
+	}
+
+	// Начислить в revenue
+	err = u.repo.UserOrderRevenue(ctx, tx, revenue)
+	if err != nil {
+		errRollback := u.txService.Rollback(tx)
+		if errRollback != nil {
+			return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderRevenue - u.txService.Rollback: %w", err)
+		}
+		return fmt.Errorf("usecase - UseCase - UserOrderRevenue - u.repo.UserOrderRevenue: %w", err)
+	}
+
+	return u.txService.Commit(tx)
+}
+
+func (u OrderUseCase) UserOrderDeleteReservation(ctx context.Context, reservation *entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -52,7 +107,7 @@ func (u UseCase) UserOrderDeleteReservation(ctx context.Context, reservation *en
 	return u.txService.Commit(tx)
 }
 
-func (u UseCase) UserOrderReservation(ctx context.Context, reservation *entity.UserReservation) error {
+func (u OrderUseCase) UserOrderReservation(ctx context.Context, reservation *entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
