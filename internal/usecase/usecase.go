@@ -6,6 +6,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 	"grpcAvito/internal/repository/postgres"
+	"grpcAvito/internal/usecase/order"
+	"grpcAvito/internal/usecase/report"
+	"grpcAvito/internal/usecase/transactions"
+	"grpcAvito/internal/usecase/user"
 )
 
 type UseCase struct {
@@ -31,10 +35,10 @@ type Report interface {
 }
 
 func New(repo *postgres.Repository, log *logrus.Logger, postgresDB *sqlx.DB) *UseCase {
-	txService := NewTransactionService(postgresDB, log)
+	txService := transactions.NewTransactionService(postgresDB, log)
 	return &UseCase{
-		User:   NewUserUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
-		Order:  NewOrderUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
-		Report: NewReportUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
+		User:   user.NewUserUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
+		Order:  order.NewOrderUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
+		Report: report.NewReportUseCase(repo.UserRepository, repo.OrderRepository, repo.ReportRepository, log, txService),
 	}
 }

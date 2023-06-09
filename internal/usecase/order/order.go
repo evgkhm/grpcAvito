@@ -1,4 +1,4 @@
-package usecase
+package order
 
 import (
 	"context"
@@ -6,19 +6,20 @@ import (
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 	"grpcAvito/internal/repository/postgres"
+	"grpcAvito/internal/usecase/transactions"
 )
 
-type OrderUseCase struct {
+type orderUseCase struct {
 	userRepo   postgres.UserRepository
 	orderRepo  postgres.OrderRepository
 	reportRepo postgres.ReportRepository
 	log        *logrus.Logger
-	txService  *TransactionServiceImpl
+	txService  *transactions.TransactionServiceImpl
 }
 
 func NewOrderUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRepository, reportRepo postgres.ReportRepository,
-	log *logrus.Logger, txService *TransactionServiceImpl) *OrderUseCase {
-	return &OrderUseCase{
+	log *logrus.Logger, txService *transactions.TransactionServiceImpl) *orderUseCase {
+	return &orderUseCase{
 		userRepo:   userRepo,
 		orderRepo:  orderRepo,
 		reportRepo: reportRepo,
@@ -27,7 +28,7 @@ func NewOrderUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderR
 	}
 }
 
-func (u OrderUseCase) UserOrderReservation(ctx context.Context, reservation *entity.UserReservation) error {
+func (u orderUseCase) UserOrderReservation(ctx context.Context, reservation *entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -83,7 +84,7 @@ func (u OrderUseCase) UserOrderReservation(ctx context.Context, reservation *ent
 	return u.txService.Commit(tx)
 }
 
-func (u OrderUseCase) UserOrderRevenue(ctx context.Context, revenue *entity.UserRevenue) error {
+func (u orderUseCase) UserOrderRevenue(ctx context.Context, revenue *entity.UserRevenue) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -122,7 +123,7 @@ func (u OrderUseCase) UserOrderRevenue(ctx context.Context, revenue *entity.User
 	return u.txService.Commit(tx)
 }
 
-func (u OrderUseCase) UserOrderDeleteReservation(ctx context.Context, reservation *entity.UserReservation) error {
+func (u orderUseCase) UserOrderDeleteReservation(ctx context.Context, reservation *entity.UserReservation) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)

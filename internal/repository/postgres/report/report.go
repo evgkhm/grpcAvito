@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-type ReportRepo struct {
+type reportRepo struct {
 	db  *sqlx.DB
 	log *logrus.Logger
 }
 
-func NewReportRepository(db *sqlx.DB, log *logrus.Logger) *ReportRepo {
-	return &ReportRepo{
+func NewReportRepository(db *sqlx.DB, log *logrus.Logger) *reportRepo {
+	return &reportRepo{
 		db:  db,
 		log: log,
 	}
@@ -27,7 +27,7 @@ type reportMonth struct {
 	Month    int `json:"month"`
 }
 
-func (r ReportRepo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
+func (r reportRepo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
 	report := reportMonth{}
 	reportMap := make(map[uint32]float32)
 	query := `SELECT * FROM revenue 

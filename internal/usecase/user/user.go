@@ -1,4 +1,4 @@
-package usecase
+package user
 
 import (
 	"context"
@@ -6,19 +6,20 @@ import (
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 	"grpcAvito/internal/repository/postgres"
+	"grpcAvito/internal/usecase/transactions"
 )
 
-type UserUseCase struct {
+type userUseCase struct {
 	userRepo   postgres.UserRepository
 	orderRepo  postgres.OrderRepository
 	reportRepo postgres.ReportRepository
 	log        *logrus.Logger
-	txService  *TransactionServiceImpl
+	txService  *transactions.TransactionServiceImpl
 }
 
 func NewUserUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRepository, reportRepo postgres.ReportRepository,
-	log *logrus.Logger, txService *TransactionServiceImpl) *UserUseCase {
-	return &UserUseCase{
+	log *logrus.Logger, txService *transactions.TransactionServiceImpl) *userUseCase {
+	return &userUseCase{
 		userRepo:   userRepo,
 		orderRepo:  orderRepo,
 		reportRepo: reportRepo,
@@ -27,7 +28,7 @@ func NewUserUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRe
 	}
 }
 
-func (u UserUseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.User) error {
+func (u userUseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -72,7 +73,7 @@ func (u UserUseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.Use
 	return u.txService.Commit(tx)
 }
 
-func (u UserUseCase) CreateUser(ctx context.Context, userDTO *entity.User) error {
+func (u userUseCase) CreateUser(ctx context.Context, userDTO *entity.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -94,7 +95,7 @@ func (u UserUseCase) CreateUser(ctx context.Context, userDTO *entity.User) error
 	return u.txService.Commit(tx)
 }
 
-func (u UserUseCase) GetBalance(ctx context.Context, dto *entity.User) error {
+func (u userUseCase) GetBalance(ctx context.Context, dto *entity.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)

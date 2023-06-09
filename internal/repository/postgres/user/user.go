@@ -11,19 +11,19 @@ import (
 	"grpcAvito/internal/entity"
 )
 
-type UserRepo struct {
+type userRepo struct {
 	db  *sqlx.DB
 	log *logrus.Logger
 }
 
-func NewUserRepository(db *sqlx.DB, log *logrus.Logger) *UserRepo {
-	return &UserRepo{
+func NewUserRepository(db *sqlx.DB, log *logrus.Logger) *userRepo {
+	return &userRepo{
 		db:  db,
 		log: log,
 	}
 }
 
-func (u UserRepo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (u userRepo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	var id int64
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO usr (id, balance) VALUES ($1, $2) RETURNING id`
@@ -38,7 +38,7 @@ func (u UserRepo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User
 	return nil
 }
 
-func (u UserRepo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (float32, error) {
+func (u userRepo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (float32, error) {
 	var balance float32
 	query := `SELECT balance FROM usr WHERE id=$1 `
 	err := tx.GetContext(ctx, &balance, query, user.ID)
@@ -51,7 +51,7 @@ func (u UserRepo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User
 	return balance, nil
 }
 
-func (u UserRepo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (u userRepo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.ID)
 	if err != nil {
@@ -60,7 +60,7 @@ func (u UserRepo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *ent
 	return nil
 }
 
-func (u UserRepo) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (u userRepo) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.ID)
 	if err != nil {

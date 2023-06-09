@@ -1,4 +1,4 @@
-package usecase
+package transactions
 
 import (
 	"github.com/jmoiron/sqlx"

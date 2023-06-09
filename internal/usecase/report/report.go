@@ -1,4 +1,4 @@
-package usecase
+package report
 
 import (
 	"context"
@@ -6,21 +6,22 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/repository/postgres"
+	"grpcAvito/internal/usecase/transactions"
 	"os"
 	"strconv"
 )
 
-type ReportUseCase struct {
+type reportUseCase struct {
 	userRepo   postgres.UserRepository
 	orderRepo  postgres.OrderRepository
 	reportRepo postgres.ReportRepository
 	log        *logrus.Logger
-	txService  *TransactionServiceImpl
+	txService  *transactions.TransactionServiceImpl
 }
 
 func NewReportUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRepository, reportRepo postgres.ReportRepository,
-	log *logrus.Logger, txService *TransactionServiceImpl) *ReportUseCase {
-	return &ReportUseCase{
+	log *logrus.Logger, txService *transactions.TransactionServiceImpl) *reportUseCase {
+	return &reportUseCase{
 		userRepo:   userRepo,
 		orderRepo:  orderRepo,
 		reportRepo: reportRepo,
@@ -29,7 +30,7 @@ func NewReportUseCase(userRepo postgres.UserRepository, orderRepo postgres.Order
 	}
 }
 
-func (u ReportUseCase) CreateMonthReport(ctx context.Context, year, month uint32) error {
+func (u reportUseCase) CreateMonthReport(ctx context.Context, year, month uint32) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
