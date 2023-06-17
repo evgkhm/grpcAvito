@@ -1,21 +1,34 @@
-package postgres
+package report
 
 import (
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
 	"time"
 )
 
-type Report struct {
+type reportRepo struct {
+	db  *sqlx.DB
+	log *logrus.Logger
+}
+
+func NewReportRepository(db *sqlx.DB, log *logrus.Logger) *reportRepo {
+	return &reportRepo{
+		db:  db,
+		log: log,
+	}
+}
+
+type reportMonth struct {
 	userData entity.UserRevenue
 	Year     int `json:"year"`
 	Month    int `json:"month"`
 }
 
-func (r Repo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
-	report := Report{}
+func (r reportRepo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month uint32) (map[uint32]float32, error) {
+	report := reportMonth{}
 	reportMap := make(map[uint32]float32)
 	query := `SELECT * FROM revenue 
 		WHERE EXTRACT(year FROM curr_date)=$1 
@@ -34,13 +47,13 @@ func (r Repo) CreateMonthReport(ctx context.Context, tx *sqlx.Tx, year, month ui
 	// Добавление в хэш-таблицу данных с БД
 	for rows.Next() {
 		var stamp time.Time
-		err = rows.Scan(&report.userData.ID, &report.userData.IDService, &report.userData.IDOrder, &report.userData.Cost, &stamp)
+		err = rows.Scan(&report.userData.ID, &report.userData.ServiceID, &report.userData.OrderID, &report.userData.Cost, &stamp)
 		if err != nil {
 			return nil, fmt.Errorf("postgres - ReportRepositoryImpl - CreateMonthReport - rows.Scan: %w", err)
 		}
 		report.Year = stamp.Year()
 		report.Month = int(stamp.Month())
-		reportMap[report.userData.IDService] += report.userData.Cost
+		reportMap[report.userData.ServiceID] += report.userData.Cost
 	}
 	return reportMap, nil
 }

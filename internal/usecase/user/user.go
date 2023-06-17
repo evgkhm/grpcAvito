@@ -1,12 +1,34 @@
-package usecase
+package user
 
 import (
 	"context"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"grpcAvito/internal/entity"
+	"grpcAvito/internal/repository/postgres"
+	"grpcAvito/internal/usecase/transactions"
 )
 
-func (u UseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.User) error {
+type userUseCase struct {
+	userRepo   postgres.UserRepository
+	orderRepo  postgres.OrderRepository
+	reportRepo postgres.ReportRepository
+	log        *logrus.Logger
+	txService  *transactions.TransactionServiceImpl
+}
+
+func NewUserUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRepository, reportRepo postgres.ReportRepository,
+	log *logrus.Logger, txService *transactions.TransactionServiceImpl) *userUseCase {
+	return &userUseCase{
+		userRepo:   userRepo,
+		orderRepo:  orderRepo,
+		reportRepo: reportRepo,
+		log:        log,
+		txService:  txService,
+	}
+}
+
+func (u userUseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -26,7 +48,7 @@ func (u UseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.User) e
 	}
 
 	// Узнать текущий баланс
-	currBalance, err := u.repo.GetBalance(ctx, tx, userDTO)
+	currBalance, err := u.userRepo.GetBalance(ctx, tx, userDTO)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -39,7 +61,7 @@ func (u UseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.User) e
 	newBalance := userDTO.Balance + currBalance
 	userDTO.Balance = newBalance
 
-	err = u.repo.UserBalanceAccrual(ctx, tx, userDTO)
+	err = u.userRepo.UserBalanceAccrual(ctx, tx, userDTO)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -51,7 +73,7 @@ func (u UseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.User) e
 	return u.txService.Commit(tx)
 }
 
-func (u UseCase) CreateUser(ctx context.Context, userDTO *entity.User) error {
+func (u userUseCase) CreateUser(ctx context.Context, userDTO *entity.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -61,7 +83,7 @@ func (u UseCase) CreateUser(ctx context.Context, userDTO *entity.User) error {
 		return fmt.Errorf("usecase - UseCase - CreateUser - u.txService.NewTransaction: %w", err)
 	}
 
-	err = u.repo.CreateUser(ctx, tx, userDTO)
+	err = u.userRepo.CreateUser(ctx, tx, userDTO)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {
@@ -73,7 +95,7 @@ func (u UseCase) CreateUser(ctx context.Context, userDTO *entity.User) error {
 	return u.txService.Commit(tx)
 }
 
-func (u UseCase) GetBalance(ctx context.Context, dto *entity.User) error {
+func (u userUseCase) GetBalance(ctx context.Context, dto *entity.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -83,7 +105,7 @@ func (u UseCase) GetBalance(ctx context.Context, dto *entity.User) error {
 		return fmt.Errorf("usecase - UseCase - GetBalance - u.txService.NewTransaction: %w", err)
 	}
 
-	dto.Balance, err = u.repo.GetBalance(ctx, tx, dto)
+	dto.Balance, err = u.userRepo.GetBalance(ctx, tx, dto)
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
 		if errRollback != nil {

@@ -1,20 +1,20 @@
 CREATE TABLE IF NOT EXISTS usr(
-    id INTEGER PRIMARY KEY,
-    balance DECIMAL
+  id INTEGER PRIMARY KEY,
+  balance DECIMAL
 );
 
 CREATE TABLE IF NOT EXISTS reservation(
   id INTEGER,
-  id_service INTEGER,
-  id_order INTEGER,
+  service_id INTEGER,
+  order_id INTEGER,
   cost DECIMAL,
-  PRIMARY KEY (id, id_service, id_order)
+  PRIMARY KEY (id, service_id, order_id)
 );
 
 CREATE TABLE IF NOT EXISTS revenue(
   id INTEGER,
-  id_service INTEGER,
-  id_order INTEGER,
+  service_id INTEGER,
+  order_id INTEGER,
   cost DECIMAL,
   curr_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
