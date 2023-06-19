@@ -12,6 +12,8 @@ import (
 	"grpcAvito/internal/usecase/user"
 )
 
+//go:generate mockgen -source=usecase.go -destination=mocks/mock.go
+
 type UseCase struct {
 	User
 	Order

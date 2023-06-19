@@ -3,6 +3,7 @@ module grpcAvito
 go 1.19
 
 require (
+	github.com/golang/mock v1.4.4
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/jmoiron/sqlx v1.3.5
