@@ -24,15 +24,15 @@
  - Сценарий разрезервирования денег
 
 # API
-| Endpoint                            | gRPC method |                          Description |
-|-------------------------------------|:-----------:|-------------------------------------:|
-| /get_balance/{id}                   |     GET     | Метод получения баланса пользователя |
-| /create_user                        |    POST     |          Метод создания пользователя |
-| /accrual_balance                    |    POST     |   Метод начисления средств на баланс |
-| /order_reservation                  |    POST     |         Метод резервирования средств |
-| /order_revenue                      |    POST     |              Метод признания выручки |
-| /delete_reservation                 |    POST     |               Метод удаления резерва |
-| /create_month_report/{year}/{month} |     GET     |          Получение месячного отсчета |
+| Endpoint                                   | gRPC method |                          Description |
+|--------------------------------------------|:-----------:|-------------------------------------:|
+| /user/get_balance/{id}                     |     GET     | Метод получения баланса пользователя |
+| /user/create_user                          |    POST     |          Метод создания пользователя |
+| /user/accrual_balance                      |    POST     |   Метод начисления средств на баланс |
+| /order/reservation                         |    POST     |         Метод резервирования средств |
+| /order/revenue                             |    POST     |              Метод признания выручки |
+| /order/delete_reservation                  |    POST     |               Метод удаления резерва |
+| /report/create_month_report/{year}/{month} |     GET     |          Получение месячного отсчета |
 
 # Example
 Получение текущего баланса
