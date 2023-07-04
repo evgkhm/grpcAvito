@@ -21,11 +21,11 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	WalletAppService_CreateUser_FullMethodName                 = "/grpcAvito.WalletAppService/CreateUser"
 	WalletAppService_UserBalanceAccrual_FullMethodName         = "/grpcAvito.WalletAppService/UserBalanceAccrual"
+	WalletAppService_GetBalance_FullMethodName                 = "/grpcAvito.WalletAppService/GetBalance"
 	WalletAppService_UserOrderReservation_FullMethodName       = "/grpcAvito.WalletAppService/UserOrderReservation"
 	WalletAppService_UserOrderRevenue_FullMethodName           = "/grpcAvito.WalletAppService/UserOrderRevenue"
 	WalletAppService_UserOrderDeleteReservation_FullMethodName = "/grpcAvito.WalletAppService/UserOrderDeleteReservation"
 	WalletAppService_CreateMonthReport_FullMethodName          = "/grpcAvito.WalletAppService/CreateMonthReport"
-	WalletAppService_GetBalance_FullMethodName                 = "/grpcAvito.WalletAppService/GetBalance"
 )
 
 // WalletAppServiceClient is the client API for WalletAppService service.
@@ -34,11 +34,11 @@ const (
 type WalletAppServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	UserBalanceAccrual(ctx context.Context, in *UserBalanceAccrualRequest, opts ...grpc.CallOption) (*UserBalanceAccrualResponse, error)
+	GetBalance(ctx context.Context, in *GetBalanceRequest, opts ...grpc.CallOption) (*GetBalanceResponse, error)
 	UserOrderReservation(ctx context.Context, in *UserOrderReservationRequest, opts ...grpc.CallOption) (*UserOrderReservationResponse, error)
 	UserOrderRevenue(ctx context.Context, in *UserOrderRevenueRequest, opts ...grpc.CallOption) (*UserOrderRevenueResponse, error)
 	UserOrderDeleteReservation(ctx context.Context, in *UserOrderDeleteReservationRequest, opts ...grpc.CallOption) (*UserOrderDeleteReservationResponse, error)
 	CreateMonthReport(ctx context.Context, in *CreateMonthReportRequest, opts ...grpc.CallOption) (*CreateMonthReportResponse, error)
-	GetBalance(ctx context.Context, in *GetBalanceRequest, opts ...grpc.CallOption) (*GetBalanceResponse, error)
 }
 
 type walletAppServiceClient struct {
@@ -61,6 +61,15 @@ func (c *walletAppServiceClient) CreateUser(ctx context.Context, in *CreateUserR
 func (c *walletAppServiceClient) UserBalanceAccrual(ctx context.Context, in *UserBalanceAccrualRequest, opts ...grpc.CallOption) (*UserBalanceAccrualResponse, error) {
 	out := new(UserBalanceAccrualResponse)
 	err := c.cc.Invoke(ctx, WalletAppService_UserBalanceAccrual_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *walletAppServiceClient) GetBalance(ctx context.Context, in *GetBalanceRequest, opts ...grpc.CallOption) (*GetBalanceResponse, error) {
+	out := new(GetBalanceResponse)
+	err := c.cc.Invoke(ctx, WalletAppService_GetBalance_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,26 +112,17 @@ func (c *walletAppServiceClient) CreateMonthReport(ctx context.Context, in *Crea
 	return out, nil
 }
 
-func (c *walletAppServiceClient) GetBalance(ctx context.Context, in *GetBalanceRequest, opts ...grpc.CallOption) (*GetBalanceResponse, error) {
-	out := new(GetBalanceResponse)
-	err := c.cc.Invoke(ctx, WalletAppService_GetBalance_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // WalletAppServiceServer is the server API for WalletAppService service.
 // All implementations must embed UnimplementedWalletAppServiceServer
 // for forward compatibility
 type WalletAppServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	UserBalanceAccrual(context.Context, *UserBalanceAccrualRequest) (*UserBalanceAccrualResponse, error)
+	GetBalance(context.Context, *GetBalanceRequest) (*GetBalanceResponse, error)
 	UserOrderReservation(context.Context, *UserOrderReservationRequest) (*UserOrderReservationResponse, error)
 	UserOrderRevenue(context.Context, *UserOrderRevenueRequest) (*UserOrderRevenueResponse, error)
 	UserOrderDeleteReservation(context.Context, *UserOrderDeleteReservationRequest) (*UserOrderDeleteReservationResponse, error)
 	CreateMonthReport(context.Context, *CreateMonthReportRequest) (*CreateMonthReportResponse, error)
-	GetBalance(context.Context, *GetBalanceRequest) (*GetBalanceResponse, error)
 	mustEmbedUnimplementedWalletAppServiceServer()
 }
 
@@ -136,6 +136,9 @@ func (UnimplementedWalletAppServiceServer) CreateUser(context.Context, *CreateUs
 func (UnimplementedWalletAppServiceServer) UserBalanceAccrual(context.Context, *UserBalanceAccrualRequest) (*UserBalanceAccrualResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserBalanceAccrual not implemented")
 }
+func (UnimplementedWalletAppServiceServer) GetBalance(context.Context, *GetBalanceRequest) (*GetBalanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBalance not implemented")
+}
 func (UnimplementedWalletAppServiceServer) UserOrderReservation(context.Context, *UserOrderReservationRequest) (*UserOrderReservationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserOrderReservation not implemented")
 }
@@ -147,9 +150,6 @@ func (UnimplementedWalletAppServiceServer) UserOrderDeleteReservation(context.Co
 }
 func (UnimplementedWalletAppServiceServer) CreateMonthReport(context.Context, *CreateMonthReportRequest) (*CreateMonthReportResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateMonthReport not implemented")
-}
-func (UnimplementedWalletAppServiceServer) GetBalance(context.Context, *GetBalanceRequest) (*GetBalanceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBalance not implemented")
 }
 func (UnimplementedWalletAppServiceServer) mustEmbedUnimplementedWalletAppServiceServer() {}
 
@@ -196,6 +196,24 @@ func _WalletAppService_UserBalanceAccrual_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(WalletAppServiceServer).UserBalanceAccrual(ctx, req.(*UserBalanceAccrualRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WalletAppService_GetBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBalanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WalletAppServiceServer).GetBalance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WalletAppService_GetBalance_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WalletAppServiceServer).GetBalance(ctx, req.(*GetBalanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -272,24 +290,6 @@ func _WalletAppService_CreateMonthReport_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _WalletAppService_GetBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetBalanceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WalletAppServiceServer).GetBalance(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: WalletAppService_GetBalance_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WalletAppServiceServer).GetBalance(ctx, req.(*GetBalanceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // WalletAppService_ServiceDesc is the grpc.ServiceDesc for WalletAppService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -306,6 +306,10 @@ var WalletAppService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _WalletAppService_UserBalanceAccrual_Handler,
 		},
 		{
+			MethodName: "GetBalance",
+			Handler:    _WalletAppService_GetBalance_Handler,
+		},
+		{
 			MethodName: "UserOrderReservation",
 			Handler:    _WalletAppService_UserOrderReservation_Handler,
 		},
@@ -320,10 +324,6 @@ var WalletAppService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateMonthReport",
 			Handler:    _WalletAppService_CreateMonthReport_Handler,
-		},
-		{
-			MethodName: "GetBalance",
-			Handler:    _WalletAppService_GetBalance_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
