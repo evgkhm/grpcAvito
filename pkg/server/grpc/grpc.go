@@ -1,4 +1,4 @@
-package server
+package grpc
 
 import (
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -10,7 +10,7 @@ import (
 	"grpcAvito/internal/service/spec"
 )
 
-func NewGRPCServer(services *service.Service, logger *logrus.Logger) *grpc.Server {
+func New(services *service.Service, logger *logrus.Logger) *grpc.Server {
 	logger.Info("new grpc server")
 	log := logrus.NewEntry(logger)
 	var opts = []grpc.ServerOption{
