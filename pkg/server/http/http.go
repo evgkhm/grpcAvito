@@ -1,4 +1,4 @@
-package server
+package http
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"grpcAvito/internal/service/spec"
 )
 
-func NewHTTPServer(endpoint string, log *logrus.Logger) *runtime.ServeMux {
+func New(endpoint string, log *logrus.Logger) *runtime.ServeMux {
 	log.Info("new http server")
 	mux := runtime.NewServeMux()
 
