@@ -1,30 +1,21 @@
-package main
+package app
 
 import (
 	"context"
 	"fmt"
 	"golang.org/x/sync/errgroup"
-	"grpcAvito/pkg/server/grpc"
-	httpServer "grpcAvito/pkg/server/http"
-
-	config "grpcAvito/internal/config"
+	"grpcAvito/internal/config"
 	"grpcAvito/internal/repository/postgres"
 	"grpcAvito/internal/service"
 	"grpcAvito/internal/usecase"
 	"grpcAvito/pkg/logging"
+	"grpcAvito/pkg/server/grpc"
+	httpServer "grpcAvito/pkg/server/http"
 	"net"
 	"net/http"
 )
 
-func init() {
-	config.InitAll([]config.Config{
-		config.PostgresConfig{},
-		config.HTTPConfig{},
-		config.GRPCConfig{},
-	})
-}
-
-func main() {
+func Run() {
 	log := logging.GetLogger()
 	postgresDB, err := postgres.NewPostgresDB()
 	if err != nil {
