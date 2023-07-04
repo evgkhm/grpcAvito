@@ -8,48 +8,48 @@ import "wallet_app.proto";
 service WalletAppService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
     option (google.api.http) = {
-      post: "/create_user"
+      post: "/user/create_user"
       body: "*"
     };
   };
 
   rpc UserBalanceAccrual(UserBalanceAccrualRequest) returns (UserBalanceAccrualResponse) {
     option (google.api.http) = {
-      post: "/accrual_balance"
+      post: "/user/accrual_balance"
       body: "*"
+    };
+  };
+
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse) {
+    option (google.api.http) = {
+      get: "/user/get_balance/{id}"
     };
   };
 
   rpc UserOrderReservation(UserOrderReservationRequest) returns (UserOrderReservationResponse) {
     option (google.api.http) = {
-      post: "/order_reservation"
+      post: "/order/reservation"
       body: "*"
     };
   };
 
   rpc UserOrderRevenue(UserOrderRevenueRequest) returns (UserOrderRevenueResponse) {
     option (google.api.http) = {
-      post: "/order_revenue"
+      post: "/order/revenue"
       body: "*"
     };
   };
 
   rpc UserOrderDeleteReservation(UserOrderDeleteReservationRequest) returns (UserOrderDeleteReservationResponse) {
     option (google.api.http) = {
-      post: "/delete_reservation"
+      post: "/order/delete_reservation"
       body: "*"
     };
   };
 
   rpc CreateMonthReport(CreateMonthReportRequest) returns (CreateMonthReportResponse) {
     option (google.api.http) = {
-      get: "/create_month_report/{year}/{month}"
-    };
-  };
-
-  rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse) {
-    option (google.api.http) = {
-      get: "/get_balance/{id}"
+      get: "/report/create_month_report/{year}/{month}"
     };
   };
 }
