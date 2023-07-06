@@ -19,7 +19,7 @@ func Run() {
 	log := logging.GetLogger()
 	postgresDB, err := postgres.NewPostgresDB()
 	if err != nil {
-		log.Fatal(fmt.Errorf("main - postgres.NewPostgresDB: %w", err))
+		log.Fatal(fmt.Errorf("app - Run - postgres.NewPostgresDB: %w", err))
 	}
 
 	postgresRepository := postgres.New(postgresDB, log)
@@ -32,7 +32,7 @@ func Run() {
 
 	listen, err := net.Listen("tcp", config.GRPC.HostPort)
 	if err != nil {
-		log.Fatal(fmt.Errorf("main - net.Listen: %w", err))
+		log.Fatal(fmt.Errorf("app - Run - net.Listen: %w", err))
 	}
 
 	mux := httpServer.New(config.GRPC.Port, log)

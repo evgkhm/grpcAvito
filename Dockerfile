@@ -10,6 +10,6 @@ EXPOSE 8888
 COPY ./ ./
 
 RUN go mod download
-RUN go build -o wallet-app ./cmd/main.go
+RUN go build -o wallet-app ./cmd/app/main.go
 
 CMD ["./wallet-app"]
