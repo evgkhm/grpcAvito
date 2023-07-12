@@ -7,22 +7,22 @@ import (
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"grpcAvito/internal/entity"
+	"grpcAvito/internal/entity/user"
 )
 
-type orderRepo struct {
+type Repo struct {
 	db  *sqlx.DB
 	log *logrus.Logger
 }
 
-func NewOrderRepository(db *sqlx.DB, log *logrus.Logger) *orderRepo {
-	return &orderRepo{
+func NewOrderRepository(db *sqlx.DB, log *logrus.Logger) *Repo {
+	return &Repo{
 		db:  db,
 		log: log,
 	}
 }
 
-func (o orderRepo) UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
+func (r Repo) UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation *user.Reservation) error {
 	var idOrder uint32
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO reservation 
@@ -40,7 +40,7 @@ func (o orderRepo) UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reserv
 	return nil
 }
 
-func (o orderRepo) UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error {
+func (r Repo) UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *user.Reservation) error {
 	query := `DELETE FROM reservation 
        WHERE id=$1 and service_id=$2 and order_id=$3 and cost=$4`
 	_, err := tx.ExecContext(ctx, query, reservation.ID, reservation.ServiceID, reservation.OrderID, reservation.Cost)
@@ -50,7 +50,7 @@ func (o orderRepo) UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, 
 	return nil
 }
 
-func (o orderRepo) UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error {
+func (r Repo) UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *user.Revenue) error {
 	var idOrder uint32
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO revenue 

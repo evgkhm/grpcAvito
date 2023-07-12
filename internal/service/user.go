@@ -3,12 +3,12 @@ package service
 import (
 	"context"
 	"github.com/pkg/errors"
-	"grpcAvito/internal/entity"
+	"grpcAvito/internal/entity/user"
 	"grpcAvito/internal/service/spec"
 )
 
 func (s Service) CreateUser(ctx context.Context, req *spec.CreateUserRequest) (*spec.CreateUserResponse, error) {
-	userDTO := entity.User{ID: req.Id, Balance: req.Balance}
+	userDTO := user.User{ID: req.Id, Balance: req.Balance}
 	err := s.useCase.CreateUser(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("service - Service - CreateUser - s.useCase.CreateUser: %v", err)
@@ -18,7 +18,7 @@ func (s Service) CreateUser(ctx context.Context, req *spec.CreateUserRequest) (*
 }
 
 func (s Service) UserBalanceAccrual(ctx context.Context, req *spec.UserBalanceAccrualRequest) (*spec.UserBalanceAccrualResponse, error) {
-	userDTO := entity.User{ID: req.Id, Balance: req.Balance}
+	userDTO := user.User{ID: req.Id, Balance: req.Balance}
 	err := s.useCase.UserBalanceAccrual(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("service - Service - UserBalanceAccrual - s.useCase.UserBalanceAccrual: %v", err)
@@ -28,7 +28,7 @@ func (s Service) UserBalanceAccrual(ctx context.Context, req *spec.UserBalanceAc
 }
 
 func (s Service) GetBalance(ctx context.Context, req *spec.GetBalanceRequest) (*spec.GetBalanceResponse, error) {
-	userDTO := entity.User{ID: req.Id}
+	userDTO := user.User{ID: req.Id}
 	err := s.useCase.GetBalance(ctx, &userDTO)
 	if err != nil {
 		s.log.Errorf("service - Service - GetBalance - s.useCase.GetBalance: %v", err)

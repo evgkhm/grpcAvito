@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
-	"grpcAvito/internal/entity"
+	user2 "grpcAvito/internal/entity/user"
 	"grpcAvito/internal/repository/postgres/order"
 	"grpcAvito/internal/repository/postgres/report"
 	"grpcAvito/internal/repository/postgres/user"
@@ -17,16 +17,16 @@ type Repository struct {
 }
 
 type UserRepository interface {
-	CreateUser(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
-	GetBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) (float32, error)
-	UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
-	MinusBalance(ctx context.Context, tx *sqlx.Tx, userDTO *entity.User) error
+	CreateUser(ctx context.Context, tx *sqlx.Tx, userDTO *user2.User) error
+	GetBalance(ctx context.Context, tx *sqlx.Tx, userDTO *user2.User) (float32, error)
+	UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, userDTO *user2.User) error
+	MinusBalance(ctx context.Context, tx *sqlx.Tx, userDTO *user2.User) error
 }
 
 type OrderRepository interface {
-	UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
-	UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *entity.UserRevenue) error
-	UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *entity.UserReservation) error
+	UserOrderReservation(ctx context.Context, tx *sqlx.Tx, reservation *user2.Reservation) error
+	UserOrderRevenue(ctx context.Context, tx *sqlx.Tx, revenue *user2.Revenue) error
+	UserOrderDeleteReservation(ctx context.Context, tx *sqlx.Tx, reservation *user2.Reservation) error
 }
 
 type ReportRepository interface {

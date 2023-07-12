@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-type reportUseCase struct {
+type UseCase struct {
 	userRepo   postgres.UserRepository
 	orderRepo  postgres.OrderRepository
 	reportRepo postgres.ReportRepository
@@ -20,8 +20,8 @@ type reportUseCase struct {
 }
 
 func NewReportUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRepository, reportRepo postgres.ReportRepository,
-	log *logrus.Logger, txService *transactions.TransactionServiceImpl) *reportUseCase {
-	return &reportUseCase{
+	log *logrus.Logger, txService *transactions.TransactionServiceImpl) *UseCase {
+	return &UseCase{
 		userRepo:   userRepo,
 		orderRepo:  orderRepo,
 		reportRepo: reportRepo,
@@ -30,7 +30,7 @@ func NewReportUseCase(userRepo postgres.UserRepository, orderRepo postgres.Order
 	}
 }
 
-func (u reportUseCase) CreateMonthReport(ctx context.Context, year, month uint32) error {
+func (u UseCase) CreateMonthReport(ctx context.Context, year, month uint32) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -74,20 +74,22 @@ func (u reportUseCase) CreateMonthReport(ctx context.Context, year, month uint32
 
 // createReportCSV функция создает csv файл отсчета из мап файла.
 func createReportCSV(data map[uint32]float32) error {
-	csvfile, err := os.Create("./report.csv")
+	csvFile, err := os.Create("./report.csv")
 	if err != nil {
 		return fmt.Errorf("create: %w", err)
 	}
-	cswWriter := csv.NewWriter(csvfile)
+	cswWriter := csv.NewWriter(csvFile)
 
 	for key, value := range data {
-		str1 := "название услуги"
-		str2 := strconv.Itoa(int(key))
-		str3 := "общая сумма выручки за отчетный период"
-		str4 := strconv.FormatFloat(float64(value), 'f', 2, 64)
+		const nameService = "название услуги"
+		const commonSumProfit = "общая сумма выручки за отчетный период"
+
+		month := strconv.Itoa(int(key))
+
+		sumProfit := strconv.FormatFloat(float64(value), 'f', 2, 64)
 
 		var res []string
-		res = append(res, str1, str2, str3, str4)
+		res = append(res, nameService, month, commonSumProfit, sumProfit)
 		err = cswWriter.Write(res)
 		if err != nil {
 			return fmt.Errorf("createReportCSV - cswWriter.Write: %w", err)
@@ -95,9 +97,9 @@ func createReportCSV(data map[uint32]float32) error {
 	}
 	cswWriter.Flush()
 
-	err = csvfile.Close()
+	err = csvFile.Close()
 	if err != nil {
-		return fmt.Errorf("createReportCSV - csvfile.Close: %w", err)
+		return fmt.Errorf("createReportCSV - csvFile.Close: %w", err)
 	}
 
 	return nil

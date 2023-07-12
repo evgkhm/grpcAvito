@@ -3,12 +3,34 @@ package postgres
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"grpcAvito/internal/config"
+	"github.com/spf13/viper"
 )
 
-func NewPostgresDB() (*sqlx.DB, error) {
+var Config *Conf
+
+type Conf struct {
+	Host    string
+	Port    string
+	User    string
+	Pass    string
+	Name    string
+	SSLMode string
+}
+
+func (c Conf) Init() {
+	Config = &Conf{
+		Host:    viper.GetString("postgres.host"),
+		Port:    viper.GetString("postgres.port"),
+		User:    viper.GetString("postgres.user"),
+		Name:    viper.GetString("postgres.name"),
+		Pass:    viper.GetString("postgres.pass"),
+		SSLMode: viper.GetString("postgres.ssl_mode"),
+	}
+}
+
+func NewPostgresDB(config *Conf) (*sqlx.DB, error) {
 	dbURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-		config.Postgres.Host, config.Postgres.Port, config.Postgres.User, config.Postgres.Name, config.Postgres.Pass, config.Postgres.SSLMode)
+		config.Host, config.Port, config.User, config.Name, config.Pass, config.SSLMode)
 
 	db, err := sqlx.Open("postgres", dbURL)
 	if err != nil {
