@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"grpcAvito/internal/service/spec"
+	"grpcAvito/internal/service/wallet/spec"
 	"time"
 )
 

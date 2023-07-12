@@ -6,7 +6,7 @@ import (
 	"golang.org/x/sync/errgroup"
 	config "grpcAvito/internal/config"
 	"grpcAvito/internal/repository/postgres"
-	"grpcAvito/internal/service"
+	"grpcAvito/internal/service/wallet"
 	"grpcAvito/internal/usecase"
 	"grpcAvito/internal/usecase/transactions"
 	"grpcAvito/pkg/logging"
@@ -37,7 +37,7 @@ func main() {
 
 	useCases := usecase.New(postgresRepository, txService, log)
 
-	services := service.New(useCases, log)
+	services := wallet.New(useCases, log)
 
 	grpcServer := grpc.New(services, log)
 

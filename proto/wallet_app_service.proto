@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package grpcAvito;
-option go_package = "./internal/service/spec";
+option go_package = "./internal/service/wallet/spec";
 import "google/api/annotations.proto";
 import "wallet_app.proto";
 

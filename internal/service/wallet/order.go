@@ -1,10 +1,10 @@
-package service
+package wallet
 
 import (
 	"context"
 	"github.com/pkg/errors"
 	"grpcAvito/internal/entity/user"
-	"grpcAvito/internal/service/spec"
+	"grpcAvito/internal/service/wallet/spec"
 )
 
 func (s Service) UserOrderDeleteReservation(ctx context.Context, req *spec.UserOrderDeleteReservationRequest) (*spec.UserOrderDeleteReservationResponse, error) {
@@ -28,8 +28,8 @@ func (s Service) UserOrderReservation(ctx context.Context, req *spec.UserOrderRe
 }
 
 func (s Service) UserOrderRevenue(ctx context.Context, req *spec.UserOrderRevenueRequest) (*spec.UserOrderRevenueResponse, error) {
-	userReservation := user.Revenue{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
-	err := s.useCase.UserOrderRevenue(ctx, &userReservation)
+	userRevenue := user.Revenue{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
+	err := s.useCase.UserOrderRevenue(ctx, &userRevenue)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderRevenue - s.useCase.UserOrderRevenue %v", err)
 		return &spec.UserOrderRevenueResponse{Success: false}, errors.Unwrap(err)

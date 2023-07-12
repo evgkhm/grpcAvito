@@ -1,10 +1,10 @@
-package service
+package wallet
 
 import (
 	"context"
 	"github.com/pkg/errors"
 	"grpcAvito/internal/entity/user"
-	"grpcAvito/internal/service/spec"
+	"grpcAvito/internal/service/wallet/spec"
 )
 
 func (s Service) CreateUser(ctx context.Context, req *spec.CreateUserRequest) (*spec.CreateUserResponse, error) {
