@@ -1,14 +1,14 @@
-package service
+package wallet
 
 import (
 	"context"
 	"github.com/pkg/errors"
-	"grpcAvito/internal/entity"
-	"grpcAvito/internal/service/spec"
+	"grpcAvito/internal/entity/user"
+	"grpcAvito/internal/service/wallet/spec"
 )
 
 func (s Service) UserOrderDeleteReservation(ctx context.Context, req *spec.UserOrderDeleteReservationRequest) (*spec.UserOrderDeleteReservationResponse, error) {
-	userReservation := entity.UserReservation{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
+	userReservation := user.Reservation{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
 	err := s.useCase.UserOrderDeleteReservation(ctx, &userReservation)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderDeleteReservation - s.useCase.UserOrderDeleteReservation: %v", err)
@@ -18,7 +18,7 @@ func (s Service) UserOrderDeleteReservation(ctx context.Context, req *spec.UserO
 }
 
 func (s Service) UserOrderReservation(ctx context.Context, req *spec.UserOrderReservationRequest) (*spec.UserOrderReservationResponse, error) {
-	userReservation := entity.UserReservation{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
+	userReservation := user.Reservation{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
 	err := s.useCase.UserOrderReservation(ctx, &userReservation)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderReservation - s.useCase.UserOrderReservation: %v", err)
@@ -28,8 +28,8 @@ func (s Service) UserOrderReservation(ctx context.Context, req *spec.UserOrderRe
 }
 
 func (s Service) UserOrderRevenue(ctx context.Context, req *spec.UserOrderRevenueRequest) (*spec.UserOrderRevenueResponse, error) {
-	userReservation := entity.UserRevenue{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
-	err := s.useCase.UserOrderRevenue(ctx, &userReservation)
+	userRevenue := user.Revenue{ID: req.Id, ServiceID: req.ServiceId, OrderID: req.OrderId, Cost: req.Cost}
+	err := s.useCase.UserOrderRevenue(ctx, &userRevenue)
 	if err != nil {
 		s.log.Errorf("service - Service - UserOrderRevenue - s.useCase.UserOrderRevenue %v", err)
 		return &spec.UserOrderRevenueResponse{Success: false}, errors.Unwrap(err)

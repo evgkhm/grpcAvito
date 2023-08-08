@@ -6,29 +6,29 @@ import (
 )
 
 type TransactionServiceImpl struct {
-	db  *sqlx.DB
-	log *logrus.Logger
+	postgresDB *sqlx.DB
+	log        *logrus.Logger
 }
 
-func NewTransactionService(db *sqlx.DB, log *logrus.Logger) *TransactionServiceImpl {
+func New(postgresDB *sqlx.DB, log *logrus.Logger) *TransactionServiceImpl {
 	return &TransactionServiceImpl{
-		db:  db,
-		log: log,
+		postgresDB: postgresDB,
+		log:        log,
 	}
 }
 
-func (u *TransactionServiceImpl) NewTransaction() (*sqlx.Tx, error) {
-	return u.db.Beginx()
+func (t *TransactionServiceImpl) NewTransaction() (*sqlx.Tx, error) {
+	return t.postgresDB.Beginx()
 }
 
-func (u *TransactionServiceImpl) Rollback(tx *sqlx.Tx) error {
+func (t *TransactionServiceImpl) Rollback(tx *sqlx.Tx) error {
 	if err := tx.Rollback(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (u TransactionServiceImpl) Commit(tx *sqlx.Tx) error {
+func (t TransactionServiceImpl) Commit(tx *sqlx.Tx) error {
 	if err := tx.Commit(); err != nil {
 		return err
 	}

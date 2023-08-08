@@ -8,22 +8,22 @@ import (
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"grpcAvito/internal/entity"
+	"grpcAvito/internal/entity/user"
 )
 
-type userRepo struct {
+type Repo struct {
 	db  *sqlx.DB
 	log *logrus.Logger
 }
 
-func NewUserRepository(db *sqlx.DB, log *logrus.Logger) *userRepo {
-	return &userRepo{
+func NewUserRepository(db *sqlx.DB, log *logrus.Logger) *Repo {
+	return &Repo{
 		db:  db,
 		log: log,
 	}
 }
 
-func (u userRepo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (r Repo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *user.User) error {
 	var id int64
 	var duplicateEntryError = &pq.Error{Code: "23505"}
 	query := `INSERT INTO usr (id, balance) VALUES ($1, $2) RETURNING id`
@@ -38,7 +38,7 @@ func (u userRepo) CreateUser(ctx context.Context, tx *sqlx.Tx, user *entity.User
 	return nil
 }
 
-func (u userRepo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) (float32, error) {
+func (r Repo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *user.User) (float32, error) {
 	var balance float32
 	query := `SELECT balance FROM usr WHERE id=$1 `
 	err := tx.GetContext(ctx, &balance, query, user.ID)
@@ -51,7 +51,7 @@ func (u userRepo) GetBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User
 	return balance, nil
 }
 
-func (u userRepo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (r Repo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *user.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.ID)
 	if err != nil {
@@ -60,7 +60,7 @@ func (u userRepo) UserBalanceAccrual(ctx context.Context, tx *sqlx.Tx, user *ent
 	return nil
 }
 
-func (u userRepo) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *entity.User) error {
+func (r Repo) MinusBalance(ctx context.Context, tx *sqlx.Tx, user *user.User) error {
 	query := `UPDATE usr SET "balance"=$1 WHERE "id"=$2`
 	_, err := tx.ExecContext(ctx, query, user.Balance, user.ID)
 	if err != nil {

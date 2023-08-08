@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"grpcAvito/internal/entity"
+	"grpcAvito/internal/entity/user"
 	"grpcAvito/internal/repository/postgres"
 	"grpcAvito/internal/usecase/transactions"
 )
 
-type userUseCase struct {
+type UseCase struct {
 	userRepo   postgres.UserRepository
 	orderRepo  postgres.OrderRepository
 	reportRepo postgres.ReportRepository
@@ -18,8 +18,8 @@ type userUseCase struct {
 }
 
 func NewUserUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRepository, reportRepo postgres.ReportRepository,
-	log *logrus.Logger, txService *transactions.TransactionServiceImpl) *userUseCase {
-	return &userUseCase{
+	log *logrus.Logger, txService *transactions.TransactionServiceImpl) *UseCase {
+	return &UseCase{
 		userRepo:   userRepo,
 		orderRepo:  orderRepo,
 		reportRepo: reportRepo,
@@ -28,7 +28,7 @@ func NewUserUseCase(userRepo postgres.UserRepository, orderRepo postgres.OrderRe
 	}
 }
 
-func (u userUseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.User) error {
+func (u UseCase) UserBalanceAccrual(ctx context.Context, userDTO *user.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -73,7 +73,7 @@ func (u userUseCase) UserBalanceAccrual(ctx context.Context, userDTO *entity.Use
 	return u.txService.Commit(tx)
 }
 
-func (u userUseCase) CreateUser(ctx context.Context, userDTO *entity.User) error {
+func (u UseCase) CreateUser(ctx context.Context, userDTO *user.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)
@@ -95,7 +95,7 @@ func (u userUseCase) CreateUser(ctx context.Context, userDTO *entity.User) error
 	return u.txService.Commit(tx)
 }
 
-func (u userUseCase) GetBalance(ctx context.Context, dto *entity.User) error {
+func (u UseCase) GetBalance(ctx context.Context, dto *user.User) error {
 	tx, err := u.txService.NewTransaction()
 	if err != nil {
 		errRollback := u.txService.Rollback(tx)

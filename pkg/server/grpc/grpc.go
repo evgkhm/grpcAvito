@@ -5,12 +5,27 @@ import (
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
-	"grpcAvito/internal/service"
-	"grpcAvito/internal/service/spec"
+	"grpcAvito/internal/service/wallet"
+	"grpcAvito/internal/service/wallet/spec"
 )
 
-func New(services *service.Service, logger *logrus.Logger) *grpc.Server {
+type Conf struct {
+	Port     string
+	HostPort string
+}
+
+var Config *Conf
+
+func (h Conf) Init() {
+	Config = &Conf{
+		Port:     viper.GetString("grpc.port"),
+		HostPort: viper.GetString("grpc.host_port"),
+	}
+}
+
+func New(services *wallet.Service, logger *logrus.Logger) *grpc.Server {
 	logger.Info("new grpc server")
 	log := logrus.NewEntry(logger)
 	var opts = []grpc.ServerOption{

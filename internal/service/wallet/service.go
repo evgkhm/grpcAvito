@@ -1,8 +1,8 @@
-package service
+package wallet
 
 import (
 	"github.com/sirupsen/logrus"
-	"grpcAvito/internal/service/spec"
+	"grpcAvito/internal/service/wallet/spec"
 	"grpcAvito/internal/usecase"
 )
 
